@@ -13,6 +13,9 @@
 *
 */
 
+var MAX_CAMERAS = 4;
+var currentNumCams = 1;
+
 function getopts(args, opts)
 {
   var result = opts.default || {};

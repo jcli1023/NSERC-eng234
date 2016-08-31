@@ -44,7 +44,8 @@ window.addEventListener('load', function(){
   console = new Console('console', console);
 	var videoOutput = document.getElementById('videoOutput');
 	var address = document.getElementById('address');
-	address.value = 'http://files.kurento.org/video/puerta-del-sol.ts';
+	//address.value = 'http://files.kurento.org/video/puerta-del-sol.ts';
+	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
   var pipeline;
   var webRtcPeer;
 
