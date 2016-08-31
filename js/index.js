@@ -13,6 +13,25 @@
 *
 */
 
+var MAX_CAMERAS = 4;
+var currentNumCams = 1;
+
+function setTemplate1()
+{
+	document.getElementById("test").innerHTML = "Template1";
+	document.getElementById("template2").style.display = "none";
+	document.getElementById("template1").style.display = "inline";
+	currentNumCams = 1;
+}
+
+function setTemplate2()
+{
+	document.getElementById("test").innerHTML = "Template2";
+	document.getElementById("template1").style.display = "none";
+	document.getElementById("template2").style.display = "inline";	
+	currentNumCams = 2;
+}
+
 function getopts(args, opts)
 {
   var result = opts.default || {};
