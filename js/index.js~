@@ -13,6 +13,36 @@
 *
 */
 
+var MAX_CAMERAS = 4;
+var currentNumCams = 1;
+
+function setTemplate1()
+{
+	document.getElementById("test").innerHTML = "Template1";
+	document.getElementById("template2").style.display = "none";
+	document.getElementById("videoOutput1").weight=1280;
+	document.getElementById("videoOutput1").height=720;
+	//document.getElementById("template1").style.display = "inline";
+	if (currentNumCams > 1)
+	{
+		currentNumCams = 1;
+		window.removeEventListener('load',createPipeline2);
+	}
+	document.getElementById("test2").innerHTML = currentNumCams;
+}
+
+function setTemplate2()
+{
+	document.getElementById("test").innerHTML = "Template2";
+	document.getElementById("videoOutput1").weight=400;	
+	document.getElementById("videoOutput1").height=300;
+	//document.getElementById("template1").style.display = "none";
+	document.getElementById("template2").style.display = "inline";	
+	currentNumCams = 2;
+	document.getElementById("test2").innerHTML = currentNumCams;
+	createPipeline2();
+}
+
 function getopts(args, opts)
 {
   var result = opts.default || {};
@@ -39,8 +69,9 @@ if (args.ice_servers) {
   console.log("Use freeice")
 }
 
+window.addEventListener('load',createPipeline1);
 
-window.addEventListener('load', function(){
+/*window.addEventListener('load', function(){
   console = new Console('console', console);
 	var videoOutput = document.getElementById('videoOutput');
 	var address = document.getElementById('address');
@@ -138,6 +169,207 @@ window.addEventListener('load', function(){
   }
 
 });
+*/
+
+function createPipeline1(){
+  console = new Console('console', console);
+	var videoOutput = document.getElementById('videoOutput1');
+	var address = document.getElementById('address1');
+	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
+  var pipeline;
+  var webRtcPeer;
+
+  startButton = document.getElementById('start1');
+  startButton.addEventListener('click', start);
+
+  stopButton = document.getElementById('stop1');
+  stopButton.addEventListener('click', stop);
+
+  function start() {
+  	if(!address.value){
+  	  window.alert("You must set the video source URL first");
+  	  return;
+  	}
+  	address.disabled = true;
+  	showSpinner(videoOutput);
+    var options = {
+      remoteVideo : videoOutput
+    };
+    webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+      function(error){
+        if(error){
+          return console.error(error);
+        }
+        webRtcPeer.generateOffer(onOffer);
+        webRtcPeer.peerConnection.addEventListener('iceconnectionstatechange', function(event){
+          if(webRtcPeer && webRtcPeer.peerConnection){
+            console.log("oniceconnectionstatechange -> " + webRtcPeer.peerConnection.iceConnectionState);
+            console.log('icegatheringstate -> ' + webRtcPeer.peerConnection.iceGatheringState);
+          }
+        });
+    });
+
+
+  }
+
+  function onOffer(error, sdpOffer){
+    if(error) return onError(error);
+
+  	kurentoClient(args.ws_uri, function(error, kurentoClient) {
+  		if(error) return onError(error);
+
+  		kurentoClient.create("MediaPipeline", function(error, p) {
+  			if(error) return onError(error);
+
+  			pipeline = p;
+
+  			pipeline.create("PlayerEndpoint", {uri: address.value}, function(error, player){
+  			  if(error) return onError(error);
+
+  			  pipeline.create("WebRtcEndpoint", function(error, webRtcEndpoint){
+  				if(error) return onError(error);
+
+          setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError);
+
+  				webRtcEndpoint.processOffer(sdpOffer, function(error, sdpAnswer){
+  					if(error) return onError(error);
+
+            webRtcEndpoint.gatherCandidates(onError);
+
+  					webRtcPeer.processAnswer(sdpAnswer);
+  				});
+
+  				player.connect(webRtcEndpoint, function(error){
+  					if(error) return onError(error);
+
+  					console.log("PlayerEndpoint-->WebRtcEndpoint connection established");
+
+  					player.play(function(error){
+  					  if(error) return onError(error);
+
+  					  console.log("Player playing ...");
+  					});
+  				});
+  			});
+  			});
+  		});
+  	});
+  }
+
+  function stop() {
+    address.disabled = false;
+    if (webRtcPeer) {
+      webRtcPeer.dispose();
+      webRtcPeer = null;
+    }
+    if(pipeline){
+      pipeline.release();
+      pipeline = null;
+    }
+    hideSpinner(videoOutput);
+  }
+
+} //createPipeline1
+
+function createPipeline2(){
+  console = new Console('console', console);
+	var videoOutput = document.getElementById('videoOutput2');
+	var address = document.getElementById('address2');
+	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
+  var pipeline;
+  var webRtcPeer;
+
+  startButton = document.getElementById('start1');
+  startButton.addEventListener('click', start);
+
+  stopButton = document.getElementById('stop1');
+  stopButton.addEventListener('click', stop);
+
+  function start() {
+  	if(!address.value){
+  	  window.alert("You must set the video source URL first");
+  	  return;
+  	}
+  	address.disabled = true;
+  	showSpinner(videoOutput);
+    var options = {
+      remoteVideo : videoOutput
+    };
+    webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+      function(error){
+        if(error){
+          return console.error(error);
+        }
+        webRtcPeer.generateOffer(onOffer);
+        webRtcPeer.peerConnection.addEventListener('iceconnectionstatechange', function(event){
+          if(webRtcPeer && webRtcPeer.peerConnection){
+            console.log("oniceconnectionstatechange -> " + webRtcPeer.peerConnection.iceConnectionState);
+            console.log('icegatheringstate -> ' + webRtcPeer.peerConnection.iceGatheringState);
+          }
+        });
+    });
+
+
+  }
+
+  function onOffer(error, sdpOffer){
+    if(error) return onError(error);
+
+  	kurentoClient(args.ws_uri, function(error, kurentoClient) {
+  		if(error) return onError(error);
+
+  		kurentoClient.create("MediaPipeline", function(error, p) {
+  			if(error) return onError(error);
+
+  			pipeline = p;
+
+  			pipeline.create("PlayerEndpoint", {uri: address.value}, function(error, player){
+  			  if(error) return onError(error);
+
+  			  pipeline.create("WebRtcEndpoint", function(error, webRtcEndpoint){
+  				if(error) return onError(error);
+
+          setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError);
+
+  				webRtcEndpoint.processOffer(sdpOffer, function(error, sdpAnswer){
+  					if(error) return onError(error);
+
+            webRtcEndpoint.gatherCandidates(onError);
+
+  					webRtcPeer.processAnswer(sdpAnswer);
+  				});
+
+  				player.connect(webRtcEndpoint, function(error){
+  					if(error) return onError(error);
+
+  					console.log("PlayerEndpoint-->WebRtcEndpoint connection established");
+
+  					player.play(function(error){
+  					  if(error) return onError(error);
+
+  					  console.log("Player playing ...");
+  					});
+  				});
+  			});
+  			});
+  		});
+  	});
+  }
+
+  function stop() {
+    address.disabled = false;
+    if (webRtcPeer) {
+      webRtcPeer.dispose();
+      webRtcPeer = null;
+    }
+    if(pipeline){
+      pipeline.release();
+      pipeline = null;
+    }
+    hideSpinner(videoOutput);
+  }
+
+}//createPipeline2
 
 function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError){
   webRtcPeer.on('icecandidate', function(candidate){
