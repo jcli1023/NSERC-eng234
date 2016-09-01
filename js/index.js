@@ -279,10 +279,10 @@ function createPipeline2(){
   var pipeline;
   var webRtcPeer;
 
-  startButton = document.getElementById('start1');
+  startButton = document.getElementById('start2');
   startButton.addEventListener('click', start);
 
-  stopButton = document.getElementById('stop1');
+  stopButton = document.getElementById('stop2');
   stopButton.addEventListener('click', stop);
 
   function start() {
