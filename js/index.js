@@ -173,7 +173,7 @@ window.addEventListener('load',createPipeline1);
 */
 
 function createPipeline1(){
-  console = new Console('console', console);
+  console = new Console('console1', console);
   var videoOutput = document.getElementById('videoOutput1');
   var address = document.getElementById('address1');
   address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
@@ -294,7 +294,7 @@ function createPipeline1(){
 } //createPipeline1
 
 function createPipeline2(){
-  console = new Console('console', console);
+  console = new Console('console2', console);
 	var videoOutput = document.getElementById('videoOutput2');
 	var address = document.getElementById('address2');
 	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
