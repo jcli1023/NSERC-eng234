@@ -16,6 +16,7 @@
 var MAX_CAMERAS = 4;
 var currentNumCams = 1;
 
+//Template 1
 function setTemplate1()
 {
 	document.getElementById("test").innerHTML = "Template1";
@@ -26,11 +27,11 @@ function setTemplate1()
 	if (currentNumCams > 1)
 	{
 		currentNumCams = 1;
-		window.removeEventListener('load',createPipeline2);
 	}
 	document.getElementById("test2").innerHTML = currentNumCams;
 }
 
+//Template 2
 function setTemplate2()
 {
 	document.getElementById("test").innerHTML = "Template2";
@@ -173,9 +174,9 @@ window.addEventListener('load',createPipeline1);
 
 function createPipeline1(){
   console = new Console('console', console);
-	var videoOutput = document.getElementById('videoOutput1');
-	var address = document.getElementById('address1');
-	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
+  var videoOutput = document.getElementById('videoOutput1');
+  var address = document.getElementById('address1');
+  address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
   var pipeline;
   var webRtcPeer;
 
@@ -253,6 +254,14 @@ function createPipeline1(){
   			});
   			});
   		});
+	
+		v1=document.getElementById("videoOutput1");
+		v1.addEventListener("play",screenshotVid(1));
+		v1.addEventListener("ended",stopScreenshots(1));
+
+
+		
+	
   	});
   }
 
@@ -267,6 +276,19 @@ function createPipeline1(){
       pipeline = null;
     }
     hideSpinner(videoOutput);
+
+	document.getElementById("test3").innerHTML = "";
+  }
+
+  function stopScreenshots(camNum)
+  {
+	document.getElementById("test3").innerHTML = "VIDEO ENDED";
+	v1.removeEventListener("ended",stopScreenshots);
+  }
+
+  function screenshotVid(camNum)
+  {
+	document.getElementById("test3").innerHTML = "CAN PLAY CAM "+camNum;
   }
 
 } //createPipeline1
@@ -370,6 +392,18 @@ function createPipeline2(){
   }
 
 }//createPipeline2
+
+
+				
+document.getElementById("videoOutput1").height=100;
+v1.height=100;
+v1.addEventListener("loadeddata",screenshotVid);
+
+function screenshotVid()
+{
+	document.getElementById("test3").innerHTML = "CAN PLAY CAM ";
+}
+		
 
 function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError){
   webRtcPeer.on('icecandidate', function(candidate){
