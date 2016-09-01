@@ -20,6 +20,7 @@ function setTemplate1()
 {
 	document.getElementById("test").innerHTML = "Template1";
 	document.getElementById("template2").style.display = "none";
+<<<<<<< HEAD
 	document.getElementById("videoOutput1").weight=1280;
 	document.getElementById("videoOutput1").height=720;
 	//document.getElementById("template1").style.display = "inline";
@@ -29,11 +30,16 @@ function setTemplate1()
 		window.removeEventListener('load',createPipeline2);
 	}
 	document.getElementById("test2").innerHTML = currentNumCams;
+=======
+	document.getElementById("template1").style.display = "inline";
+	currentNumCams = 1;
+>>>>>>> 79257ffef1ebb2fe36c62bee41d7615c82bcd6fd
 }
 
 function setTemplate2()
 {
 	document.getElementById("test").innerHTML = "Template2";
+<<<<<<< HEAD
 	document.getElementById("videoOutput1").weight=400;	
 	document.getElementById("videoOutput1").height=300;
 	//document.getElementById("template1").style.display = "none";
@@ -41,6 +47,11 @@ function setTemplate2()
 	currentNumCams = 2;
 	document.getElementById("test2").innerHTML = currentNumCams;
 	createPipeline2();
+=======
+	document.getElementById("template1").style.display = "none";
+	document.getElementById("template2").style.display = "inline";	
+	currentNumCams = 2;
+>>>>>>> 79257ffef1ebb2fe36c62bee41d7615c82bcd6fd
 }
 
 function getopts(args, opts)
