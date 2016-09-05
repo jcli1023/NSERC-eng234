@@ -198,7 +198,7 @@ function createPipeline1(){
   });
   */
 
-  videoOutput.addEventListener("EndOfStream",function(){
+  videoOutput.addEventListener("ended",function(){
 	alert("video ended!");
 	stopScreenshot(1);
   });

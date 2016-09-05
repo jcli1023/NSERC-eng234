@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="./img/kurento.png" type="image/png" />
+
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="bower_components/ekko-lightbox/dist/ekko-lightbox.min.css">
+<link rel="stylesheet" href="css/kurento.css">
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+<script	src="bower_components/adapter.js/adapter.js"></script>
+
+<script src="bower_components/kurento-client/js/kurento-client.js"></script>
+<script src="bower_components/kurento-utils/js/kurento-utils.js"></script>
+
+<script src="./js/console.js"></script>
+<script src="./js/index.js"></script>
+<title>Kurento RTSP to WebRTC player</title>
+</head>
+
+<body>
+	<header>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target=".navbar-collapse"></button>
+					<a class="navbar-brand" href="./">Kurento Tutorial</a>
+				</div>
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1"></div>
+			</div>
+		</div>
+	</header>
+	<div class="container">
+		<div class="page-header">
+			<h1>Kurento RTSP to WebRTC player</h1>
+		</div>
+		<div id="template_options">
+			<button onclick="setTemplate1()">Template 1</button>
+			<button onclick="setTemplate2()">Template 2</button>
+		</div>
+		<div id="template1">
+			<div class="row">
+				<div class="col-md-5">
+					<h3>Remote stream 1</h3>
+					<video id="videoOutput1" autoplay width="1280px" height="720px"
+						poster="./img/webrtc.png"></video>
+					</br>
+					Set source URL: <input style="width:350px;" id="address1" type="text">
+					</br></br>
+				</div>
+				<div class="col-md-2">
+					<a id="start1" href="#" class="btn btn-success"><span
+						class="glyphicon glyphicon-play"></span> Start</a><br /> <br /> 
+					<a id="stop1" href="#" class="btn btn-danger"><span
+						class="glyphicon glyphicon-stop"></span> Stop</a>
+					<button id="pauseButton">Pause</button>
+					<button id="resumeButton">Resume</button>
+				</div>
+				<div class="col-md-5">
+
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<label class="control-label" for="console">Console 1</label>
+						<div id="console1"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="template2" style="display: none">
+			<div class="row">
+
+				<div class="col-md-5">
+					<h3>Remote stream 2</h3>
+					<video id="videoOutput2" autoplay width="400px" height="300px"
+						poster="./img/webrtc.png"></video>
+					</br>
+					Set source URL: <input style="width:350px;" id="address2" type="text">
+					</br></br>
+				</div>
+				<div class="col-md-2">
+					<a id="start2" href="#" class="btn btn-success"><span
+						class="glyphicon glyphicon-play"></span> Start</a><br /> <br /> 
+					<a id="stop2" href="#" class="btn btn-danger"><span
+						class="glyphicon glyphicon-stop"></span> Stop</a>
+
+				</div>
+				<div class="col-md-5">
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<label class="control-label" for="console2">Console 2</label>
+						<div id="console2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p id="test"></p>
+		<p id="test2"></p>
+		<p id="test3">junk</p>
+		BLAH BLAH BLAH
+		<canvas id="testCanvas"></canvas>
+	</div>
+
+<script>
+document.getElementById("test").innerHTML = currentNumCams;
+</script>
+
+</html>
