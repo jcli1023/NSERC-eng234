@@ -66,6 +66,7 @@
 						class="glyphicon glyphicon-stop"></span> Stop</a>
 					<button id="pauseButton">Pause</button>
 					<button id="resumeButton">Resume</button>
+					<button onclick="alertEnd()">Test End</button>
 				</div>
 				<div class="col-md-5">
 
@@ -109,7 +110,7 @@
 			</div>
 		</div>
 		<p id="test"></p>
-		<p id="test2"></p>
+		<p id="test2">Nothing</p>
 		<p id="test3">junk</p>
 		BLAH BLAH BLAH
 		<canvas id="testCanvas"></canvas>
