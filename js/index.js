@@ -179,7 +179,7 @@ window.addEventListener('load',function(){pipe1();});
 {
 	v = document.getElementById('videoOutput1');
 	console.log("HELLO ALERT ENDED?");
-	alert(v.ended);
+	alert(v.active);
 }
 
 pipe1 = function createPipeline1(){
@@ -191,6 +191,7 @@ pipe1 = function createPipeline1(){
   var webRtcPeer;
 
   var drawTimer = null;
+
 var dumbCount = 0;
   startButton = document.getElementById('start1');
   startButton.addEventListener('click', start);
@@ -222,6 +223,7 @@ var dumbCount = 0;
 	{
 		clearInterval(drawTimer);
 		drawTimer = null;
+		firstTimeImage = true;
 	}
   }
 
@@ -241,9 +243,12 @@ var dumbCount = 0;
  	var remoteVideoCanvas;
 	remoteVideoCanvas = webRtcPeer.currentFrame;
 	destinationCanvas = document.getElementById("testCanvas");
+	destinationContext = destinationCanvas.getContext("2d");
+	destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
+	
 	destinationCanvas.height = remoteVideoCanvas.height;
 	destinationCanvas.width = remoteVideoCanvas.width;
-	destinationContext = destinationCanvas.getContext("2d");
+
 	destinationContext.drawImage(remoteVideoCanvas,0,0);
   }
   function pauseVideo()
