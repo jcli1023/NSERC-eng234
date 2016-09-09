@@ -244,7 +244,7 @@ var dumbCount = 0;
 	remoteVideoCanvas = webRtcPeer.currentFrame;
 	destinationCanvas = document.getElementById("testCanvas");
 	destinationContext = destinationCanvas.getContext("2d");
-	destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
+	//destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
 	
 	destinationCanvas.height = remoteVideoCanvas.height;
 	destinationCanvas.width = remoteVideoCanvas.width;
@@ -258,8 +258,8 @@ var dumbCount = 0;
   function saveFrameToServer(saveCurrentFrame,camNum)
   {
 	var saveToServerFrame;
-	//saveToServerFrame = saveCurrentFrame.toDataUrl("image/jpeg",1.0);
-	saveToServerFrame = saveCurrentFrame.toDataUrl();
+	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",1.0);
+
 	$.post("saveScreenshot.php",
     	{
         	/*cam: camNum,
@@ -267,8 +267,9 @@ var dumbCount = 0;
 		photo: saveToServerFrame
     	},
     	function(data, status){
-		console.log("SAVE FRAME SERVER" + dumbCount);
-        	alert("Data: " + data + "\nStatus: " + status);
+
+		//document.getElementById("test3").innerHTML = data+" "+status+" "+dumbCount;
+        	//alert("Data: " + data + "\nStatus: " + status);
     	});
   }
   function pauseVideo()
