@@ -35,7 +35,6 @@ function setTemplate1()
 //Template 2
 function setTemplate2()
 {
-	createPipeline1.stop();
 	document.getElementById("test").innerHTML = "Template2";
 	document.getElementById("videoOutput1").weight=400;	
 	document.getElementById("videoOutput1").height=300;
