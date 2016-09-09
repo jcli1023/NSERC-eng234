@@ -241,6 +241,7 @@ var dumbCount = 0;
 	console.log("HELLO IM IN HERE SCREENSHOT" + dumbCount);
 	var destinationContext;
  	var remoteVideoCanvas;
+	var saveToServerFrame;	
 	remoteVideoCanvas = webRtcPeer.currentFrame;
 	destinationCanvas = document.getElementById("testCanvas");
 	destinationContext = destinationCanvas.getContext("2d");
@@ -250,6 +251,26 @@ var dumbCount = 0;
 	destinationCanvas.width = remoteVideoCanvas.width;
 
 	destinationContext.drawImage(remoteVideoCanvas,0,0);
+
+	saveFrameToServer(remoteVideoCanvas,camNum);
+	
+  }
+  
+  function saveFrameToServer(saveCurrentFrame,camNum)
+  {
+	var saveToServerFrame;
+	//saveToServerFrame = saveCurrentFrame.toDataUrl("image/jpeg",1.0);
+	saveToServerFrame = saveCurrentFrame.toDataUrl();
+	$.post("saveScreenshot.php",
+    	{
+        	/*cam: camNum,
+        	frame: saveToServerFrame*/
+		photo: saveToServerFrame
+    	},
+    	function(data, status){
+		console.log("SAVE FRAME SERVER" + dumbCount);
+        	alert("Data: " + data + "\nStatus: " + status);
+    	});
   }
   function pauseVideo()
   {
