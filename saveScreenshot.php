@@ -6,7 +6,8 @@
 	$data = base64_decode($data);
 
 	mkdir("./photos");
-	file_put_contents( "./photos/".time().'.jpg', $data);
+	file_put_contents( "./photos/".uniqid().'.jpg', $data);
+	//file_put_contents( "./photos/".uniqid().'.png', $data);
 	echo "I fini PHP\n";
 	die("Went through PHP");
 ?>

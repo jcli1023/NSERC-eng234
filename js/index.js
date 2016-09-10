@@ -242,7 +242,7 @@ var dumbCount = 0;
  	var remoteVideoCanvas;
 	var saveToServerFrame;	
 	remoteVideoCanvas = webRtcPeer.currentFrame;
-	destinationCanvas = document.getElementById("testCanvas");
+	/*destinationCanvas = document.getElementById("testCanvas");
 	destinationContext = destinationCanvas.getContext("2d");
 	//destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
 	
@@ -250,7 +250,7 @@ var dumbCount = 0;
 	destinationCanvas.width = remoteVideoCanvas.width;
 
 	destinationContext.drawImage(remoteVideoCanvas,0,0);
-
+*/
 	saveFrameToServer(remoteVideoCanvas,camNum);
 	
   }
@@ -258,7 +258,8 @@ var dumbCount = 0;
   function saveFrameToServer(saveCurrentFrame,camNum)
   {
 	var saveToServerFrame;
-	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",1.0);
+	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",0.5);
+	//saveToServerFrame = saveCurrentFrame.toDataURL();
 
 	$.post("saveScreenshot.php",
     	{
