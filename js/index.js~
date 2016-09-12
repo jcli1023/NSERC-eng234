@@ -399,14 +399,117 @@ function createPipeline2(){
   var address = document.getElementById('address2');
   address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
   var pipeline;
-
   var webRtcPeer;
 
+  var drawTimer = null;
+
+var dumbCount = 0;
   startButton = document.getElementById('start2');
   startButton.addEventListener('click', start);
 
   stopButton = document.getElementById('stop2');
   stopButton.addEventListener('click', stop);
+
+  document.getElementById("pauseButton").addEventListener("click",pauseVideo);
+  document.getElementById("resumeButton").addEventListener("click",resumeVideo);
+
+
+/*	  videoOutput.addEventListener("ended",function(){
+	alert("video ended!");
+	stopScreenshot(1);
+  	});
+*/
+  videoOutput.addEventListener("pause",function(){ 
+	stopScreenshot(2);
+  });
+  videoOutput.addEventListener("playing",function(){
+	startScreenshot(2);
+  });
+
+
+
+  function stopScreenshot(camNum)
+  {
+	if (drawTimer)
+	{
+		clearInterval(drawTimer);
+		drawTimer = null;
+		firstTimeImage = true;
+	}
+  }
+
+  function startScreenshot(camNum)
+  {
+	if (drawTimer == null)
+	{
+		drawTimer = setInterval(function(){grabScreenshot(2)},50);
+	}
+  }
+
+  function grabScreenshot(camNum)
+  {
+	dumbCount++;
+	console.log("HELLO IM IN HERE SCREENSHOT" + dumbCount);
+	var destinationContext;
+ 	var remoteVideoCanvas;
+	var saveToServerFrame;	
+	remoteVideoCanvas = webRtcPeer.currentFrame;
+	/*destinationCanvas = document.getElementById("testCanvas");
+	destinationContext = destinationCanvas.getContext("2d");
+	//destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
+	
+	destinationCanvas.height = remoteVideoCanvas.height;
+	destinationCanvas.width = remoteVideoCanvas.width;
+
+	destinationContext.drawImage(remoteVideoCanvas,0,0);
+*/
+	saveFrameToServer(remoteVideoCanvas,camNum);
+	
+  }
+  
+  function saveFrameToServer(saveCurrentFrame,camNum)
+  {
+	var saveToServerFrame;
+	var dateFrame = new Date();
+	var timeFrame = dateFrame.getFullYear()+dateFrame.getMonth()+dateFrame.getDate()+"_"+dateFrame.getHours()+dateFrame.getMinutes()+dateFrame.getSeconds()+dateFrame.getMilliseconds();
+	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",0.5);
+	//saveToServerFrame = saveCurrentFrame.toDataURL();
+	
+	$.post("saveScreenshot.php",
+    	{
+        	cam: camNum,
+		time: timeFrame,
+        	frame: saveToServerFrame
+		//photo: saveToServerFrame
+    	},
+    	function(data, status){
+
+		document.getElementById("test3").innerHTML = data+" "+status+" "+dumbCount;
+        	//alert("Data: " + data + "\nStatus: " + status);
+    	});
+  }
+  function pauseVideo()
+  {
+	var destinationContext;
+ 	var remoteVideoCanvas;
+	//videoOutput.pause();
+	webRtcPeer.remoteVideo.pause();
+	remoteVideoCanvas = webRtcPeer.currentFrame;
+	document.getElementById("test3").innerHTML = remoteVideoCanvas.width;
+
+	destinationCanvas = document.getElementById("testCanvas");
+	destinationCanvas.height = remoteVideoCanvas.height;
+	destinationCanvas.width = remoteVideoCanvas.width;
+	destinationContext = destinationCanvas.getContext("2d");
+	destinationContext.drawImage(remoteVideoCanvas,0,0);
+  }
+
+  function resumeVideo()
+  {
+	//videoOutput.play();  	
+	webRtcPeer.remoteVideo.play();
+	document.getElementById("test2").innerHTML = "CONTINUE PLAYING ";
+  }
 
   function start() {
   	if(!address.value){
@@ -428,9 +531,11 @@ function createPipeline2(){
           if(webRtcPeer && webRtcPeer.peerConnection){
             console.log("oniceconnectionstatechange -> " + webRtcPeer.peerConnection.iceConnectionState);
             console.log('icegatheringstate -> ' + webRtcPeer.peerConnection.iceGatheringState);
+
           }
         });
     });
+
 
 
   }
@@ -462,6 +567,7 @@ function createPipeline2(){
   					webRtcPeer.processAnswer(sdpAnswer);
   				});
 
+
   				player.connect(webRtcEndpoint, function(error){
   					if(error) return onError(error);
 
@@ -476,6 +582,7 @@ function createPipeline2(){
   			});
   			});
   		});
+	
   	});
   }
 
@@ -490,17 +597,13 @@ function createPipeline2(){
       pipeline = null;
     }
     hideSpinner(videoOutput);
+    stopScreenshot(2);
   }
 
-}//createPipeline2
 
 
 
-function screenshotVid()
-{
-	document.getElementById("test3").innerHTML = "CAN PLAY CAM ";
-}
-		
+}; //createPipeline2
 
 function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError){
   webRtcPeer.on('icecandidate', function(candidate){
