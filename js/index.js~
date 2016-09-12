@@ -258,18 +258,21 @@ var dumbCount = 0;
   function saveFrameToServer(saveCurrentFrame,camNum)
   {
 	var saveToServerFrame;
+	var dateFrame = new Date();
+	var timeFrame = dateFrame.getFullYear()+dateFrame.getMonth()+dateFrame.getDate()+"_"+dateFrame.getHours()+dateFrame.getMinutes()+dateFrame.getSeconds()+dateFrame.getMilliseconds();
 	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",0.5);
 	//saveToServerFrame = saveCurrentFrame.toDataURL();
-
+	
 	$.post("saveScreenshot.php",
     	{
-        	/*cam: camNum,
-        	frame: saveToServerFrame*/
-		photo: saveToServerFrame
+        	cam: camNum,
+		time: timeFrame,
+        	frame: saveToServerFrame
+		//photo: saveToServerFrame
     	},
     	function(data, status){
 
-		//document.getElementById("test3").innerHTML = data+" "+status+" "+dumbCount;
+		document.getElementById("test3").innerHTML = data+" "+status+" "+dumbCount;
         	//alert("Data: " + data + "\nStatus: " + status);
     	});
   }
