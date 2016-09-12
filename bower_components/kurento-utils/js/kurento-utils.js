@@ -20,8 +20,8 @@ try {
 var MEDIA_CONSTRAINTS = {
         audio: true,
         video: {
-            width: 1920,
-	    height: 1080,
+            width: 1280,
+	    height: 720,
             framerate: 30
         }
     };

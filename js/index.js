@@ -263,9 +263,9 @@ var dumbCount = 0;
 
 	$.post("saveScreenshot.php",
     	{
-        	/*cam: camNum,
-        	frame: saveToServerFrame*/
-		photo: saveToServerFrame
+        	//cam: camNum,
+        	frame: saveToServerFrame
+		//photo: saveToServerFrame
     	},
     	function(data, status){
 

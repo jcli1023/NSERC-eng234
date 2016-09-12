@@ -258,8 +258,8 @@ var dumbCount = 0;
   function saveFrameToServer(saveCurrentFrame,camNum)
   {
 	var saveToServerFrame;
-	//saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",1.0);
-	saveToServerFrame = saveCurrentFrame.toDataURL();
+	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",0.5);
+	//saveToServerFrame = saveCurrentFrame.toDataURL();
 
 	$.post("saveScreenshot.php",
     	{
