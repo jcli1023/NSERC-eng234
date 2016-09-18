@@ -262,13 +262,16 @@ var dumbCount = 0;
 	var timeFrame = dateFrame.getFullYear()+dateFrame.getMonth()+dateFrame.getDate()+"_"+dateFrame.getHours()+dateFrame.getMinutes()+dateFrame.getSeconds()+dateFrame.getMilliseconds();
 	saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg",0.5);
 	//saveToServerFrame = saveCurrentFrame.toDataURL();
+	var frameDim = [saveCurrentFrame.width,saveCurrentFrame.height];
+	var vidDim = [videoOutput.width,videoOutput.height];
 	
 	$.post("saveScreenshot.php",
     	{
         	cam: camNum,
 		time: timeFrame,
-        	frame: saveToServerFrame
-		//photo: saveToServerFrame
+        	frame: saveToServerFrame,
+		frameDim: frameDim,
+		vidDim: vidDim
     	},
     	function(data, status){
 
