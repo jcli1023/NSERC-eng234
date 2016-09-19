@@ -230,7 +230,7 @@ var dumbCount = 0;
   {
 	if (drawTimer == null)
 	{
-		drawTimer = setInterval(function(){grabScreenshot(1)},50);
+		drawTimer = setInterval(function(){grabScreenshot(1)},500);
 	}
   }
 
@@ -482,8 +482,9 @@ var dumbCount = 0;
     	{
         	cam: camNum,
 		time: timeFrame,
-        	frame: saveToServerFrame
-		//photo: saveToServerFrame
+        	frame: saveToServerFrame,
+		frameDim: frameDim,
+		vidDim: vidDim
     	},
     	function(data, status){
 
