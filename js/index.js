@@ -63,16 +63,21 @@ function setTemplate2()
 
 function overlayTextCanvas()
 {
-	var canvas1 = document.getElementById("objectCam1");
-	var context1 = canvas1.getContext("2d");
-	context1.fillStyle = "green";
-	context1.font = "bold 16px Arial";
-	context1.fillText("ObjectCam1", 100, 100);
-	var canvas2 = document.getElementById("borderCam1");
-	var context2 = canvas2.getContext("2d");
-	context2.fillStyle = "blue";
-	context2.font = "bold 16px Arial";
-	context2.fillText("borderCam1", 200, 200);
+	for (i = 1; i <= currentNumCams; i++)
+	{
+	 	var canvas1 = document.getElementById("objectCam"+i);
+		var context1 = canvas1.getContext("2d");
+		var canvas2 = document.getElementById("borderCam"+i);
+		var context2 = canvas2.getContext("2d");
+		context1.fillStyle = "green";
+		context1.font = "bold 16px Arial";
+		context1.fillText("ObjectCam"+i, 100, 100);
+
+	
+		context2.fillStyle = "blue";
+		context2.font = "bold 16px Arial";
+		context2.fillText("borderCam"+i, 200, 200);
+	}
 }
 
 

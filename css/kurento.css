@@ -40,17 +40,17 @@ video,#console1,#console2 {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-#videoOutput1{
+#videoOutput1,#videoOutput2{
 	position: absolute;
 	z-index: 1;
 }
 
-#objectCam1{
+#objectCam1,#objectCam2{
 	position: absolute;
 	z-index: 2;
 }
 
-#borderCam1{
+#borderCam1,#borderCam2{
 	position: relative;
 	z-index: 3;
 }
