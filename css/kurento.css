@@ -53,7 +53,7 @@ video,#console1,#console2 {
 }
 
 #borderCam1{
-	positon: absolute;
+	position: relative;
     	border: 1px solid #0000FF;
 	border-radius: 4px;
 	z-index: 3;

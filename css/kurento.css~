@@ -53,7 +53,7 @@ video,#console1,#console2 {
 }
 
 #borderCam1{
-	positon: absolute;
+	position: absolute;
     	border: 1px solid #0000FF;
 	border-radius: 4px;
 	z-index: 3;
@@ -68,6 +68,6 @@ video,#console1,#console2 {
 .col-md-2 {
 	position: absolute;
 	width: 80px;
-	left: 100px;
+	left: 150px;
 	padding-top: 120px;
 }
