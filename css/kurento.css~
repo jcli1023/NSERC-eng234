@@ -24,7 +24,10 @@ body {
 	body
 }
 
-video,#console* {
+
+
+
+video,#console1,#console2 {
 	display: block;
 	font-size: 14px;
 	line-height: 1.42857143;
@@ -40,7 +43,30 @@ video,#console* {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-#console* {
+.col-md-5{
+	position: relative;
+}
+
+#videoOutput1{
+	position: absolute;
+	z-index: auto;
+}
+
+#objectCam1{
+	position: absolute;
+    	
+	border-radius: 4px;
+	z-index: 1;
+}
+
+#borderCam1{
+	positon: absolute;
+    	border: 1px solid #0000FF;
+	border-radius: 4px;
+	z-index: 2;
+}
+
+#console1,#console2 {
 	overflow-y: auto;
 	width: 100%;
 	height: 120px;

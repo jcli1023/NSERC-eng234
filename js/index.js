@@ -14,6 +14,10 @@
 */
 
 var MAX_CAMERAS = 4;
+var MAX_VID_SIZE_TEMP1_HEIGHT = 720;
+var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
+var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
+var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var currentNumCams = 1;
 var pipe1, pipe2;
 
@@ -22,8 +26,12 @@ function setTemplate1()
 {
 	document.getElementById("test").innerHTML = "Template1";
 	document.getElementById("template2").style.display = "none";
-	document.getElementById("videoOutput1").weight=1280;
-	document.getElementById("videoOutput1").height=720;
+	document.getElementById("videoOutput1").width=MAX_VID_SIZE_TEMP1_WIDTH;
+	document.getElementById("videoOutput1").height=MAX_VID_SIZE_TEMP1_HEIGHT;
+	document.getElementById("objectCam1").width=MAX_VID_SIZE_TEMP1_WIDTH;
+	document.getElementById("objectCam1").height=MAX_VID_SIZE_TEMP1_HEIGHT;
+	document.getElementById("borderCam1").width=MAX_VID_SIZE_TEMP1_WIDTH;
+	document.getElementById("borderCam1").height=MAX_VID_SIZE_TEMP1_HEIGHT;
 	//document.getElementById("template1").style.display = "inline";
 	if (currentNumCams > 1)
 	{
@@ -36,8 +44,12 @@ function setTemplate1()
 function setTemplate2()
 {
 	document.getElementById("test").innerHTML = "Template2";
-	document.getElementById("videoOutput1").weight=400;	
-	document.getElementById("videoOutput1").height=300;
+	document.getElementById("videoOutput1").width=MAX_VID_SIZE_TEMP2_WIDTH;	
+	document.getElementById("videoOutput1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
+	document.getElementById("objectCam1").width=MAX_VID_SIZE_TEMP2_WIDTH;
+	document.getElementById("objectCam1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
+	document.getElementById("borderCam1").width=MAX_VID_SIZE_TEMP2_WIDTH;
+	document.getElementById("borderCam1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
 	//document.getElementById("template1").style.display = "none";
 	document.getElementById("template2").style.display = "inline";	
 	currentNumCams = 2;

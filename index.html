@@ -57,9 +57,11 @@
 					<h3>Remote stream 1</h3>
 					<video id="videoOutput1" autoplay width="1280px" height="720px"
 						poster="./img/webrtc.png"></video>
+					<canvas id="objectCam1" width="1280px" height="720px"></canvas>
+					<canvas id="borderCam1" width="1280px" height="720px"></canvas>
 					</br>
 					Set source URL: <input style="width:350px;" id="address1" type="text">
-					</br></br>
+					
 				</div>
 				<div class="col-md-2">
 					<a id="start1" href="#" class="btn btn-success"><span
@@ -69,9 +71,6 @@
 					<button id="pauseButton">Pause</button>
 					<button id="resumeButton">Resume</button>
 					<button onclick="alertEnd()">Test End</button>
-				</div>
-				<div class="col-md-5">
-
 				</div>
 
 				<div class="row">
@@ -100,9 +99,7 @@
 						class="glyphicon glyphicon-stop"></span> Stop</a>
 
 				</div>
-				<div class="col-md-5">
 
-				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<label class="control-label" for="console2">Console 2</label>

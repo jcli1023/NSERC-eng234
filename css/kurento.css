@@ -24,6 +24,9 @@ body {
 	body
 }
 
+
+
+
 video,#console1,#console2 {
 	display: block;
 	font-size: 14px;
@@ -38,6 +41,29 @@ video,#console1,#console2 {
 	-webkit-transition: border-color ease-in-out .15s, box-shadow
 		ease-in-out .15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.col-md-5{
+	position: relative;
+}
+
+#videoOutput1{
+	position: absolute;
+	z-index: auto;
+}
+
+#objectCam1{
+	position: absolute;
+    	border: 1px solid #73AD21;
+	border-radius: 4px;
+	z-index: 1;
+}
+
+#borderCam1{
+	positon: absolute;
+    	border: 1px solid #0000FF;
+	border-radius: 4px;
+	z-index: 2;
 }
 
 #console1,#console2 {
