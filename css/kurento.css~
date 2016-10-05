@@ -21,10 +21,7 @@ html {
 
 body {
 	padding-top: 40px;
-	body
 }
-
-
 
 
 video,#console1,#console2 {
@@ -43,27 +40,23 @@ video,#console1,#console2 {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-.col-md-5{
-	position: relative;
-}
-
 #videoOutput1{
 	position: absolute;
-	z-index: auto;
+	z-index: 1;
 }
 
 #objectCam1{
 	position: absolute;
-    	
+    	border: 1px solid #73AD21;
 	border-radius: 4px;
-	z-index: 1;
+	z-index: 2;
 }
 
 #borderCam1{
 	positon: absolute;
     	border: 1px solid #0000FF;
 	border-radius: 4px;
-	z-index: 2;
+	z-index: 3;
 }
 
 #console1,#console2 {
@@ -73,6 +66,8 @@ video,#console1,#console2 {
 }
 
 .col-md-2 {
+	position: absolute;
 	width: 80px;
-	padding-top: 190px;
+	left: 100px;
+	padding-top: 120px;
 }

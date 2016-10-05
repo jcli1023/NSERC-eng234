@@ -46,6 +46,10 @@ function setTemplate2()
 	document.getElementById("test").innerHTML = "Template2";
 	document.getElementById("videoOutput1").width=MAX_VID_SIZE_TEMP2_WIDTH;	
 	document.getElementById("videoOutput1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
+	document.getElementById("objectCam1").width=MAX_VID_SIZE_TEMP2_WIDTH;
+	document.getElementById("objectCam1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
+	document.getElementById("borderCam1").width=MAX_VID_SIZE_TEMP2_WIDTH;
+	document.getElementById("borderCam1").height=MAX_VID_SIZE_TEMP2_HEIGHT;
 	//document.getElementById("template1").style.display = "none";
 	document.getElementById("template2").style.display = "inline";	
 	currentNumCams = 2;
