@@ -21,6 +21,29 @@ var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var currentNumCams = 1;
 var pipe1, pipe2;
 
+paper.install(window);
+
+window.onload = function() {
+	// Setup directly from canvas id:
+	paper.setup('objectCam1');
+	var path1 = new Path();
+	path1.strokeColor = 'black';
+	var start = new Point(100, 100);
+	path1.moveTo(start);
+	path1.lineTo(start.add([ 200, -50 ]));
+	paper.setup('borderCam1');
+	var path6 = new Path();
+	path6.strokeColor = 'red';
+	var start = new Point(200, 200);
+	path6.moveTo(start);
+	path6.lineTo(start.add([ 200, -50 ]));
+	path6.clear();
+	path6.moveTo(start);
+	path6.lineTo(start.add([ 200, -50 ]));
+	view.draw();
+}
+
+
 //Template 1
 function setTemplate1()
 {
@@ -78,6 +101,11 @@ function overlayTextCanvas()
 		context2.font = "bold 16px Arial";
 		context2.fillText("borderCam"+i, 200, 200);
 	}
+}
+
+function clearCanvas(canvasId)
+{
+	document.getElementById(canvasId).width = document.getElementById(canvasId);
 }
 
 
@@ -225,7 +253,10 @@ pipe1 = function createPipeline1(){
 
   var drawTimer = null;
   var pathObject = null;
+  var currentPathObject = null;
   var pathBorder = null;
+  var isPaused = false;
+  var objectPresent = null;
 
 var dumbCount = 0;
   startButton = document.getElementById('start1');
@@ -234,8 +265,8 @@ var dumbCount = 0;
   stopButton = document.getElementById('stop1');
   stopButton.addEventListener('click', stop);
 
-  document.getElementById("pauseButton").addEventListener("click",pauseVideo);
-  document.getElementById("resumeButton").addEventListener("click",resumeVideo);
+  document.getElementById("objectButton").addEventListener("click",pauseVideo);
+  document.getElementById("borderButton").addEventListener("click",resumeVideo);
 
 
 /*	  videoOutput.addEventListener("ended",function(){
@@ -317,7 +348,43 @@ var dumbCount = 0;
   }
   function pauseVideo()
   {
-	var destinationContext;
+	if (!isPaused)
+	{
+		isPaused = true;
+		videoOutput.pause();
+		document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
+		paper.setup("objectCam1");
+		
+		//var path;
+		function onMouseDown(event) {
+			pathObject = new Path();
+			pathObject.strokeColor = 'pink';
+			pathObject.add(event.point);
+		}
+
+		objectTrackTool1 = new Tool();
+		objectTrackTool1.onMouseDown = onMouseDown;
+
+		objectTrackTool1.onMouseDrag = function(event) {
+			pathObject.add(event.point);
+		}
+
+	}
+	else if (isPaused)
+	{
+		isPaused = false;
+		videoOutput.play();
+
+		document.getElementById("objectButton").innerHTML = "Tracking Object";
+		document.getElementById("objectTracker").innerHTML = "Object Tracking";
+		objectTrackTool1.remove();
+		currentPathObject = pathObject.clone();
+		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
+		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
+		
+	}
+
+	/*var destinationContext;
  	var remoteVideoCanvas;
 	//videoOutput.pause();
 	webRtcPeer.remoteVideo.pause();
@@ -329,7 +396,10 @@ var dumbCount = 0;
 	destinationCanvas.width = remoteVideoCanvas.width;
 	destinationContext = destinationCanvas.getContext("2d");
 	destinationContext.drawImage(remoteVideoCanvas,0,0);
+	*/
   }
+
+	
 
   function resumeVideo()
   {
@@ -414,17 +484,19 @@ var dumbCount = 0;
   }
 
   function stop() {
-    address.disabled = false;
-    if (webRtcPeer) {
-      webRtcPeer.dispose();
-      webRtcPeer = null;
-    }
-    if(pipeline){
-      pipeline.release();
-      pipeline = null;
-    }
-    hideSpinner(videoOutput);
-    stopScreenshot(1);
+	address.disabled = false;
+	if (webRtcPeer) {
+		webRtcPeer.dispose();
+		webRtcPeer = null;
+	}
+	if(pipeline){
+		pipeline.release();
+		pipeline = null;
+	}
+	hideSpinner(videoOutput);
+	clearCanvas("objectCam1");
+	stopScreenshot(1);
+	
   }
 
 

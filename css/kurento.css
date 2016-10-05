@@ -63,7 +63,7 @@ video,#console1,#console2 {
 
 .col-md-2 {
 	position: absolute;
-	width: 80px;
-	left: 150px;
+	width: 100px;
+	left: 125px;
 	padding-top: 120px;
 }
