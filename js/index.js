@@ -38,6 +38,8 @@ function setTemplate1()
 		currentNumCams = 1;
 	}
 	document.getElementById("test2").innerHTML = currentNumCams;
+
+	overlayTextCanvas()
 }
 
 //Template 2
@@ -54,9 +56,24 @@ function setTemplate2()
 	document.getElementById("template2").style.display = "inline";	
 	currentNumCams = 2;
 	document.getElementById("test2").innerHTML = currentNumCams;
+
+	overlayTextCanvas();
 	createPipeline2();
 }
 
+function overlayTextCanvas()
+{
+	var canvas1 = document.getElementById("objectCam1");
+	var context1 = canvas1.getContext("2d");
+	context1.fillStyle = "green";
+	context1.font = "bold 16px Arial";
+	context1.fillText("ObjectCam1", 100, 100);
+	var canvas2 = document.getElementById("borderCam1");
+	var context2 = canvas2.getContext("2d");
+	context2.fillStyle = "blue";
+	context2.font = "bold 16px Arial";
+	context2.fillText("borderCam1", 200, 200);
+}
 
 
 function getopts(args, opts)

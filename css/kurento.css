@@ -47,15 +47,11 @@ video,#console1,#console2 {
 
 #objectCam1{
 	position: absolute;
-    	border: 1px solid #73AD21;
-	border-radius: 4px;
 	z-index: 2;
 }
 
 #borderCam1{
 	position: relative;
-    	border: 1px solid #0000FF;
-	border-radius: 4px;
 	z-index: 3;
 }
 

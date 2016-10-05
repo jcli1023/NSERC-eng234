@@ -202,6 +202,8 @@ pipe1 = function createPipeline1(){
   var webRtcPeer;
 
   var drawTimer = null;
+  var pathObject = null;
+  var pathBorder = null;
 
 var dumbCount = 0;
   startButton = document.getElementById('start1');
