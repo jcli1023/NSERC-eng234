@@ -252,9 +252,8 @@ var pipe1 = function createPipeline1(){
   var webRtcPeer;
 
   var drawTimer = null;
-  var pathObject = null;
-  var currentPathObject = new Path();
-  var pathBorder = null;
+  var pathObject = new Path();
+  var pathBorder = new Path();
   var isPaused = false;
   var objectPresent = null;
 
@@ -357,16 +356,16 @@ var dumbCount = 0;
 		
 		//var path;
 		function onMouseDown(event) {
-			pathObject = new Path();
-			pathObject.strokeColor = 'pink';
-			pathObject.add(event.point);
+			currentPathObject = new Path();
+			currentPathObject.strokeColor = 'pink';
+			currentPathObject.add(event.point);
 		}
 
 		objectTrackTool1 = new Tool();
 		objectTrackTool1.onMouseDown = onMouseDown;
 
 		objectTrackTool1.onMouseDrag = function(event) {
-			pathObject.add(event.point);
+			currentPathObject.add(event.point);
 		}
 
 	}
@@ -378,7 +377,7 @@ var dumbCount = 0;
 		document.getElementById("objectButton").innerHTML = "Tracking Object";
 		document.getElementById("objectTracker").innerHTML = "Object Tracking";
 		objectTrackTool1.remove();
-		currentPathObject.addSegments(pathObject.segments);
+		pathObject.addSegments(currentPathObject.segments);
 		//currentPathObject = pathObject.clone();
 		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
 		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
@@ -495,7 +494,7 @@ var dumbCount = 0;
 		pipeline = null;
 	}
 	hideSpinner(videoOutput);
-	pathObject.removeSegments();
+	currentPathObject.removeSegments();
 	stopScreenshot(1);
 	document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
 	document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
