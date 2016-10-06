@@ -19,6 +19,7 @@ var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var currentNumCams = 1;
+//pipe1 = new createPipeline1();
 
 //paper.install(pipe1);
 paper.install(window)
@@ -131,7 +132,8 @@ if (args.ice_servers) {
   console.log("Use freeice")
 }
 
-window.addEventListener('load',function(){pipe1();});
+window.addEventListener('load',createPipeline1);
+//window.addEventListener('load',function(){pipe1();});
 //window.addEventListener('load',pipe1);
 
 /*window.addEventListener('load', function(){
@@ -241,9 +243,8 @@ window.addEventListener('load',function(){pipe1();});
 }
 
 
-
-var pipe1 = function createPipeline1(){
-
+function createPipeline1(){
+//var pipe1 = function createPipeline1(){
   console = new Console('console1', console);
   var videoOutput = document.getElementById('videoOutput1');
   var address = document.getElementById('address1');
@@ -526,8 +527,8 @@ var dumbCount = 0;
 	
   	});
   }
-this.stop = function() {
- //function stop() {
+//	this.stop = function() {
+ 	function stop() {
 	address.disabled = false;
 	if (webRtcPeer) {
 		webRtcPeer.dispose();
