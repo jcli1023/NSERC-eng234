@@ -240,10 +240,10 @@ window.addEventListener('load',function(){pipe1();});
 {
 	v = document.getElementById('videoOutput1');
 	console.log("HELLO ALERT ENDED?");
-	alert(v.active);
+	pipe1.stop();
 }
 
-pipe1 = function createPipeline1(){
+var pipe1 = function createPipeline1(){
   console = new Console('console1', console);
   var videoOutput = document.getElementById('videoOutput1');
   var address = document.getElementById('address1');
@@ -253,7 +253,7 @@ pipe1 = function createPipeline1(){
 
   var drawTimer = null;
   var pathObject = null;
-  var currentPathObject = null;
+  var currentPathObject = new Path();
   var pathBorder = null;
   var isPaused = false;
   var objectPresent = null;
@@ -378,7 +378,8 @@ var dumbCount = 0;
 		document.getElementById("objectButton").innerHTML = "Tracking Object";
 		document.getElementById("objectTracker").innerHTML = "Object Tracking";
 		objectTrackTool1.remove();
-		currentPathObject = pathObject.clone();
+		currentPathObject.addSegments(pathObject.segments);
+		//currentPathObject = pathObject.clone();
 		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
 		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
 		
@@ -494,13 +495,11 @@ var dumbCount = 0;
 		pipeline = null;
 	}
 	hideSpinner(videoOutput);
-	clearCanvas("objectCam1");
+	pathObject.removeSegments();
 	stopScreenshot(1);
-	
+	document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
+	document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
   }
-
-
-
 
 }; //createPipeline1
 
