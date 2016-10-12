@@ -2,6 +2,12 @@
 session_start();
 $camNum = $_POST['cam'];
 $coordinates = $_POST['coordinates'];
+
+if ( !isset($_SESSION['cams']) )
+	$_SESSION['cams'] = array($camNum);
+else
+	array_push($_SESSION['cams'],$camNum);
+
 if ( !isset($_SESSION['dumbCount']) )
 	$_SESSION['dumbCount'] = 0;
 else
