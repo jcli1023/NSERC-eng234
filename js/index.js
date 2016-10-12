@@ -390,24 +390,30 @@ var dumbCount = 0;
 		document.getElementById("objectButton").innerHTML = "Tracking Object";
 		document.getElementById("borderButton").disabled = false;
 		document.getElementById("objectTracker").innerHTML = "Object Tracking";
+
 		objectTrackTool1.remove();
 		pathObject.clear();
-		pathObject.addSegments(currentPathObject.segments);
 
+		if (typeof currentPathObject !== 'undefined')
+			pathObject.addSegments(currentPathObject.segments);
+
+		initializeDrawings(1,1);
 		
 		if(typeof(EventSource) !== "undefined") {
 			console.log("entered EventSource");
 			source = new EventSource("sse_test.php");
 			source.onmessage = function(event) {
-				console.log(event.data);
+				console.log(event.data +" "+event.lastEventId);
 			};
 		}
 		else {
 			console.log("Sorry, your browser does not support server-sent events...");
 		}
 
-		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
-		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
+		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
+
+		if (typeof currentPathObject !== 'undefined')		
+			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
 		
 	}
 
@@ -464,13 +470,30 @@ var dumbCount = 0;
 		document.getElementById("borderButton").innerHTML = "Border Set";
 		borderTrackTool1.remove();
 		pathBorder.clear();
-		pathBorder.addSegments(currentPathBorder.segments);
 
-		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.segments.toString();		
-		document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.segments.toString();
+		if (typeof currentPathBorder !== 'undefined')
+			pathBorder.addSegments(currentPathBorder.segments);
+
+		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.segments.toString();
+
+		if (typeof currentPathBorder !== 'undefined')		
+			document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.segments.toString();
 		
 	}
 
+  }
+
+  function initializeDrawings(camNum, coordinates)
+  {
+	$.post("initialize_drawings.php",
+    	{
+        	cam: camNum
+    	},
+    	function(data, status){
+
+		alert("Data: " + data);
+        	//alert("Data: " + data + "\nStatus: " + status);
+    	});
   }
 
   function start() {
