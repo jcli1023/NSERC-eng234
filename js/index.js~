@@ -26,18 +26,19 @@ paper.install(window)
 window.onload = function() {
 	// Setup directly from canvas id:
 	paper.setup('objectCam1');
-	var path1 = new Path();
+	/*var path1 = new Path();
 	path1.strokeColor = 'green';
 	var start = new Point(100, 100);
 	path1.moveTo(start);
-	path1.lineTo(start.add([ 200, -50 ]));
+	path1.lineTo(start.add([ 200, -50 ]));*/
 	paper.setup('borderCam1');
+/*
 	var path6 = new Path();
 	path6.strokeColor = 'blue';
 	var start = new Point(200, 200);
 	path6.moveTo(start);
 	path6.lineTo(start.add([ 200, -50 ]));
-	view.draw();
+	view.draw();*/
 }
 
 
@@ -254,16 +255,21 @@ function createPipeline1(){
 
   var drawTimer = null;
   var pathObject = new Path();
+  pathObject.name = "pathObject";
+  var currentPathObject;
   var pathBorder = new Path();
+  pathBorder.name = "pathBorder";
+  var currentPathBorder;
   var isPaused = false;
   var objectPresent = null;
+  var source; 
 
 var dumbCount = 0;
   startButton = document.getElementById('start1');
   startButton.addEventListener('click', start);
 
   stopButton = document.getElementById('stop1');
-  stopButton.addEventListener('click', this.stop);
+  stopButton.addEventListener('click', stop);
 
   document.getElementById("objectButton").addEventListener("click",drawObject);
   document.getElementById("borderButton").addEventListener("click",drawBorder);
@@ -363,6 +369,7 @@ var dumbCount = 0;
 		//var path;
 		function onMouseDown(event) {
 			currentPathObject = new Path();
+			currentPathObject.name = "currentPathObject";
 			currentPathObject.strokeColor = 'pink';
 			currentPathObject.add(event.point);
 		}
@@ -386,6 +393,18 @@ var dumbCount = 0;
 		objectTrackTool1.remove();
 		pathObject.clear();
 		pathObject.addSegments(currentPathObject.segments);
+
+		
+		if(typeof(EventSource) !== "undefined") {
+			console.log("entered EventSource");
+			source = new EventSource("sse_test.php");
+			source.onmessage = function(event) {
+				console.log(event.data);
+			};
+		}
+		else {
+			console.log("Sorry, your browser does not support server-sent events...");
+		}
 
 		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
 		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
@@ -423,6 +442,7 @@ var dumbCount = 0;
 		//var path;
 		function onMouseDown(event) {
 			currentPathBorder = new Path();
+			currentPathBorder.name = "currentPathBorder";
 			currentPathBorder.strokeColor = 'red';
 			currentPathBorder.add(event.point);
 		}
@@ -540,14 +560,22 @@ var dumbCount = 0;
 	}
 	hideSpinner(videoOutput);
 
-	currentPathObject.removeSegments();
-	currentPathBorder.removeSegments();
+	if (typeof currentPathObject !== 'undefined')
+		currentPathObject.removeSegments();
+	if (typeof currentPathBorder !== 'undefined')
+		currentPathBorder.removeSegments();
+
 	document.getElementById("objectButton").innerHTML = "Track Object";
 	document.getElementById("borderButton").innerHTML = "Track Border";
-	stopScreenshot(1);
 
-	document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();		
-	document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
+	source.close();
+	stopScreenshot(1);
+	console.log("STOPPED FUNCTION()");
+
+	if (typeof pathObject !== 'undefined')
+		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
+	if (typeof currentPathObject !== 'undefined')
+		document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
   }
 
 }; //createPipeline1
