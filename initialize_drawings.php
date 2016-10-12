@@ -1,8 +1,13 @@
 <?php
 session_start();
 $camNum = $_POST['cam'];
-$_SESSION['dumbCount'] = 0;
-$_SESSION['cams']['object']['1'] = "Hello World!";
-$data = $_POST['camNum'];
-echo $data;
+$coordinates = $_POST['coordinates'];
+if ( !isset($_SESSION['dumbCount']) )
+	$_SESSION['dumbCount'] = 0;
+else
+	$_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
+//$_SESSION['cams']['object'][$camNum] = "Hello World!";
+$_SESSION['cams']['object'][$camNum] = $coordinates;
+//$data = $_POST['cam'];
+echo $coordinates;
 ?>

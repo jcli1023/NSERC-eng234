@@ -291,7 +291,6 @@ var dumbCount = 0;
 
   function stopScreenshot(camNum)
   {
-	isPaused = true;
 	if (drawTimer)
 	{
 		clearInterval(drawTimer);
@@ -302,7 +301,6 @@ var dumbCount = 0;
 
   function startScreenshot(camNum)
   {
-	isPaused = false;
 	if (drawTimer == null)
 	{
 		drawTimer = setInterval(function(){grabScreenshot(1)},500);
@@ -358,8 +356,13 @@ var dumbCount = 0;
   {
 	if (!isPaused)
 	{
-		isPaused = true;
-		videoOutput.pause();
+		console.log("videoOutput.paused: "+videoOutput.paused);
+		if (!videoOutput.paused){
+
+			console.log("Entered here");
+			videoOutput.pause();
+			isPaused = true;
+		}
 		document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
 		document.getElementById("borderButton").disabled = true;
 /*		objectCam1 = document.getElementById("objectCam1");
@@ -385,7 +388,9 @@ var dumbCount = 0;
 	else if (isPaused)
 	{
 		isPaused = false;
-		videoOutput.play();
+		console.log("videoOutput.paused2: "+videoOutput.paused);
+		if (videoOutput.paused)
+			videoOutput.play();
 
 		document.getElementById("objectButton").innerHTML = "Tracking Object";
 		document.getElementById("borderButton").disabled = false;
@@ -397,7 +402,7 @@ var dumbCount = 0;
 		if (typeof currentPathObject !== 'undefined')
 			pathObject.addSegments(currentPathObject.segments);
 
-		initializeDrawings(1,1);
+		initializeDrawings(1,currentPathObject);
 		
 		if(typeof(EventSource) !== "undefined") {
 			console.log("entered EventSource");
@@ -487,7 +492,8 @@ var dumbCount = 0;
   {
 	$.post("initialize_drawings.php",
     	{
-        	cam: camNum
+        	cam: camNum,
+		coordinates: coordinates.segments.toString()
     	},
     	function(data, status){
 
@@ -594,6 +600,7 @@ var dumbCount = 0;
 	if (typeof source !== 'undefined')
 		source.close();
 	stopScreenshot(1);
+	isPaused = false; //Set drawing function back to initial drawing
 	console.log("STOPPED FUNCTION()");
 
 	if (typeof pathObject !== 'undefined')
