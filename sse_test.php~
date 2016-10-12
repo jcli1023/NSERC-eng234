@@ -9,7 +9,7 @@ $_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
 //echo "data: The server time is: {$time}\n\n";
 //echo "event: stupid\n"
 echo "retry: 500\n";
-echo "id: 1\n";
+echo "id: ".$_SESSION['dumbCount']."\n";
 //echo "data: The server time is: {$time}\n\n";
 
 echo "data: ".$_SESSION['cams']['object'][1]."\n\n";

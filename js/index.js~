@@ -600,6 +600,7 @@ var dumbCount = 0;
 	if (typeof source !== 'undefined')
 		source.close();
 	stopScreenshot(1);
+	isPaused = false; //Set drawing function back to initial drawing
 	console.log("STOPPED FUNCTION()");
 
 	if (typeof pathObject !== 'undefined')

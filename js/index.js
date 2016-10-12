@@ -357,11 +357,12 @@ var dumbCount = 0;
 	if (!isPaused)
 	{
 		console.log("videoOutput.paused: "+videoOutput.paused);
+		isPaused = true;
 		if (!videoOutput.paused){
 
 			console.log("Entered here");
 			videoOutput.pause();
-			isPaused = true;
+
 		}
 		document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
 		document.getElementById("borderButton").disabled = true;
