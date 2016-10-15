@@ -8,10 +8,10 @@ $coordinates = $_POST['coordinates'];
 else
 	array_push($_SESSION['cams'],$camNum);
 */
-if ( !isset($_SESSION['dumbCount']) )
+//if ( !isset($_SESSION['dumbCount']) )
 	$_SESSION['dumbCount'] = 0;
-else
-	$_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
+//else
+//	$_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
 //$_SESSION['cams']['object'][$camNum] = "Hello World!";
 $_SESSION['cams']['object'][$camNum] = $coordinates;
 //$data = $_POST['cam'];

@@ -357,11 +357,12 @@ var dumbCount = 0;
 	if (!isPaused)
 	{
 		console.log("videoOutput.paused: "+videoOutput.paused);
+		isPaused = true;
 		if (!videoOutput.paused){
 
 			console.log("Entered here");
 			videoOutput.pause();
-			isPaused = true;
+
 		}
 		document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
 		document.getElementById("borderButton").disabled = true;
@@ -404,6 +405,7 @@ var dumbCount = 0;
 
 		initializeDrawings(1,currentPathObject);
 		
+		//When server sends information to client
 		if(typeof(EventSource) !== "undefined") {
 			console.log("entered EventSource");
 			source = new EventSource("sse_test.php");
@@ -415,10 +417,13 @@ var dumbCount = 0;
 			console.log("Sorry, your browser does not support server-sent events...");
 		}
 
-		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
+		
+//		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
+		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.exportJSON({asString:true});
 
 		if (typeof currentPathObject !== 'undefined')		
-			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
+//			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
+			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.exportJSON({asString:true});
 		
 	}
 
@@ -479,10 +484,12 @@ var dumbCount = 0;
 		if (typeof currentPathBorder !== 'undefined')
 			pathBorder.addSegments(currentPathBorder.segments);
 
-		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.segments.toString();
+//		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.segments.toString();
+		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.exportJSON({asString:true});
 
 		if (typeof currentPathBorder !== 'undefined')		
-			document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.segments.toString();
+//			document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.segments.toString();
+			document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.exportJSON({asString:true});
 		
 	}
 
@@ -493,7 +500,8 @@ var dumbCount = 0;
 	$.post("initialize_drawings.php",
     	{
         	cam: camNum,
-		coordinates: coordinates.segments.toString()
+		//coordinates: coordinates.segments.toString()
+		coordinates: coordinates.exportJSON({asString:true})
     	},
     	function(data, status){
 
