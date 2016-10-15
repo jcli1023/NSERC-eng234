@@ -394,6 +394,28 @@ function createPipeline1() {
 				source = new EventSource("sse_test.php");
 				source.onmessage = function(event) {
 					console.log(event.data + " " + event.lastEventId);
+					var jsonObj = JSON.parse(event.data);
+					testObj2 = { };
+					
+					testObj = jsonObj[0]+","+jsonObj[1].applyMatrix+","+jsonObj[1].segments+","+jsonObj[1].strokeColor;
+					console.log("testObj: "+testObj);
+					currentPathObject.importJSON(event.data);
+					/*
+					var new_tweets = { };
+
+new_tweets.k = { };
+
+new_tweets.k.tweet_id = 98745521;
+new_tweets.k.user_id = 54875;
+
+new_tweets.k.data = { };
+
+new_tweets.k.data.in_reply_to_screen_name = 'other_user';
+new_tweets.k.data.text = 'tweet text';
+
+// Will create the JSON string you're looking for.
+var json = JSON.stringify(new_tweets);
+					*/
 				};
 			} else {
 				console.log("Sorry, your browser does not support server-sent events...");
@@ -485,15 +507,15 @@ function createPipeline1() {
 		$.post("initialize_drawings.php", {
 				cam: camNum,
 				//coordinates: coordinates.segments.toString()
-				coordinates: coordinates.exportJSON({
-					asString: true
-				})
+				coordinates: coordinates.exportJSON()
 			},
 			function(data, status) {
 
-				alert("Data: " + data);
+				//alert(data);
+				console.log(data);
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
+		console.log("coordinates.exportJSON(): "+coordinates.exportJSON());
 	}
 
 	function start() {
