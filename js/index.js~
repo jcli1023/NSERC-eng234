@@ -481,7 +481,7 @@ function createPipeline1() {
 				source = new EventSource("sse_test.php");
 				source.onmessage = function(event) {
 					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
-					/*var jsonObj = JSON.parse(event.data);
+					var jsonObj = JSON.parse(event.data);
 					var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
@@ -500,8 +500,8 @@ function createPipeline1() {
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
 					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
-					console.log("testObj: " + testObj);*/
-					//currentPathObject.importJSON(event.data);
+					console.log("testObj: " + testObj);
+					currentPathObject.importJSON(event.data);
 					/*
 					var new_tweets = { };
 

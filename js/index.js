@@ -332,6 +332,7 @@ function createPipeline1() {
 	var pipeline;
 	var webRtcPeer;
 
+	var camNum = 1;
 	var frameDim; //dimensions of the frames
 	var vidDim; //dimensions of the video
 	var drawTimer = null;
@@ -359,10 +360,10 @@ function createPipeline1() {
 	  	});
 	*/
 	videoOutput.addEventListener("pause", function() {
-		stopScreenshot(1);
+		stopScreenshot(camNum);
 	});
 	videoOutput.addEventListener("playing", function() {
-		startScreenshot(1);
+		startScreenshot(camNum);
 	});
 
 
@@ -378,7 +379,7 @@ function createPipeline1() {
 	function startScreenshot(camNum) {
 		if (drawTimer == null) {
 			drawTimer = setInterval(function() {
-				grabScreenshot(1)
+				grabScreenshot(camNum)
 			}, 500);
 		}
 	}
@@ -473,12 +474,12 @@ function createPipeline1() {
 
 			objectTrackTool1.remove();
 
-			initializeDrawings(1, currentPathObject);
+			initializeDrawings(camNum, currentPathObject);
 
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
-				source = new EventSource("sse_test.php");
+				source = new EventSource("sse_test.php?camNum="+camNum);
 				source.onmessage = function(event) {
 					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
@@ -715,7 +716,7 @@ function createPipeline1() {
 
 		if (typeof source !== 'undefined')
 			source.close();
-		stopScreenshot(1);
+		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
 
