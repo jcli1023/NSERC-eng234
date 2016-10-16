@@ -111,7 +111,7 @@ function setTemplate1() {
 	}
 	document.getElementById("test2").innerHTML = currentNumCams;
 
-	overlayTextCanvas()
+	overlayTextCanvas();
 }
 
 //Template 2
@@ -180,8 +180,9 @@ if (args.ice_servers) {
 }
 
 window.addEventListener('load', createPipeline1);
+window.addEventListener('load', overlayTextCanvas);
 //window.addEventListener('load',function(){pipe1();});
-//window.addEventListener('load',pipe1);
+//window.addEventListener('load',pipe1());
 
 /*window.addEventListener('load', function(){
   console = new Console('console', console);
@@ -288,7 +289,7 @@ function alertEnd() {
 	pipe1.stop();
 }
 
-
+//window.pipe1 = function createPipeline1 () {
 function createPipeline1() {
 
 	var paperScopes = [];
@@ -524,31 +525,13 @@ function createPipeline1() {
 				console.log("Sorry, your browser does not support server-sent events...");
 			}
 
-
-			//		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
-
-
 			if (typeof currentPathObject !== 'undefined')
-			//			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
 				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
 				asString: true
 			});
 
 		}
 
-		/*var destinationContext;
- 	var remoteVideoCanvas;
-	//videoOutput.pause();
-	webRtcPeer.remoteVideo.pause();
-	remoteVideoCanvas = webRtcPeer.currentFrame;
-	document.getElementById("test3").innerHTML = remoteVideoCanvas.width;
-
-	destinationCanvas = document.getElementById("testCanvas");
-	destinationCanvas.height = remoteVideoCanvas.height;
-	destinationCanvas.width = remoteVideoCanvas.width;
-	destinationContext = destinationCanvas.getContext("2d");
-	destinationContext.drawImage(remoteVideoCanvas,0,0);
-	*/
 	}
 
 
@@ -566,9 +549,9 @@ function createPipeline1() {
 				videoOutput.pause();
 
 			}
+
 			document.getElementById("borderButton").innerHTML = "Drawn Border";
 			document.getElementById("objectButton").disabled = true;
-			//objectCam1 = document.getElementById("objectCam1");
 
 			paper = paperScopes[1];
 
@@ -707,9 +690,11 @@ function createPipeline1() {
 		hideSpinner(videoOutput);
 
 		if (typeof currentPathObject !== 'undefined')
-			currentPathObject.removeSegments();
+			//currentPathObject.removeSegments();
+			currentPathObject.remove();
 		if (typeof currentPathBorder !== 'undefined')
-			currentPathBorder.removeSegments();
+			//currentPathBorder.removeSegments();
+			currentPathBorder.remove();
 
 		document.getElementById("objectButton").innerHTML = "Track Object";
 		document.getElementById("borderButton").innerHTML = "Track Border";
@@ -719,6 +704,7 @@ function createPipeline1() {
 		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
+		overlayTextCanvas();
 
 		if (typeof pathObject !== 'undefined')
 			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
@@ -727,6 +713,7 @@ function createPipeline1() {
 	}
 
 }; //createPipeline1
+
 
 function createPipeline2() {
 	console = new Console('console2', console);
@@ -745,8 +732,8 @@ function createPipeline2() {
 	stopButton = document.getElementById('stop2');
 	stopButton.addEventListener('click', stop);
 
-	document.getElementById("pauseButton").addEventListener("click", pauseVideo);
-	document.getElementById("resumeButton").addEventListener("click", resumeVideo);
+	//document.getElementById("pauseButton").addEventListener("click", pauseVideo);
+	//document.getElementById("resumeButton").addEventListener("click", resumeVideo);
 
 
 	/*	  videoOutput.addEventListener("ended",function(){
@@ -754,6 +741,7 @@ function createPipeline2() {
 		stopScreenshot(1);
 	  	});
 	*/
+
 	videoOutput.addEventListener("pause", function() {
 		stopScreenshot(2);
 	});
