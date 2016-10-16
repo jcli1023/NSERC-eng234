@@ -18,10 +18,61 @@ var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var currentNumCams = 1;
+/*var myPapers = [];
+
+myPapers[0] = new paper.PaperScope();
+myPapers[1] = new paper.PaperScope();*/
 //pipe1 = new createPipeline1();
 
+/*var mypapers = [];
+mypapers[0] = new paper.PaperScope();
+mypapers[1] = new paper.PaperScope();
+
+mypapers[0].setup($("#canvas1")[0]);
+
+
+paper = mypapers[0];
+var circle1 = new paper.Path.Circle(30, 30, 20);
+circle1.style = {
+    fillColor: new paper.Color(0, 0, 1),
+    strokeColor: "black"
+};
+*/
+
+
+//mypapers[0].view.draw();
+
+/*window.onload = function() {
+var mypapers = [];
+mypapers[0] = new paper.PaperScope();
+mypapers[1] = new paper.PaperScope();
+
+mypapers[0].setup("objectCam1");
+
+
+paper = mypapers[0];
+var circle1 = new paper.Path.Circle(30, 30, 20);
+circle1.style = {
+    fillColor: new paper.Color(0, 0, 1),
+    strokeColor: "red"
+};
+
+mypapers[1].setup("borderCam1");
+paper = mypapers[1];
+var circle1 = new paper.Path.Circle(100, 100, 20);
+circle1.style = {
+    fillColor: new paper.Color(1, 0, 0),
+    strokeColor: "yellow"
+};
+
+
+mypapers[0].view.draw();
+mypapers[1].view.draw();
+}
+*/
+
 //paper.install(pipe1);
-paper.install(window)
+/*paper.install(window)
 window.onload = function() {
 	// Setup directly from canvas id:
 	paper.setup('objectCam1');
@@ -30,7 +81,7 @@ window.onload = function() {
 	var start = new Point(100, 100);
 	path1.moveTo(start);
 	path1.lineTo(start.add([ 200, -50 ]));*/
-	paper.setup('borderCam1');
+//	paper.setup('borderCam1');
 	/*
 		var path6 = new Path();
 		path6.strokeColor = 'blue';
@@ -38,7 +89,7 @@ window.onload = function() {
 		path6.moveTo(start);
 		path6.lineTo(start.add([ 200, -50 ]));
 		view.draw();*/
-}
+//}
 
 
 //Template 1
@@ -236,6 +287,40 @@ function alertEnd() {
 
 
 function createPipeline1() {
+
+	var paperScopes = [];
+	paperScopes[0] = new paper.PaperScope();
+	paperScopes[1] = new paper.PaperScope();
+
+	paperScopes[0].setup("objectCam1");
+	paperScopes[1].setup("borderCam1");
+
+
+/*
+paperScopes[0].view.autoUpdate = false;
+paperScopes[1].view.autoUpdate = false;
+
+paper = paperScopes[0];
+
+
+var circle1 = new paper.Path.Circle(30, 30, 20);
+circle1.style = {
+    fillColor: new paper.Color(1, .5, .5),
+    strokeColor: "black"
+};
+
+
+paper = paperScopes[1];
+
+var circle2 = new paper.Path.Circle(60, 60, 20);
+circle2.style = {
+    fillColor: new paper.Color(.5, .5, 1),
+    strokeColor: "black"
+};
+
+paperScopes[0].view.draw();
+paperScopes[1].view.draw();
+*/
 	//var pipe1 = function createPipeline1(){
 	console = new Console('console1', console);
 	var videoOutput = document.getElementById('videoOutput1');
@@ -245,15 +330,15 @@ function createPipeline1() {
 	var webRtcPeer;
 
 	var drawTimer = null;
-	var pathObject = new Path();
-	pathObject.name = "pathObject";
+	/*var pathObject = new paper.Path();
+	pathObject.name = "pathObject";*/
 	var currentPathObject;
-	var pathBorder = new Path();
-	pathBorder.name = "pathBorder";
+	/*var pathBorder = new paper.Path();
+	pathBorder.name = "pathBorder";*/
 	var currentPathBorder;
 	var isPaused = false;
 	var objectPresent = null;
-	var source;
+	var source; //eventSource for serve sided events
 
 	var dumbCount = 0;
 	startButton = document.getElementById('start1');
@@ -340,8 +425,9 @@ function createPipeline1() {
 	}
 
 	function drawObject() {
+		console.log("entered drawObject()");
 		if (!isPaused) {
-			console.log("videoOutput.paused: " + videoOutput.paused);
+			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 			isPaused = true;
 			if (!videoOutput.paused) {
 
@@ -351,20 +437,27 @@ function createPipeline1() {
 			}
 			document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
 			document.getElementById("borderButton").disabled = true;
-			/*		objectCam1 = document.getElementById("objectCam1");
-					paper.setup(objectCam1);*/
-			paper.setup("objectCam1");
+			//objectCam1 = document.getElementById("objectCam1");
 
-			//var path;
+			paper = paperScopes[0];
+
 			function onMouseDown(event) {
-				currentPathObject = new Path();
+//				currentPathObject = new Path();
+				console.log("onMouseDown(event)");
+				
+				currentPathObject = new paper.Path();
 				currentPathObject.name = "currentPathObject";
 				currentPathObject.strokeColor = 'pink';
 				currentPathObject.add(event.point);
-			}
 
-			objectTrackTool1 = new Tool();
+			}
+			console.log("paperScopes: "+paperScopes);
+			console.log("paper0 is : " + paper);
+			console.log("paper.tools : "+paper.tools);
+			objectTrackTool1 = new paper.Tool();
+			objectTrackTool1.activate();
 			objectTrackTool1.onMouseDown = onMouseDown;
+
 
 			objectTrackTool1.onMouseDrag = function(event) {
 				currentPathObject.add(event.point);
@@ -372,7 +465,7 @@ function createPipeline1() {
 
 		} else if (isPaused) {
 			isPaused = false;
-			console.log("videoOutput.paused2: " + videoOutput.paused);
+			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
 			if (videoOutput.paused)
 				videoOutput.play();
 
@@ -381,10 +474,10 @@ function createPipeline1() {
 			document.getElementById("objectTracker").innerHTML = "Object Tracking";
 
 			objectTrackTool1.remove();
-			pathObject.clear();
+//			pathObject.clear();
 
-			if (typeof currentPathObject !== 'undefined')
-				pathObject.addSegments(currentPathObject.segments);
+			/*if (typeof currentPathObject !== 'undefined')
+				pathObject.addSegments(currentPathObject.segments);*/
 
 			initializeDrawings(1, currentPathObject);
 
@@ -395,8 +488,21 @@ function createPipeline1() {
 				source.onmessage = function(event) {
 					console.log(event.data + " " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
-					testObj = { };
-					
+					var jsonObj2 = [];
+					var segArrays = [];
+					var strokeColorArray = [];
+					var jsonObj3 = {
+						"name" : "currentPathObject",
+						"applyMatrix" : true,
+						"segments" : currentPathObject.segments,
+						"strokeColor" : currentPathObject.strokeColor											
+					};
+					var jsonObj4 = { "word" : "hello" };
+					jsonObj2.push("Path");
+					jsonObj2.push(jsonObj3);
+					jsonObj2.push(jsonObj4);
+					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
+
 					testObj = jsonObj[0]+","+jsonObj[1].applyMatrix+","+jsonObj[1].segments+","+jsonObj[1].strokeColor;
 					console.log("testObj: "+testObj);
 					currentPathObject.importJSON(event.data);
@@ -452,55 +558,58 @@ var json = JSON.stringify(new_tweets);
 
 
 	function drawBorder() {
+		console.log("entered drawBorder()");
 		if (!isPaused) {
+			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 			isPaused = true;
-			videoOutput.pause();
-			document.getElementById("objectButton").disabled = true;
-			document.getElementById("borderButton").innerHTML = "Drawn Border";
-			borderCam1 = document.getElementById("borderCam1");
-			paper.setup(borderCam1);
-			//		paper.setup("borderCam1");
+			if (!videoOutput.paused) {
 
-			//var path;
+				console.log("Entered here");
+				videoOutput.pause();
+
+			}
+			document.getElementById("borderButton").innerHTML = "Drawn Border";
+			document.getElementById("objectButton").disabled = true;
+			//objectCam1 = document.getElementById("objectCam1");
+
+			paper = paperScopes[1];				
+
 			function onMouseDown(event) {
-				currentPathBorder = new Path();
+//				currentPathObject = new Path();
+				console.log("onMouseDown(event)");
+				paper = paperScopes[0];
+				currentPathBorder = new paper.Path();
 				currentPathBorder.name = "currentPathBorder";
 				currentPathBorder.strokeColor = 'red';
 				currentPathBorder.add(event.point);
+
 			}
 
-			borderTrackTool1 = new Tool();
-			borderTrackTool1.onMouseDown = onMouseDown;
+			console.log("paper1 is : " + paper);
+			console.log("paper.tools : "+paper.tools);
+			borderTrackTool = new paper.Tool();
+			borderTrackTool.activate();
+			borderTrackTool.onMouseDown = onMouseDown;
 
-			borderTrackTool1.onMouseDrag = function(event) {
+
+			borderTrackTool.onMouseDrag = function(event) {
 				currentPathBorder.add(event.point);
 			}
 
 		} else if (isPaused) {
 			isPaused = false;
-			videoOutput.play();
+			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
+			if (videoOutput.paused)
+				videoOutput.play();
 
-			document.getElementById("objectButton").disabled = false;
 			document.getElementById("borderButton").innerHTML = "Border Set";
-			borderTrackTool1.remove();
-			pathBorder.clear();
+			document.getElementById("objectButton").disabled = false;
 
-			if (typeof currentPathBorder !== 'undefined')
-				pathBorder.addSegments(currentPathBorder.segments);
 
-			//		document.getElementById("test2").innerHTML = "pathBorder: "+pathBorder.segments.toString();
-			document.getElementById("test2").innerHTML = "pathBorder: " + pathBorder.exportJSON({
-				asString: true
-			});
+			borderTrackTool.remove();
 
-			if (typeof currentPathBorder !== 'undefined')
-			//			document.getElementById("test3").innerHTML = "currentPathBorder: "+currentPathBorder.segments.toString();
-				document.getElementById("test3").innerHTML = "currentPathBorder: " + currentPathBorder.exportJSON({
-				asString: true
-			});
 
 		}
-
 	}
 
 	function initializeDrawings(camNum, coordinates) {

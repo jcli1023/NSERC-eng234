@@ -19,7 +19,16 @@ foreach($obj[1]->strokeColor as $values) {
 	
 	echo $values." ";
 }
+
+$new = "hello";
+
+array_push($obj,$new);
+
 $json = json_encode($obj);
+
+$fp = fopen('results.json', 'w');
+fwrite($fp, json_encode($coordinates));
+fclose($fp);
 
 /*["Path",{"name":"currentPathObject",
 "applyMatrix":true,
