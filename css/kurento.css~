@@ -47,12 +47,12 @@ video,#console1,#console2 {
 
 #objectCam1,#objectCam2{
 	position: absolute;
-	z-index: 2;
+	z-index: 1000;
 }
 
 #borderCam1,#borderCam2{
-	position: relative;
-	z-index: 3;
+	position: absolute;
+	z-index: 500;
 }
 
 #console1,#console2 {
@@ -63,7 +63,7 @@ video,#console1,#console2 {
 
 .col-md-2 {
 	position: absolute;
-	width: 80px;
+	width: 100px;
 	left: 125px;
 	padding-top: 120px;
 }

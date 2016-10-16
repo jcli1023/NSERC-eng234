@@ -17,7 +17,10 @@ var MAX_VID_SIZE_TEMP1_HEIGHT = 720;
 var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
+var zFRONT = 1000;
+var zBACK = 500;
 var currentNumCams = 1;
+
 /*var myPapers = [];
 
 myPapers[0] = new paper.PaperScope();
@@ -425,6 +428,9 @@ paperScopes[1].view.draw();
 	}
 
 	function drawObject() {
+		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
+		document.getElementById("objectCam1").style.zIndex = zFRONT;
+		document.getElementById("borderCam1").style.zIndex = zBACK;
 		console.log("entered drawObject()");
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
@@ -443,25 +449,26 @@ paperScopes[1].view.draw();
 
 			function onMouseDown(event) {
 //				currentPathObject = new Path();
-				console.log("onMouseDown(event)");
+				console.log("paperOnMouseDown: "+paper);
 				
 				currentPathObject = new paper.Path();
 				currentPathObject.name = "currentPathObject";
-				currentPathObject.strokeColor = 'pink';
+				currentPathObject.strokeColor = 'green';
 				currentPathObject.add(event.point);
 
 			}
 			console.log("paperScopes: "+paperScopes);
 			console.log("paper0 is : " + paper);
 			console.log("paper.tools : "+paper.tools);
-			objectTrackTool1 = new paper.Tool();
-			objectTrackTool1.activate();
+
+			objectTrackTool1 = new paperScopes[0].Tool();
 			objectTrackTool1.onMouseDown = onMouseDown;
 
 
 			objectTrackTool1.onMouseDrag = function(event) {
 				currentPathObject.add(event.point);
 			}
+
 
 		} else if (isPaused) {
 			isPaused = false;
@@ -558,6 +565,9 @@ var json = JSON.stringify(new_tweets);
 
 
 	function drawBorder() {
+		//Brings borderCam1 canvas to front for mouse events, objectCam1 canvas to back
+		document.getElementById("objectCam1").style.zIndex = zBACK; 
+		document.getElementById("borderCam1").style.zIndex = zFRONT; 
 		console.log("entered drawBorder()");
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
@@ -576,8 +586,7 @@ var json = JSON.stringify(new_tweets);
 
 			function onMouseDown(event) {
 //				currentPathObject = new Path();
-				console.log("onMouseDown(event)");
-				paper = paperScopes[0];
+				console.log("paperOnMouseDown: "+paper);
 				currentPathBorder = new paper.Path();
 				currentPathBorder.name = "currentPathBorder";
 				currentPathBorder.strokeColor = 'red';
@@ -588,7 +597,6 @@ var json = JSON.stringify(new_tweets);
 			console.log("paper1 is : " + paper);
 			console.log("paper.tools : "+paper.tools);
 			borderTrackTool = new paper.Tool();
-			borderTrackTool.activate();
 			borderTrackTool.onMouseDown = onMouseDown;
 
 

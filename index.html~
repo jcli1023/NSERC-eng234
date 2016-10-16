@@ -58,7 +58,7 @@
 					<video id="videoOutput1" autoplay width="1280px" height="720px"
 						poster="./img/webrtc.png"></video>
 					<canvas id="objectCam1" width="1280px" height="720px"></canvas>
-					<canvas id="borderCam1" width="1280px" height="720px"></canvas>
+					<!--<canvas id="borderCam1" width="1280px" height="720px"></canvas>-->
 					</br>
 					Set source URL: <input style="width:350px;" id="address1" type="text">
 					</br></br>
