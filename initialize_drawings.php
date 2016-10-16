@@ -1,20 +1,32 @@
 <?php
 session_start();
 $camNum = $_POST['cam'];
+$camName = "cam".$camNum;
 $coordinates = $_POST['coordinates'];
 $obj = json_decode($coordinates);
 
 //var_dump($obj);
 echo $obj[0]."\n";
-echo $obj[1]->name."\n";
 echo $obj[1]->applyMatrix."\n";
 
-foreach($obj[1]->segments as $points) {
+/*foreach($obj[1]->segments as &$points) {
 	echo $points[0].",".$points[1]."\n";
+	$points[0] = $points[0] + 10;
+	$points[1] = $points[1] + 10;
+	
+}*/
+$arrlength = count($obj[1]->segments);
+echo $arrlength."\n";
+for ($i = 0; $i < $arrlength; $i++)
+{
+	$obj[1]->segments[$i][0] += 10;
+	$obj[1]->segments[$i][1] += 10;
 }
+
 $obj[1]->strokeColor[0] = 0;	
 $obj[1]->strokeColor[1] = 0;
 $obj[1]->strokeColor[2] = 1;
+
 foreach($obj[1]->strokeColor as $values) {
 	
 	echo $values." ";
@@ -53,7 +65,8 @@ else
 //	$_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
 //$_SESSION['cams']['object'][$camNum] = "Hello World!";
 //$_SESSION['cams']['object'][$camNum] = $coordinates;
-$_SESSION['cams']['object'][$camNum] = $json;
+$_SESSION['object']['cam']["$camName"] = $json;
+echo $_SESSION['object']['cam']['cam1'];
 //$data = $_POST['cam'];
 //echo $coordinates;
 ?>

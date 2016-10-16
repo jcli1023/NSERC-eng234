@@ -85,13 +85,13 @@ window.onload = function() {
 	path1.moveTo(start);
 	path1.lineTo(start.add([ 200, -50 ]));*/
 //	paper.setup('borderCam1');
-	/*
-		var path6 = new Path();
-		path6.strokeColor = 'blue';
-		var start = new Point(200, 200);
-		path6.moveTo(start);
-		path6.lineTo(start.add([ 200, -50 ]));
-		view.draw();*/
+/*
+	var path6 = new Path();
+	path6.strokeColor = 'blue';
+	var start = new Point(200, 200);
+	path6.moveTo(start);
+	path6.lineTo(start.add([ 200, -50 ]));
+	view.draw();*/
 //}
 
 
@@ -299,31 +299,31 @@ function createPipeline1() {
 	paperScopes[1].setup("borderCam1");
 
 
-/*
-paperScopes[0].view.autoUpdate = false;
-paperScopes[1].view.autoUpdate = false;
+	/*
+	paperScopes[0].view.autoUpdate = false;
+	paperScopes[1].view.autoUpdate = false;
 
-paper = paperScopes[0];
-
-
-var circle1 = new paper.Path.Circle(30, 30, 20);
-circle1.style = {
-    fillColor: new paper.Color(1, .5, .5),
-    strokeColor: "black"
-};
+	paper = paperScopes[0];
 
 
-paper = paperScopes[1];
+	var circle1 = new paper.Path.Circle(30, 30, 20);
+	circle1.style = {
+	    fillColor: new paper.Color(1, .5, .5),
+	    strokeColor: "black"
+	};
 
-var circle2 = new paper.Path.Circle(60, 60, 20);
-circle2.style = {
-    fillColor: new paper.Color(.5, .5, 1),
-    strokeColor: "black"
-};
 
-paperScopes[0].view.draw();
-paperScopes[1].view.draw();
-*/
+	paper = paperScopes[1];
+
+	var circle2 = new paper.Path.Circle(60, 60, 20);
+	circle2.style = {
+	    fillColor: new paper.Color(.5, .5, 1),
+	    strokeColor: "black"
+	};
+
+	paperScopes[0].view.draw();
+	paperScopes[1].view.draw();
+	*/
 	//var pipe1 = function createPipeline1(){
 	console = new Console('console1', console);
 	var videoOutput = document.getElementById('videoOutput1');
@@ -332,16 +332,15 @@ paperScopes[1].view.draw();
 	var pipeline;
 	var webRtcPeer;
 
+	var frameDim; //dimensions of the frames
+	var vidDim; //dimensions of the video
 	var drawTimer = null;
-	/*var pathObject = new paper.Path();
-	pathObject.name = "pathObject";*/
 	var currentPathObject;
-	/*var pathBorder = new paper.Path();
-	pathBorder.name = "pathBorder";*/
 	var currentPathBorder;
 	var isPaused = false;
-	var objectPresent = null;
 	var source; //eventSource for serve sided events
+	var objectPresent = null;
+
 
 	var dumbCount = 0;
 	startButton = document.getElementById('start1');
@@ -410,8 +409,8 @@ paperScopes[1].view.draw();
 		var timeFrame = dateFrame.getFullYear() + dateFrame.getMonth() + dateFrame.getDate() + "_" + dateFrame.getHours() + dateFrame.getMinutes() + dateFrame.getSeconds() + dateFrame.getMilliseconds();
 		saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg", 0.5);
 		//saveToServerFrame = saveCurrentFrame.toDataURL();
-		var frameDim = [saveCurrentFrame.width, saveCurrentFrame.height];
-		var vidDim = [videoOutput.width, videoOutput.height];
+		frameDim = [saveCurrentFrame.width, saveCurrentFrame.height];
+		vidDim = [videoOutput.width, videoOutput.height];
 
 		$.post("saveScreenshot.php", {
 				cam: camNum,
@@ -428,6 +427,7 @@ paperScopes[1].view.draw();
 	}
 
 	function drawObject() {
+		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
 		document.getElementById("objectCam1").style.zIndex = zFRONT;
 		document.getElementById("borderCam1").style.zIndex = zBACK;
 		console.log("entered drawObject()");
@@ -447,20 +447,12 @@ paperScopes[1].view.draw();
 			paper = paperScopes[0];
 
 			function onMouseDown(event) {
-//				currentPathObject = new Path();
-				console.log("paperOnMouseDown: "+paper);
-				
 				currentPathObject = new paper.Path();
-				currentPathObject.name = "currentPathObject";
 				currentPathObject.strokeColor = 'green';
 				currentPathObject.add(event.point);
-
 			}
-			console.log("paperScopes: "+paperScopes);
-			console.log("paper0 is : " + paper);
-			console.log("paper.tools : "+paper.tools);
 
-			objectTrackTool1 = new paperScopes[0].Tool();
+			objectTrackTool1 = new paper.Tool();
 			objectTrackTool1.onMouseDown = onMouseDown;
 
 
@@ -480,10 +472,6 @@ paperScopes[1].view.draw();
 			document.getElementById("objectTracker").innerHTML = "Object Tracking";
 
 			objectTrackTool1.remove();
-//			pathObject.clear();
-
-			/*if (typeof currentPathObject !== 'undefined')
-				pathObject.addSegments(currentPathObject.segments);*/
 
 			initializeDrawings(1, currentPathObject);
 
@@ -492,41 +480,43 @@ paperScopes[1].view.draw();
 				console.log("entered EventSource");
 				source = new EventSource("sse_test.php");
 				source.onmessage = function(event) {
-					console.log(event.data + " " + event.lastEventId);
-					var jsonObj = JSON.parse(event.data);
+					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
+					/*var jsonObj = JSON.parse(event.data);
 					var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
 					var jsonObj3 = {
-						"name" : "currentPathObject",
-						"applyMatrix" : true,
-						"segments" : currentPathObject.segments,
-						"strokeColor" : currentPathObject.strokeColor											
+						"name": "currentPathObject",
+						"applyMatrix": true,
+						"segments": currentPathObject.segments.toString(),
+						"strokeColor": currentPathObject.strokeColor.toString()
 					};
-					var jsonObj4 = { "word" : "hello" };
+					var jsonObj4 = {
+						"word": "hello"
+					};
 					jsonObj2.push("Path");
 					jsonObj2.push(jsonObj3);
 					jsonObj2.push(jsonObj4);
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
-					testObj = jsonObj[0]+","+jsonObj[1].applyMatrix+","+jsonObj[1].segments+","+jsonObj[1].strokeColor;
-					console.log("testObj: "+testObj);
-					currentPathObject.importJSON(event.data);
+					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
+					console.log("testObj: " + testObj);*/
+					//currentPathObject.importJSON(event.data);
 					/*
 					var new_tweets = { };
 
-new_tweets.k = { };
+					new_tweets.k = { };
 
-new_tweets.k.tweet_id = 98745521;
-new_tweets.k.user_id = 54875;
+					new_tweets.k.tweet_id = 98745521;
+					new_tweets.k.user_id = 54875;
 
-new_tweets.k.data = { };
+					new_tweets.k.data = { };
 
-new_tweets.k.data.in_reply_to_screen_name = 'other_user';
-new_tweets.k.data.text = 'tweet text';
+					new_tweets.k.data.in_reply_to_screen_name = 'other_user';
+					new_tweets.k.data.text = 'tweet text';
 
-// Will create the JSON string you're looking for.
-var json = JSON.stringify(new_tweets);
+					// Will create the JSON string you're looking for.
+					var json = JSON.stringify(new_tweets);
 					*/
 				};
 			} else {
@@ -535,9 +525,7 @@ var json = JSON.stringify(new_tweets);
 
 
 			//		document.getElementById("test2").innerHTML = "pathObject: "+pathObject.segments.toString();
-			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.exportJSON({
-				asString: true
-			});
+
 
 			if (typeof currentPathObject !== 'undefined')
 			//			document.getElementById("test3").innerHTML = "currentPathObject: "+currentPathObject.segments.toString();
@@ -564,9 +552,10 @@ var json = JSON.stringify(new_tweets);
 
 
 	function drawBorder() {
+		//Brings borderCam1 canvas to front for mouse events, objectCam1 canvas to back
 		document.getElementById("objectCam1").style.zIndex = zBACK;
 		document.getElementById("borderCam1").style.zIndex = zFRONT;
-		console.log("entered drawBorder()");
+
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 			isPaused = true;
@@ -580,20 +569,14 @@ var json = JSON.stringify(new_tweets);
 			document.getElementById("objectButton").disabled = true;
 			//objectCam1 = document.getElementById("objectCam1");
 
-			paper = paperScopes[1];				
+			paper = paperScopes[1];
 
 			function onMouseDown(event) {
-//				currentPathObject = new Path();
-				console.log("paperOnMouseDown: "+paper);
 				currentPathBorder = new paper.Path();
-				currentPathBorder.name = "currentPathBorder";
 				currentPathBorder.strokeColor = 'red';
 				currentPathBorder.add(event.point);
-
 			}
 
-			console.log("paper1 is : " + paper);
-			console.log("paper.tools : "+paper.tools);
 			borderTrackTool = new paper.Tool();
 			borderTrackTool.onMouseDown = onMouseDown;
 
@@ -627,10 +610,10 @@ var json = JSON.stringify(new_tweets);
 			function(data, status) {
 
 				//alert(data);
-				console.log(data);
+				console.log("initialize_drawing data: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
-		console.log("coordinates.exportJSON(): "+coordinates.exportJSON());
+		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function start() {
