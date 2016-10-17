@@ -336,6 +336,7 @@ function createPipeline1() {
 	var camNum = 1;
 	var frameDim; //dimensions of the frames
 	var vidDim; //dimensions of the video
+	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
 	var currentPathObject;
 	var currentPathBorder;
@@ -408,7 +409,7 @@ function createPipeline1() {
 	function saveFrameToServer(saveCurrentFrame, camNum) {
 		var saveToServerFrame;
 		var dateFrame = new Date();
-		var timeFrame = dateFrame.getFullYear() + dateFrame.getMonth() + dateFrame.getDate() + "_" + dateFrame.getHours() + dateFrame.getMinutes() + dateFrame.getSeconds() + dateFrame.getMilliseconds();
+		timeFrame = dateFrame.getFullYear() + dateFrame.getMonth() + dateFrame.getDate() + "_" + dateFrame.getHours() + dateFrame.getMinutes() + dateFrame.getSeconds() + dateFrame.getMilliseconds();
 		saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg", 0.5);
 		//saveToServerFrame = saveCurrentFrame.toDataURL();
 		frameDim = [saveCurrentFrame.width, saveCurrentFrame.height];
@@ -480,7 +481,7 @@ function createPipeline1() {
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
-				source = new EventSource("sse_test.php?camNum="+camNum);
+				source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
 				source.onmessage = function(event) {
 					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
@@ -588,8 +589,10 @@ function createPipeline1() {
 	function initializeDrawings(camNum, coordinates) {
 		$.post("initialize_drawings.php", {
 				cam: camNum,
-				//coordinates: coordinates.segments.toString()
-				coordinates: coordinates.exportJSON()
+				coordinates: coordinates.exportJSON(),
+				timeFrame: timeFrame,
+				frameDim: frameDim,
+				vidDim: vidDim
 			},
 			function(data, status) {
 
@@ -741,10 +744,6 @@ function createPipeline2() {
 		stopScreenshot(1);
 	  	});
 	*/
-
-	videoOutput.addEventListener("click",function() {
-		console.log("CLICKEE");
-});
 
 	videoOutput.addEventListener("pause", function() {
 		stopScreenshot(2);

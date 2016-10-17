@@ -5,10 +5,14 @@ session_start();
 
 $_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
 $camNum = $_GET['camNum'];
+$frameDim = array($_GET['frameX'],$_GET['frameY']);
+$vidDim = array($_GET['vidX'],$_GET['vidY']);
+$ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 
 echo "retry: 500\n";
 echo "id: ".$_SESSION['dumbCount']."\n";
 //echo "data: The server time is: {$time}\n\n";
+//echo "data: ratioDim[0] ".$ratioDim[0]." ratioDim[1] ".$ratioDim[1]."\n";
 
 $arrlength = count($_SESSION['object']['cam']);
 $camName = "cam".$camNum;

@@ -1,20 +1,23 @@
 <?php
 session_start();
+
 $camNum = $_POST['cam'];
-$camName = "cam".$camNum;
 $coordinates = $_POST['coordinates'];
+$timeFrame = $_POST['timeFrame'];
+$frameDim = $_POST['frameDim'];
+$vidDim = $_POST['vidDim'];
+
+$camName = "cam".$camNum;
+$ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
+echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
+
+
 $obj = json_decode($coordinates);
 
 //var_dump($obj);
 echo $obj[0]."\n";
 echo $obj[1]->applyMatrix."\n";
 
-/*foreach($obj[1]->segments as &$points) {
-	echo $points[0].",".$points[1]."\n";
-	$points[0] = $points[0] + 10;
-	$points[1] = $points[1] + 10;
-	
-}*/
 $arrlength = count($obj[1]->segments);
 echo $arrlength."\n";
 for ($i = 0; $i < $arrlength; $i++)
