@@ -481,7 +481,8 @@ function createPipeline1() {
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
-				source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
+				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
+				source = new EventSource("sse_test.php?camNum="+camNum);
 				source.onmessage = function(event) {
 					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
@@ -589,7 +590,7 @@ function createPipeline1() {
 	function initializeDrawings(camNum, coordinates) {
 		$.post("initialize_drawings.php", {
 				cam: camNum,
-				coordinates: coordinates.exportJSON(),
+				coordinates: coordinates.exportJSON({asString:false}),
 				timeFrame: timeFrame,
 				frameDim: frameDim,
 				vidDim: vidDim
