@@ -334,8 +334,8 @@ function createPipeline1() {
 	var webRtcPeer;
 
 	var camNum = 1;
-	var frameDim; //dimensions of the frames
-	var vidDim; //dimensions of the video
+	var frameDim = [1920,1080]; //dimensions of the frames
+	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
 	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
 	var currentPathObject;
