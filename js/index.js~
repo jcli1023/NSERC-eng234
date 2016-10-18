@@ -590,7 +590,7 @@ function createPipeline1() {
 	function initializeDrawings(camNum, coordinates) {
 		$.post("initialize_drawings.php", {
 				cam: camNum,
-				coordinates: coordinates.exportJSON(),
+				coordinates: coordinates.exportJSON({asString:false}),
 				timeFrame: timeFrame,
 				frameDim: frameDim,
 				vidDim: vidDim
