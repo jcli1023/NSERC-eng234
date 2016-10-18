@@ -11,11 +11,14 @@ $camName = "cam".$camNum;
 $ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
 
+$fp = fopen('resultsPaperJs.json', 'w');
+fwrite($fp, $coordinates);
+fclose($fp);
 
-$obj = json_decode($coordinates);
+//$obj = json_decode($coordinates);
 
 //var_dump($obj);
-echo $obj[0]."\n";
+/*echo $obj[0]."\n";
 echo $obj[1]->applyMatrix."\n";
 
 $arrlength = count($obj[1]->segments);
@@ -38,11 +41,18 @@ foreach($obj[1]->strokeColor as $values) {
 $new = "hello";
 
 array_push($obj,$new);
+*/
+//$text = addslashes($coordinates);
+//echo "text: ".$text;
+//$results = shell_exec("java -jar testJSONjar.jar ".$text);
+$results = shell_exec("java -jar testJSONjar.jar ".addslashes($coordinates));
 
-$json = json_encode($obj);
 
-$fp = fopen('results.json', 'w');
-fwrite($fp, json_encode($json));
+$json = $results;
+//$json = json_encode($obj);
+
+$fp = fopen('resultsPhp.json', 'w');
+fwrite($fp, $json);
 fclose($fp);
 
 /*["Path",{"name":"currentPathObject",
@@ -65,13 +75,10 @@ else
 //if ( !isset($_SESSION['dumbCount']) )
 	$_SESSION['dumbCount'] = 0;
 //else
-//	$_SESSION['dumbCount'] = $_SESSION['dumbCount']+1;
-//$_SESSION['cams']['object'][$camNum] = "Hello World!";
-//$_SESSION['cams']['object'][$camNum] = $coordinates;
+
 $_SESSION['object']['cam']["$camName"] = $json;
 echo $_SESSION['object']['cam']['cam1'];
-//$data = $_POST['cam'];
-//echo $coordinates;
+
 ?>
 
 

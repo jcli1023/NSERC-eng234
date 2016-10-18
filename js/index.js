@@ -598,7 +598,7 @@ function createPipeline1() {
 			function(data, status) {
 
 				//alert(data);
-				console.log("initialize_drawing data: " + data);
+				console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
