@@ -48,7 +48,7 @@ array_push($obj,$new);
 //$text = addslashes($coordinates);
 //echo "text: ".$text;
 //$results = shell_exec("java -jar testJSONjar.jar ".$text);
-$results = shell_exec("java -jar testJSONjar.jar ".addslashes($coordinates));
+$results = shell_exec("java -jar testJSONjar.jar ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
 
 
 $json = $results;

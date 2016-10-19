@@ -22,14 +22,19 @@ echo "id: ".$_SESSION['dumbCount']."\n";
 //$obj = json_decode($_SESSION['object']['cam']["$camName"]);
 
 $input = addslashes($_SESSION['object']['cam']['cam1']);
+//$input = $_SESSION['object']['cam']['cam1'];
 
 $fp = fopen('sessionVar2.json', 'w');
 fwrite($fp, $input);
 fclose($fp);
 
-$results = shell_exec("java -jar testJSONjar.jar ".$input);
+$results = shell_exec("java -jar testJSONjar.jar ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
 $_SESSION['object']['cam']["$camName"] = $results;
 
+
+$fp = fopen('sessionVar3.json', 'w');
+fwrite($fp, $results);
+fclose($fp);
 /*$arrlength = count($obj[1]->segments);
 for ($i = 0; $i < $arrlength; $i++)
 {

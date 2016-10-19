@@ -8,10 +8,10 @@ $frameDim = $_POST['frameDim'];
 $vidDim = $_POST['vidDim'];
 
 $camName = "cam".$camNum;
+$ratioDim = $_SESSION['frameRatio']["$camName"];
 //$ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 
-$ratioDim = $_SESSION['frameRatio']["$camName"];
-echo "ratioDim: ".$ratioDim[0]."x".$ratioDim[1]." ";
+
 //echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
 
 $fp = fopen('resultsPaperJs.json', 'w');
@@ -48,7 +48,7 @@ array_push($obj,$new);
 //$text = addslashes($coordinates);
 //echo "text: ".$text;
 //$results = shell_exec("java -jar testJSONjar.jar ".$text);
-$results = shell_exec("java -jar testJSONjar.jar ".addslashes($coordinates));
+$results = shell_exec("java -jar testJSONjar.jar ".$ratioDim[0]." ".ratioDim[1]." ".addslashes($coordinates));
 
 
 $json = $results;
