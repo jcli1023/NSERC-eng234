@@ -10,6 +10,8 @@ $camName = "cam".$camNum;
 $vidDim = array($_GET['vidX'],$_GET['vidY']);
 $ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 */
+$ratio = $_SESSION['frameRatio']["$camName"];
+
 echo "retry: 500\n";
 echo "id: ".$_SESSION['dumbCount']."\n";
 //echo "data: The server time is: {$time}\n\n";
@@ -26,6 +28,7 @@ fwrite($fp, $input);
 fclose($fp);
 
 $results = shell_exec("java -jar testJSONjar.jar ".$input);
+$_SESSION['object']['cam']["$camName"] = $results;
 
 /*$arrlength = count($obj[1]->segments);
 for ($i = 0; $i < $arrlength; $i++)

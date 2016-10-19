@@ -10,6 +10,8 @@ $camName = "cam".$camNum;
 $vidDim = array($_GET['vidX'],$_GET['vidY']);
 $ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 */
+$ratioDim = $_SESSION['frameRatio']["$camName"];
+
 echo "retry: 500\n";
 echo "id: ".$_SESSION['dumbCount']."\n";
 //echo "data: The server time is: {$time}\n\n";
