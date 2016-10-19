@@ -45,7 +45,7 @@ array_push($obj,$new);
 //$text = addslashes($coordinates);
 //echo "text: ".$text;
 //$results = shell_exec("java -jar testJSONjar.jar ".$text);
-$results = shell_exec("java -jar testJSONjar.jar ".$coordinates);
+$results = shell_exec("java -jar testJSONjar.jar ".addslashes($coordinates));
 
 
 $json = $results;
@@ -77,7 +77,13 @@ else
 //else
 
 $_SESSION['object']['cam']["$camName"] = $json;
-echo $_SESSION['object']['cam']['cam1'];
+echo "sessionVar: ".$_SESSION['object']['cam']['cam1'];
+
+
+
+$fp = fopen('sessionVar1.json', 'w');
+fwrite($fp,$_SESSION['object']['cam']['cam1']);
+fclose($fp);
 
 ?>
 

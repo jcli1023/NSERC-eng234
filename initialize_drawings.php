@@ -9,7 +9,7 @@ $vidDim = $_POST['vidDim'];
 
 $camName = "cam".$camNum;
 $ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
-echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
+//echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
 
 $fp = fopen('resultsPaperJs.json', 'w');
 fwrite($fp, $coordinates);
@@ -77,7 +77,14 @@ else
 //else
 
 $_SESSION['object']['cam']["$camName"] = $json;
+//echo "sessionVar: ".$_SESSION['object']['cam']['cam1'];
 echo $_SESSION['object']['cam']['cam1'];
+
+
+
+$fp = fopen('sessionVar1.json', 'w');
+fwrite($fp,$_SESSION['object']['cam']['cam1']);
+fclose($fp);
 
 ?>
 

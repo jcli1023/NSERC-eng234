@@ -477,7 +477,7 @@ function createPipeline1() {
 			objectTrackTool1.remove();
 
 			initializeDrawings(camNum, currentPathObject);
-
+/*
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
@@ -522,11 +522,11 @@ function createPipeline1() {
 					// Will create the JSON string you're looking for.
 					var json = JSON.stringify(new_tweets);
 					*/
-				};
+/*				};
 			} else {
 				console.log("Sorry, your browser does not support server-sent events...");
 			}
-
+*/
 			if (typeof currentPathObject !== 'undefined')
 				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
 				asString: true
@@ -590,7 +590,7 @@ function createPipeline1() {
 	function initializeDrawings(camNum, coordinates) {
 		$.post("initialize_drawings.php", {
 				cam: camNum,
-				coordinates: coordinates.exportJSON({asString:false}),
+				coordinates: coordinates.exportJSON(),
 				timeFrame: timeFrame,
 				frameDim: frameDim,
 				vidDim: vidDim
@@ -598,9 +598,11 @@ function createPipeline1() {
 			function(data, status) {
 
 				//alert(data);
-				console.log("initialize_drawing data: " + data);
+				console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
+				currentPathObject.importJSON(data);
 			});
+
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 

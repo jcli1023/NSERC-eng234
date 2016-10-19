@@ -600,7 +600,9 @@ function createPipeline1() {
 				//alert(data);
 				console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
+				currentPathObject.importJSON(data);
 			});
+
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
