@@ -477,7 +477,7 @@ function createPipeline1() {
 			objectTrackTool1.remove();
 
 			initializeDrawings(camNum, currentPathObject);
-/*
+
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
@@ -503,9 +503,11 @@ function createPipeline1() {
 					jsonObj2.push(jsonObj4);
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
+					jsonObj[1].segments.length = 0;
 					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
 					console.log("testObj: " + testObj);
-					currentPathObject.importJSON(event.data);
+
+					currentPathObject.importJSON(jsonObj);
 					/*
 					var new_tweets = { };
 
@@ -522,11 +524,11 @@ function createPipeline1() {
 					// Will create the JSON string you're looking for.
 					var json = JSON.stringify(new_tweets);
 					*/
-/*				};
+				};
 			} else {
 				console.log("Sorry, your browser does not support server-sent events...");
 			}
-*/
+
 			if (typeof currentPathObject !== 'undefined')
 				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
 				asString: true
@@ -600,6 +602,9 @@ function createPipeline1() {
 				//alert(data);
 				console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
+				/*var jsonObj = JSON.parse(data);
+				jsonObj[1].segments.length = 0;
+				currentPathObject.importJSON(jsonObj);*/
 				currentPathObject.importJSON(data);
 			});
 

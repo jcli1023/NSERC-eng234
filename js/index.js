@@ -503,9 +503,11 @@ function createPipeline1() {
 					jsonObj2.push(jsonObj4);
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
+					//jsonObj[1].segments.length = 0;
 					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
 					console.log("testObj: " + testObj);
-					currentPathObject.importJSON(event.data);
+
+					currentPathObject.importJSON(jsonObj);
 					/*
 					var new_tweets = { };
 
@@ -600,6 +602,9 @@ function createPipeline1() {
 				//alert(data);
 				console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
+				/*var jsonObj = JSON.parse(data);
+				jsonObj[1].segments.length = 0;
+				currentPathObject.importJSON(jsonObj);*/
 				currentPathObject.importJSON(data);
 			});
 
