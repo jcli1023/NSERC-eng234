@@ -13,8 +13,8 @@
  *
  */
 var MAX_CAMERAS = 4;
-var MAX_VID_SIZE_TEMP1_HEIGHT = 720;
-var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
+var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
+var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var zFRONT = 1000;
@@ -329,7 +329,7 @@ function createPipeline1() {
 	console = new Console('console1', console);
 	var videoOutput = document.getElementById('videoOutput1');
 	var address = document.getElementById('address1');
-	address.value = 'rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
+	address.value = 'rtsp://192.168.85.128:8554/test_vid.mkv';
 	var pipeline;
 	var webRtcPeer;
 
@@ -441,6 +441,7 @@ function createPipeline1() {
 
 				console.log("Entered here");
 				videoOutput.pause();
+				grabScreenshot(1);
 
 			}
 			document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";

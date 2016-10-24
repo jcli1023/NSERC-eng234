@@ -13,8 +13,8 @@
  *
  */
 var MAX_CAMERAS = 4;
-var MAX_VID_SIZE_TEMP1_HEIGHT = 720;
-var MAX_VID_SIZE_TEMP1_WIDTH = 1280;
+var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
+var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var zFRONT = 1000;
@@ -441,6 +441,7 @@ function createPipeline1() {
 
 				console.log("Entered here");
 				videoOutput.pause();
+				grabScreenshot(1);
 
 			}
 			document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
@@ -503,7 +504,7 @@ function createPipeline1() {
 					jsonObj2.push(jsonObj4);
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
-					jsonObj[1].segments.length = 0;
+					//jsonObj[1].segments.length = 0;
 					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
 					console.log("testObj: " + testObj);
 
