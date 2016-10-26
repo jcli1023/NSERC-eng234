@@ -505,8 +505,19 @@ function createPipeline1() {
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 
 					//jsonObj[1].segments.length = 0;
-					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor;
+					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3];
 					console.log("testObj: " + testObj);
+
+					if (jsonObj[3] === false)
+					{
+						document.getElementById("objectTracker").innerHTML = "OBJECT MISSING";
+						document.getElementById("objectTracker").style.backgroundColor = 'red';
+					}
+					else
+					{
+						document.getElementById("objectTracker").innerHTML = "OBJECT TRACKED";
+						document.getElementById("objectTracker").style.backgroundColor = 'green';
+					}
 
 					currentPathObject.importJSON(jsonObj);
 					/*
