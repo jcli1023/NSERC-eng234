@@ -9,6 +9,7 @@ $vidDim = $_POST['vidDim'];
 
 $camName = "cam".$camNum;
 $ratioDim = $_SESSION['frameRatio']["$camName"];
+$time = $_SESSION['time']["$camName"];
 //$ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 
 
