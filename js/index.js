@@ -17,7 +17,6 @@ var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
 var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
-var MS_CAP = 30;
 var zFRONT = 1000;
 var zBACK = 500;
 var currentNumCams = 1;
@@ -383,7 +382,7 @@ function createPipeline1() {
 		if (drawTimer == null) {
 			drawTimer = setInterval(function() {
 				grabScreenshot(camNum)
-			}, 67);
+			}, 100);
 		}
 	}
 
@@ -469,8 +468,7 @@ function createPipeline1() {
 		} else if (isPaused) {
 			isPaused = false;
 			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
-			if (videoOutput.paused)
-				videoOutput.play();
+			
 
 			document.getElementById("objectButton").innerHTML = "Tracking Object";
 			document.getElementById("borderButton").disabled = false;
@@ -480,6 +478,9 @@ function createPipeline1() {
 
 			initializeDrawings(camNum, currentPathObject);
 
+			if (videoOutput.paused)
+				videoOutput.play();
+
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
@@ -488,6 +489,7 @@ function createPipeline1() {
 				source.onmessage = function(event) {
 					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
+					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);					
 					/*var jsonObj2 = [];
 					var segArrays = [];

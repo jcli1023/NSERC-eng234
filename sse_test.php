@@ -13,7 +13,7 @@ $ratioDim = array($frameDim[0]/$vidDim[0],$frameDim[1]/$vidDim[1]);
 $ratioDim = $_SESSION['frameRatio']["$camName"];
 $time = $_SESSION['time']["$camName"];
 
-echo "retry: 66\n";
+echo "retry: 44\n";
 echo "id: ".$_SESSION['dumbCount']."\n";
 //echo "data: The server time is: {$time}\n\n";
 //echo "data: ratioDim[0] ".$ratioDim[0]." ratioDim[1] ".$ratioDim[1]."\n";
