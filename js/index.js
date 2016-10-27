@@ -17,6 +17,7 @@ var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
 var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
 var MAX_VID_SIZE_TEMP2_WIDTH = 400;
+var MS_CAP = 30;
 var zFRONT = 1000;
 var zBACK = 500;
 var currentNumCams = 1;
@@ -382,7 +383,7 @@ function createPipeline1() {
 		if (drawTimer == null) {
 			drawTimer = setInterval(function() {
 				grabScreenshot(camNum)
-			}, 500);
+			}, 67);
 		}
 	}
 
@@ -485,9 +486,10 @@ function createPipeline1() {
 				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
 				source = new EventSource("sse_test.php?camNum="+camNum);
 				source.onmessage = function(event) {
-					console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
+					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
-					var jsonObj2 = [];
+					currentPathObject.importJSON(jsonObj);					
+					/*var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
 					var jsonObj3 = {
@@ -503,12 +505,13 @@ function createPipeline1() {
 					jsonObj2.push(jsonObj3);
 					jsonObj2.push(jsonObj4);
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
-
+*/
 					//jsonObj[1].segments.length = 0;
-					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3];
-					console.log("testObj: " + testObj);
+					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
+					//console.log("testObj: " + testObj);
+					console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
-					if (jsonObj[3] === false)
+					if (jsonObj[3].objectFound === "false")
 					{
 						document.getElementById("objectTracker").innerHTML = "OBJECT MISSING";
 						document.getElementById("objectTracker").style.backgroundColor = 'red';
@@ -519,7 +522,7 @@ function createPipeline1() {
 						document.getElementById("objectTracker").style.backgroundColor = 'green';
 					}
 
-					currentPathObject.importJSON(jsonObj);
+
 					/*
 					var new_tweets = { };
 
@@ -612,7 +615,7 @@ function createPipeline1() {
 			function(data, status) {
 
 				//alert(data);
-				console.log("initialize_drawing data ##########: " + data);
+				//console.log("initialize_drawing data ##########: " + data);
 				//alert("Data: " + data + "\nStatus: " + status);
 				/*var jsonObj = JSON.parse(data);
 				jsonObj[1].segments.length = 0;
@@ -620,7 +623,7 @@ function createPipeline1() {
 				currentPathObject.importJSON(data);
 			});
 
-		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
+		//console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function start() {
@@ -721,12 +724,15 @@ function createPipeline1() {
 
 		document.getElementById("objectButton").innerHTML = "Track Object";
 		document.getElementById("borderButton").innerHTML = "Track Border";
+		document.getElementById("objectTracker").innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker").style.backgroundColor = "white";
 
 		if (typeof source !== 'undefined')
 			source.close();
 		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
+		
 		overlayTextCanvas();
 
 		if (typeof pathObject !== 'undefined')

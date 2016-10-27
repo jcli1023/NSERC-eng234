@@ -16,7 +16,7 @@ $time = $_SESSION['time']["$camName"];
 //echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
 
 $fp = fopen('resultsPaperJs.json', 'w');
-fwrite($fp, $coordinates." time: ".$time);
+fwrite($fp, $coordinates);
 fclose($fp);
 
 //$obj = json_decode($coordinates);
@@ -49,7 +49,8 @@ array_push($obj,$new);
 //$text = addslashes($coordinates);
 //echo "text: ".$text;
 //$results = shell_exec("java -jar testJSONjar.jar ".$text);
-$results = shell_exec("java -jar testJSONjar.jar ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+//$results = shell_exec("java -jar testJSONjar.jar ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+$results = shell_exec("java -jar InitializeObject.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
 
 
 $json = $results;

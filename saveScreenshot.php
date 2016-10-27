@@ -4,13 +4,14 @@ session_start();
 $data = $_POST['frame'];
 $camNum = $_POST['cam'];
 $time = $_POST['time'];
+$camName = "cam".$camNum;
+$_SESSION['time']["$camName"] = $time;
 $frameDim = $_POST['frameDim'];
 $vidDim = $_POST['vidDim'];
 $camFolder = "CAMERA-".$camNum;
-$camName = "cam".$camNum;
 $_SESSION['frameRatio']["$camName"][0] = $frameDim[0]/$vidDim[0];
 $_SESSION['frameRatio']["$camName"][1] = $frameDim[1]/$vidDim[1];
-$_SESSION['time']["$camName"] = $time;
+
 
 echo "_SESSION: ".$_SESSION['frameRatio']["$camName"][0]."x".$_SESSION['frameRatio']["$camName"][0]." ";
 list($type, $data) = explode(';', $data);
