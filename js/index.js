@@ -21,80 +21,6 @@ var zFRONT = 1000;
 var zBACK = 500;
 var currentNumCams = 1;
 
-/*var myPapers = [];
-
-myPapers[0] = new paper.PaperScope();
-myPapers[1] = new paper.PaperScope();*/
-//pipe1 = new createPipeline1();
-
-/*var mypapers = [];
-mypapers[0] = new paper.PaperScope();
-mypapers[1] = new paper.PaperScope();
-
-mypapers[0].setup($("#canvas1")[0]);
-
-
-paper = mypapers[0];
-var circle1 = new paper.Path.Circle(30, 30, 20);
-circle1.style = {
-    fillColor: new paper.Color(0, 0, 1),
-    strokeColor: "black"
-};
-*/
-
-
-//mypapers[0].view.draw();
-
-/*window.onload = function() {
-var mypapers = [];
-mypapers[0] = new paper.PaperScope();
-mypapers[1] = new paper.PaperScope();
-
-mypapers[0].setup("objectCam1");
-
-
-paper = mypapers[0];
-var circle1 = new paper.Path.Circle(30, 30, 20);
-circle1.style = {
-    fillColor: new paper.Color(0, 0, 1),
-    strokeColor: "red"
-};
-
-mypapers[1].setup("borderCam1");
-paper = mypapers[1];
-var circle1 = new paper.Path.Circle(100, 100, 20);
-circle1.style = {
-    fillColor: new paper.Color(1, 0, 0),
-    strokeColor: "yellow"
-};
-
-
-mypapers[0].view.draw();
-mypapers[1].view.draw();
-}
-*/
-
-//paper.install(pipe1);
-/*paper.install(window)
-window.onload = function() {
-	// Setup directly from canvas id:
-	paper.setup('objectCam1');
-	/*var path1 = new Path();
-	path1.strokeColor = 'green';
-	var start = new Point(100, 100);
-	path1.moveTo(start);
-	path1.lineTo(start.add([ 200, -50 ]));*/
-//	paper.setup('borderCam1');
-/*
-	var path6 = new Path();
-	path6.strokeColor = 'blue';
-	var start = new Point(200, 200);
-	path6.moveTo(start);
-	path6.lineTo(start.add([ 200, -50 ]));
-	view.draw();*/
-//}
-
-
 //Template 1
 function setTemplate1() {
 	document.getElementById("test").innerHTML = "Template1";
@@ -184,105 +110,6 @@ window.addEventListener('load', overlayTextCanvas);
 //window.addEventListener('load',function(){pipe1();});
 //window.addEventListener('load',pipe1());
 
-/*window.addEventListener('load', function(){
-  console = new Console('console', console);
-	var videoOutput = document.getElementById('videoOutput');
-	var address = document.getElementById('address');
-	//address.value = 'http://files.kurento.org/video/puerta-del-sol.ts';
-	address.value='rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
-  var pipeline;
-  var webRtcPeer;
-
-  startButton = document.getElementById('start');
-  startButton.addEventListener('click', start);
-
-  stopButton = document.getElementById('stop');
-  stopButton.addEventListener('click', stop);
-
-  function start() {
-  	if(!address.value){
-  	  window.alert("You must set the video source URL first");
-  	  return;
-  	}
-  	address.disabled = true;
-  	showSpinner(videoOutput);
-    var options = {
-      remoteVideo : videoOutput
-    };
-    webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-      function(error){
-        if(error){
-          return console.error(error);
-        }
-        webRtcPeer.generateOffer(onOffer);
-        webRtcPeer.peerConnection.addEventListener('iceconnectionstatechange', function(event){
-          if(webRtcPeer && webRtcPeer.peerConnection){
-            console.log("oniceconnectionstatechange -> " + webRtcPeer.peerConnection.iceConnectionState);
-            console.log('icegatheringstate -> ' + webRtcPeer.peerConnection.iceGatheringState);
-          }
-        });
-    });
-  }
-
-  function onOffer(error, sdpOffer){
-    if(error) return onError(error);
-
-  	kurentoClient(args.ws_uri, function(error, kurentoClient) {
-  		if(error) return onError(error);
-
-  		kurentoClient.create("MediaPipeline", function(error, p) {
-  			if(error) return onError(error);
-
-  			pipeline = p;
-
-  			pipeline.create("PlayerEndpoint", {uri: address.value}, function(error, player){
-  			  if(error) return onError(error);
-
-  			  pipeline.create("WebRtcEndpoint", function(error, webRtcEndpoint){
-  				if(error) return onError(error);
-
-          setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError);
-
-  				webRtcEndpoint.processOffer(sdpOffer, function(error, sdpAnswer){
-  					if(error) return onError(error);
-
-            webRtcEndpoint.gatherCandidates(onError);
-
-  					webRtcPeer.processAnswer(sdpAnswer);
-  				});
-
-  				player.connect(webRtcEndpoint, function(error){
-  					if(error) return onError(error);
-
-  					console.log("PlayerEndpoint-->WebRtcEndpoint connection established");
-
-  					player.play(function(error){
-  					  if(error) return onError(error);
-
-  					  console.log("Player playing ...");
-  					});
-  				});
-  			});
-  			});
-  		});
-  	});
-  }
-
-  function stop() {
-    address.disabled = false;
-    if (webRtcPeer) {
-      webRtcPeer.dispose();
-      webRtcPeer = null;
-    }
-    if(pipeline){
-      pipeline.release();
-      pipeline = null;
-    }
-    hideSpinner(videoOutput);
-  }
-
-});
-*/
 function alertEnd() {
 	v = document.getElementById('videoOutput1');
 	console.log("HELLO ALERT ENDED?");
@@ -334,7 +161,7 @@ function createPipeline1() {
 	var webRtcPeer;
 
 	var camNum = 1;
-	var frameDim = [1920,1080]; //dimensions of the frames
+	var frameDim = [1920, 1080]; //dimensions of the frames
 	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
 	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
@@ -393,17 +220,8 @@ function createPipeline1() {
 		var remoteVideoCanvas;
 		var saveToServerFrame;
 		remoteVideoCanvas = webRtcPeer.currentFrame;
-		/*destinationCanvas = document.getElementById("testCanvas");
-	destinationContext = destinationCanvas.getContext("2d");
-	//destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
-	
-	destinationCanvas.height = remoteVideoCanvas.height;
-	destinationCanvas.width = remoteVideoCanvas.width;
 
-	destinationContext.drawImage(remoteVideoCanvas,0,0);
-*/
 		saveFrameToServer(remoteVideoCanvas, camNum);
-
 	}
 
 	function saveFrameToServer(saveCurrentFrame, camNum) {
@@ -468,7 +286,7 @@ function createPipeline1() {
 		} else if (isPaused) {
 			isPaused = false;
 			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
-			
+
 
 			document.getElementById("objectButton").innerHTML = "Tracking Object";
 			document.getElementById("borderButton").disabled = false;
@@ -485,12 +303,12 @@ function createPipeline1() {
 			if (typeof(EventSource) !== "undefined") {
 				console.log("entered EventSource");
 				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
-				source = new EventSource("sse_test.php?camNum="+camNum);
+				source = new EventSource("sse_test.php?camNum=" + camNum);
 				source.onmessage = function(event) {
 					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var jsonObj = JSON.parse(event.data);
 					currentPathObject.clear();
-					currentPathObject.importJSON(jsonObj);					
+					currentPathObject.importJSON(jsonObj);
 					/*var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
@@ -509,17 +327,14 @@ function createPipeline1() {
 					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
 */
 					//jsonObj[1].segments.length = 0;
-					testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
+					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
 					//console.log("testObj: " + testObj);
-					console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
+					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
-					if (jsonObj[3].objectFound === "false")
-					{
+					if (jsonObj[3].objectFound === "false") {
 						document.getElementById("objectTracker").innerHTML = "OBJECT MISSING";
 						document.getElementById("objectTracker").style.backgroundColor = 'red';
-					}
-					else
-					{
+					} else {
 						document.getElementById("objectTracker").innerHTML = "OBJECT TRACKED";
 						document.getElementById("objectTracker").style.backgroundColor = 'green';
 					}
@@ -548,13 +363,12 @@ function createPipeline1() {
 
 			if (typeof currentPathObject !== 'undefined')
 				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
-				asString: true
-			});
+					asString: true
+				});
 
 		}
 
 	}
-
 
 	function drawBorder() {
 		//Brings borderCam1 canvas to front for mouse events, objectCam1 canvas to back
@@ -602,7 +416,6 @@ function createPipeline1() {
 
 			borderTrackTool.remove();
 
-
 		}
 	}
 
@@ -625,7 +438,7 @@ function createPipeline1() {
 				currentPathObject.importJSON(data);
 			});
 
-		//console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
+		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function start() {
@@ -718,10 +531,10 @@ function createPipeline1() {
 		hideSpinner(videoOutput);
 
 		if (typeof currentPathObject !== 'undefined')
-			//currentPathObject.removeSegments();
+		//currentPathObject.removeSegments();
 			currentPathObject.remove();
 		if (typeof currentPathBorder !== 'undefined')
-			//currentPathBorder.removeSegments();
+		//currentPathBorder.removeSegments();
 			currentPathBorder.remove();
 
 		document.getElementById("objectButton").innerHTML = "Track Object";
@@ -734,7 +547,7 @@ function createPipeline1() {
 		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
-		
+
 		overlayTextCanvas();
 
 		if (typeof pathObject !== 'undefined')
