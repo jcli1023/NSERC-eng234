@@ -40,6 +40,24 @@ video,#console1,#console2 {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
+#console1,#console2 {
+	overflow-y: auto;
+	width: 100%;
+	height: 120px;
+}
+
+.col-md-2 {
+	position: absolute;
+	width: 100px;
+	left: 125px;
+	padding-top: 120px;
+}
+
+/*
+z-index are important for these 3 components:
+videOutput*, objectCam*, borderCam* has to maintain these z-indexes
+objectCam* and borderCam* has to be overlayed over the videoOutput*
+*/
 #videoOutput1,#videoOutput2{
 	position: absolute;
 	z-index: 1;
@@ -53,17 +71,4 @@ video,#console1,#console2 {
 #borderCam1,#borderCam2{
 	position: relative;
 	z-index: 500;
-}
-
-#console1,#console2 {
-	overflow-y: auto;
-	width: 100%;
-	height: 120px;
-}
-
-.col-md-2 {
-	position: absolute;
-	width: 100px;
-	left: 125px;
-	padding-top: 120px;
 }
