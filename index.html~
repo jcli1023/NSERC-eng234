@@ -100,6 +100,9 @@
 						class="glyphicon glyphicon-play"></span> Start</a><br /> <br /> 
 					<a id="stop2" href="#" class="btn btn-danger"><span
 						class="glyphicon glyphicon-stop"></span> Stop</a>
+					<button id="objectButton2">Track Object</button>
+					<p id="objectTracker2">Object Not Tracked</p>
+					<button id="borderButton2">Track Border</button>
 
 				</div>
 
