@@ -179,8 +179,8 @@ function createPipeline1() {
 	stopButton = document.getElementById('stop1');
 	stopButton.addEventListener('click', stop);
 
-	document.getElementById("objectButton").addEventListener("click", drawObject);
-	document.getElementById("borderButton").addEventListener("click", drawBorder);
+	document.getElementById("objectButton1").addEventListener("click", drawObject);
+	document.getElementById("borderButton1").addEventListener("click", drawBorder);
 
 
 	/*	  videoOutput.addEventListener("ended",function(){
@@ -262,8 +262,8 @@ function createPipeline1() {
 				grabScreenshot(1);
 
 			}
-			document.getElementById("objectButton").innerHTML = "Drawn Object of Interest";
-			document.getElementById("borderButton").disabled = true;
+			document.getElementById("objectButton1").innerHTML = "Drawn Object of Interest";
+			document.getElementById("borderButton1").disabled = true;
 			//objectCam1 = document.getElementById("objectCam1");
 
 			paper = paperScopes[0];
@@ -288,9 +288,9 @@ function createPipeline1() {
 			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
 
 
-			document.getElementById("objectButton").innerHTML = "Tracking Object";
-			document.getElementById("borderButton").disabled = false;
-			document.getElementById("objectTracker").innerHTML = "Object Tracking";
+			document.getElementById("objectButton1").innerHTML = "Tracking Object";
+			document.getElementById("borderButton1").disabled = false;
+			document.getElementById("objectTracker1").innerHTML = "Object Tracking";
 
 			objectTrackTool1.remove();
 
@@ -332,11 +332,11 @@ function createPipeline1() {
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
 					if (jsonObj[3].objectFound === "false") {
-						document.getElementById("objectTracker").innerHTML = "OBJECT MISSING";
-						document.getElementById("objectTracker").style.backgroundColor = 'red';
+						document.getElementById("objectTracker1").innerHTML = "OBJECT MISSING";
+						document.getElementById("objectTracker1").style.backgroundColor = 'red';
 					} else {
-						document.getElementById("objectTracker").innerHTML = "OBJECT TRACKED";
-						document.getElementById("objectTracker").style.backgroundColor = 'green';
+						document.getElementById("objectTracker1").innerHTML = "OBJECT TRACKED";
+						document.getElementById("objectTracker1").style.backgroundColor = 'green';
 					}
 
 
@@ -385,8 +385,8 @@ function createPipeline1() {
 
 			}
 
-			document.getElementById("borderButton").innerHTML = "Drawn Border";
-			document.getElementById("objectButton").disabled = true;
+			document.getElementById("borderButton1").innerHTML = "Drawn Border";
+			document.getElementById("objectButton1").disabled = true;
 
 			paper = paperScopes[1];
 
@@ -410,8 +410,8 @@ function createPipeline1() {
 			if (videoOutput.paused)
 				videoOutput.play();
 
-			document.getElementById("borderButton").innerHTML = "Border Set";
-			document.getElementById("objectButton").disabled = false;
+			document.getElementById("borderButton1").innerHTML = "Border Set";
+			document.getElementById("objectButton1").disabled = false;
 
 
 			borderTrackTool.remove();
@@ -537,10 +537,10 @@ function createPipeline1() {
 		//currentPathBorder.removeSegments();
 			currentPathBorder.remove();
 
-		document.getElementById("objectButton").innerHTML = "Track Object";
-		document.getElementById("borderButton").innerHTML = "Track Border";
-		document.getElementById("objectTracker").innerHTML = "Object Not Tracked";
-		document.getElementById("objectTracker").style.backgroundColor = "white";
+		document.getElementById("objectButton1").innerHTML = "Track Object";
+		document.getElementById("borderButton1").innerHTML = "Track Border";
+		document.getElementById("objectTracker1").innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker1").style.backgroundColor = "white";
 
 		if (typeof source !== 'undefined')
 			source.close();
@@ -560,14 +560,59 @@ function createPipeline1() {
 
 
 function createPipeline2() {
+
+	var paperScopes = [];
+	paperScopes[0] = new paper.PaperScope();
+	paperScopes[1] = new paper.PaperScope();
+
+	paperScopes[0].setup("objectCam2");
+	paperScopes[1].setup("borderCam2");
+
+
+	/*
+	paperScopes[0].view.autoUpdate = false;
+	paperScopes[1].view.autoUpdate = false;
+
+	paper = paperScopes[0];
+
+
+	var circle1 = new paper.Path.Circle(30, 30, 20);
+	circle1.style = {
+	    fillColor: new paper.Color(1, .5, .5),
+	    strokeColor: "black"
+	};
+
+
+	paper = paperScopes[1];
+
+	var circle2 = new paper.Path.Circle(60, 60, 20);
+	circle2.style = {
+	    fillColor: new paper.Color(.5, .5, 1),
+	    strokeColor: "black"
+	};
+
+	paperScopes[0].view.draw();
+	paperScopes[1].view.draw();
+	*/
+	//var pipe1 = function createPipeline1(){
 	console = new Console('console2', console);
 	var videoOutput = document.getElementById('videoOutput2');
 	var address = document.getElementById('address2');
-	address.value = 'rtsp://192.168.41.128:8554/jellyfish-3-mbps-hd-h264.mkv';
+	address.value = 'rtsp://192.168.85.128:8554/test_vid.mkv';
 	var pipeline;
 	var webRtcPeer;
 
+	var camNum = 2;
+	var frameDim = [1920, 1080]; //dimensions of the frames
+	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
+	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
+	var currentPathObject;
+	var currentPathBorder;
+	var isPaused = false;
+	var source; //eventSource for serve sided events
+	var objectPresent = null;
+
 
 	var dumbCount = 0;
 	startButton = document.getElementById('start2');
@@ -576,8 +621,8 @@ function createPipeline2() {
 	stopButton = document.getElementById('stop2');
 	stopButton.addEventListener('click', stop);
 
-	//document.getElementById("pauseButton").addEventListener("click", pauseVideo);
-	//document.getElementById("resumeButton").addEventListener("click", resumeVideo);
+	document.getElementById("objectButton2").addEventListener("click", drawObject);
+	document.getElementById("borderButton2").addEventListener("click", drawBorder);
 
 
 	/*	  videoOutput.addEventListener("ended",function(){
@@ -585,12 +630,11 @@ function createPipeline2() {
 		stopScreenshot(1);
 	  	});
 	*/
-
 	videoOutput.addEventListener("pause", function() {
-		stopScreenshot(2);
+		stopScreenshot(camNum);
 	});
 	videoOutput.addEventListener("playing", function() {
-		startScreenshot(2);
+		startScreenshot(camNum);
 	});
 
 
@@ -606,8 +650,8 @@ function createPipeline2() {
 	function startScreenshot(camNum) {
 		if (drawTimer == null) {
 			drawTimer = setInterval(function() {
-				grabScreenshot(2)
-			}, 50);
+				grabScreenshot(camNum)
+			}, 100);
 		}
 	}
 
@@ -618,25 +662,18 @@ function createPipeline2() {
 		var remoteVideoCanvas;
 		var saveToServerFrame;
 		remoteVideoCanvas = webRtcPeer.currentFrame;
-		/*destinationCanvas = document.getElementById("testCanvas");
-	destinationContext = destinationCanvas.getContext("2d");
-	//destinationContext.clearRect(0,0,destinationCanvas.width,destinationCanvas.height);
-	
-	destinationCanvas.height = remoteVideoCanvas.height;
-	destinationCanvas.width = remoteVideoCanvas.width;
 
-	destinationContext.drawImage(remoteVideoCanvas,0,0);
-*/
 		saveFrameToServer(remoteVideoCanvas, camNum);
-
 	}
 
 	function saveFrameToServer(saveCurrentFrame, camNum) {
 		var saveToServerFrame;
 		var dateFrame = new Date();
-		var timeFrame = dateFrame.getFullYear() + dateFrame.getMonth() + dateFrame.getDate() + "_" + dateFrame.getHours() + dateFrame.getMinutes() + dateFrame.getSeconds() + dateFrame.getMilliseconds();
+		timeFrame = dateFrame.getFullYear() + dateFrame.getMonth() + dateFrame.getDate() + "_" + dateFrame.getHours() + dateFrame.getMinutes() + dateFrame.getSeconds() + dateFrame.getMilliseconds();
 		saveToServerFrame = saveCurrentFrame.toDataURL("image/jpeg", 0.5);
 		//saveToServerFrame = saveCurrentFrame.toDataURL();
+		frameDim = [saveCurrentFrame.width, saveCurrentFrame.height];
+		vidDim = [videoOutput.width, videoOutput.height];
 
 		$.post("saveScreenshot.php", {
 				cam: camNum,
@@ -652,25 +689,198 @@ function createPipeline2() {
 			});
 	}
 
-	function pauseVideo() {
-		var destinationContext;
-		var remoteVideoCanvas;
-		//videoOutput.pause();
-		webRtcPeer.remoteVideo.pause();
-		remoteVideoCanvas = webRtcPeer.currentFrame;
-		document.getElementById("test3").innerHTML = remoteVideoCanvas.width;
+	function drawObject() {
+		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
+		document.getElementById("objectCam2").style.zIndex = zFRONT;
+		document.getElementById("borderCam2").style.zIndex = zBACK;
+		console.log("entered drawObject()");
+		if (!isPaused) {
+			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
+			isPaused = true;
+			if (!videoOutput.paused) {
 
-		destinationCanvas = document.getElementById("testCanvas");
-		destinationCanvas.height = remoteVideoCanvas.height;
-		destinationCanvas.width = remoteVideoCanvas.width;
-		destinationContext = destinationCanvas.getContext("2d");
-		destinationContext.drawImage(remoteVideoCanvas, 0, 0);
+				console.log("Entered here");
+				videoOutput.pause();
+				grabScreenshot(1);
+
+			}
+			document.getElementById("objectButton2").innerHTML = "Drawn Object of Interest";
+			document.getElementById("borderButton2").disabled = true;
+			//objectCam1 = document.getElementById("objectCam1");
+
+			paper = paperScopes[0];
+
+			function onMouseDown(event) {
+				currentPathObject = new paper.Path();
+				currentPathObject.strokeColor = 'green';
+				currentPathObject.add(event.point);
+			}
+
+			objectTrackTool1 = new paper.Tool();
+			objectTrackTool1.onMouseDown = onMouseDown;
+
+
+			objectTrackTool1.onMouseDrag = function(event) {
+				currentPathObject.add(event.point);
+			}
+
+
+		} else if (isPaused) {
+			isPaused = false;
+			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
+
+
+			document.getElementById("objectButton2").innerHTML = "Tracking Object";
+			document.getElementById("borderButton2").disabled = false;
+			document.getElementById("objectTracker2").innerHTML = "Object Tracking";
+
+			objectTrackTool1.remove();
+
+			initializeDrawings(camNum, currentPathObject);
+
+			if (videoOutput.paused)
+				videoOutput.play();
+
+			//When server sends information to client
+			if (typeof(EventSource) !== "undefined") {
+				console.log("entered EventSource");
+				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
+				source = new EventSource("sse_test.php?camNum=" + camNum);
+				source.onmessage = function(event) {
+					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
+					var jsonObj = JSON.parse(event.data);
+					currentPathObject.clear();
+					currentPathObject.importJSON(jsonObj);
+					/*var jsonObj2 = [];
+					var segArrays = [];
+					var strokeColorArray = [];
+					var jsonObj3 = {
+						"name": "currentPathObject",
+						"applyMatrix": true,
+						"segments": currentPathObject.segments.toString(),
+						"strokeColor": currentPathObject.strokeColor.toString()
+					};
+					var jsonObj4 = {
+						"word": "hello"
+					};
+					jsonObj2.push("Path");
+					jsonObj2.push(jsonObj3);
+					jsonObj2.push(jsonObj4);
+					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
+*/
+					//jsonObj[1].segments.length = 0;
+					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
+					//console.log("testObj: " + testObj);
+					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
+
+					if (jsonObj[3].objectFound === "false") {
+						document.getElementById("objectTracker2").innerHTML = "OBJECT MISSING";
+						document.getElementById("objectTracker2").style.backgroundColor = 'red';
+					} else {
+						document.getElementById("objectTracker2").innerHTML = "OBJECT TRACKED";
+						document.getElementById("objectTracker2").style.backgroundColor = 'green';
+					}
+
+
+					/*
+					var new_tweets = { };
+
+					new_tweets.k = { };
+
+					new_tweets.k.tweet_id = 98745521;
+					new_tweets.k.user_id = 54875;
+
+					new_tweets.k.data = { };
+
+					new_tweets.k.data.in_reply_to_screen_name = 'other_user';
+					new_tweets.k.data.text = 'tweet text';
+
+					// Will create the JSON string you're looking for.
+					var json = JSON.stringify(new_tweets);
+					*/
+				};
+			} else {
+				console.log("Sorry, your browser does not support server-sent events...");
+			}
+
+			if (typeof currentPathObject !== 'undefined')
+				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
+					asString: true
+				});
+
+		}
+
 	}
 
-	function resumeVideo() {
-		//videoOutput.play();  	
-		webRtcPeer.remoteVideo.play();
-		document.getElementById("test2").innerHTML = "CONTINUE PLAYING ";
+	function drawBorder() {
+		//Brings borderCam1 canvas to front for mouse events, objectCam1 canvas to back
+		document.getElementById("objectCam2").style.zIndex = zBACK;
+		document.getElementById("borderCam2").style.zIndex = zFRONT;
+
+		if (!isPaused) {
+			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
+			isPaused = true;
+			if (!videoOutput.paused) {
+
+				console.log("Entered here");
+				videoOutput.pause();
+
+			}
+
+			document.getElementById("borderButton2").innerHTML = "Drawn Border";
+			document.getElementById("objectButton2").disabled = true;
+
+			paper = paperScopes[1];
+
+			function onMouseDown(event) {
+				currentPathBorder = new paper.Path();
+				currentPathBorder.strokeColor = 'red';
+				currentPathBorder.add(event.point);
+			}
+
+			borderTrackTool = new paper.Tool();
+			borderTrackTool.onMouseDown = onMouseDown;
+
+
+			borderTrackTool.onMouseDrag = function(event) {
+				currentPathBorder.add(event.point);
+			}
+
+		} else if (isPaused) {
+			isPaused = false;
+			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
+			if (videoOutput.paused)
+				videoOutput.play();
+
+			document.getElementById("borderButton2").innerHTML = "Border Set";
+			document.getElementById("objectButton2").disabled = false;
+
+
+			borderTrackTool.remove();
+
+		}
+	}
+
+	function initializeDrawings(camNum, coordinates) {
+		$.post("initialize_drawings.php", {
+				cam: camNum,
+				coordinates: coordinates.exportJSON(),
+				timeFrame: timeFrame,
+				frameDim: frameDim,
+				vidDim: vidDim
+			},
+			function(data, status) {
+
+				//alert(data);
+				//console.log("initialize_drawing data ##########: " + data);
+				//alert("Data: " + data + "\nStatus: " + status);
+				/*var jsonObj = JSON.parse(data);
+				jsonObj[1].segments.length = 0;
+				currentPathObject.importJSON(jsonObj);*/
+				currentPathObject.importJSON(data);
+			});
+
+		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function start() {
@@ -749,7 +959,7 @@ function createPipeline2() {
 
 		});
 	}
-
+	//	this.stop = function() {
 	function stop() {
 		address.disabled = false;
 		if (webRtcPeer) {
@@ -761,11 +971,35 @@ function createPipeline2() {
 			pipeline = null;
 		}
 		hideSpinner(videoOutput);
-		stopScreenshot(2);
+
+		if (typeof currentPathObject !== 'undefined')
+		//currentPathObject.removeSegments();
+			currentPathObject.remove();
+		if (typeof currentPathBorder !== 'undefined')
+		//currentPathBorder.removeSegments();
+			currentPathBorder.remove();
+
+		document.getElementById("objectButton2").innerHTML = "Track Object";
+		document.getElementById("borderButton2").innerHTML = "Track Border";
+		document.getElementById("objectTracker2").innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker2").style.backgroundColor = "white";
+
+		if (typeof source !== 'undefined')
+			source.close();
+		stopScreenshot(camNum);
+		isPaused = false; //Set drawing function back to initial drawing
+		console.log("STOPPED FUNCTION()");
+
+		overlayTextCanvas();
+
+		if (typeof pathObject !== 'undefined')
+			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
+		if (typeof currentPathObject !== 'undefined')
+			document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
 	}
 
-
 }; //createPipeline2
+
 
 function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError) {
 	webRtcPeer.on('icecandidate', function(candidate) {
