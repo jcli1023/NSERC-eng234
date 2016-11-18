@@ -598,7 +598,7 @@ function createPipeline2() {
 	console = new Console('console2', console);
 	var videoOutput = document.getElementById('videoOutput2');
 	var address = document.getElementById('address2');
-	address.value = 'rtsp//dsmp.ryerson.ca:8554/test_vid.mkv';
+	address.value = 'rtsp://dsmp.ryerson.ca:8554/test_vid.mkv';
 	var pipeline;
 	var webRtcPeer;
 
