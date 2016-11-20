@@ -177,6 +177,10 @@ function createPipeline1() {
 	stopButton = document.getElementById('stop1');
 	stopButton.addEventListener('click', stop);
 
+	clearObjectButton = document.getElementById('clearObjectDrawing1');
+	clearObjectButton.style.display = "none";
+	clearObjectButton.addEventListener('click', clearObjectDrawing);
+
 	document.getElementById("objectButton1").addEventListener("click", drawObject);
 	document.getElementById("borderButton1").addEventListener("click", drawBorder);
 
@@ -199,7 +203,6 @@ function createPipeline1() {
 		if (drawTimer) {
 			clearInterval(drawTimer);
 			drawTimer = null;
-			firstTimeImage = true;
 		}
 	}
 
@@ -252,12 +255,10 @@ function createPipeline1() {
 		console.log("entered drawObject()");
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
-			isPaused = true;
 
-			if (typeof(EventSource) !== "undefined") {
-				if (typeof source !== 'undefined')
-					source.close();
-			}
+			resetDefaultUI();
+			//isPaused must be set after resetDefaultUI()	
+			isPaused = true;
 
 			if (!videoOutput.paused) {
 
@@ -266,8 +267,10 @@ function createPipeline1() {
 				grabScreenshot(1);
 
 			}
+
 			document.getElementById("objectButton1").innerHTML = "Drawn Object of Interest";
 			document.getElementById("borderButton1").disabled = true;
+			document.getElementById("clearObjectDrawing1").style.display = "inline";
 
 			paper = paperScopes[0];
 
@@ -294,6 +297,7 @@ function createPipeline1() {
 			document.getElementById("objectButton1").innerHTML = "Tracking Object";
 			document.getElementById("borderButton1").disabled = false;
 			document.getElementById("objectTracker1").innerHTML = "Object Tracking";
+			document.getElementById("clearObjectDrawing1").style.display = "none";
 
 			objectTrackTool1.remove();
 
@@ -444,6 +448,11 @@ function createPipeline1() {
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
+	function clearObjectDrawing() {
+		if (typeof currentPathObject !== 'undefined')
+			currentPathObject.remove();
+	}
+
 	function resetDefaultUI() {
 		if (typeof(EventSource) !== "undefined") {
 			if (typeof source !== 'undefined')
@@ -455,6 +464,10 @@ function createPipeline1() {
 		if (typeof currentPathBorder !== 'undefined')
 			currentPathBorder.remove();
 
+		stopScreenshot(camNum);
+		isPaused = false; //Set drawing function back to initial drawing
+
+		document.getElementById("clearObjectDrawing1").style.display = "none";
 		document.getElementById("objectButton1").innerHTML = "Track Object";
 		document.getElementById("borderButton1").innerHTML = "Track Border";
 		document.getElementById("objectTracker1").innerHTML = "Object Not Tracked";
@@ -557,8 +570,6 @@ function createPipeline1() {
 
 		resetDefaultUI();
 
-		stopScreenshot(camNum);
-		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
 
 		if (typeof pathObject !== 'undefined')
@@ -578,36 +589,9 @@ function createPipeline2() {
 	paperScopes[0] = new paper.PaperScope();
 	paperScopes[1] = new paper.PaperScope();
 
-	paperScopes[0].setup("objectCam2");
-	paperScopes[1].setup("borderCam2");
+	paperScopes[0].setup("objectCam1");
+	paperScopes[1].setup("borderCam1");
 
-
-	/*
-	paperScopes[0].view.autoUpdate = false;
-	paperScopes[1].view.autoUpdate = false;
-
-	paper = paperScopes[0];
-
-
-	var circle1 = new paper.Path.Circle(30, 30, 20);
-	circle1.style = {
-	    fillColor: new paper.Color(1, .5, .5),
-	    strokeColor: "black"
-	};
-
-
-	paper = paperScopes[1];
-
-	var circle2 = new paper.Path.Circle(60, 60, 20);
-	circle2.style = {
-	    fillColor: new paper.Color(.5, .5, 1),
-	    strokeColor: "black"
-	};
-
-	paperScopes[0].view.draw();
-	paperScopes[1].view.draw();
-	*/
-	//var pipe1 = function createPipeline1(){
 	console = new Console('console2', console);
 	var videoOutput = document.getElementById('videoOutput2');
 	var address = document.getElementById('address2');
@@ -623,9 +607,8 @@ function createPipeline2() {
 	var currentPathObject;
 	var currentPathBorder;
 	var isPaused = false;
-	var source; //eventSource for serve sided events
+	var source; //eventSource for server sided events
 	var objectPresent = null;
-
 
 	var dumbCount = 0;
 	startButton = document.getElementById('start2');
@@ -633,6 +616,10 @@ function createPipeline2() {
 
 	stopButton = document.getElementById('stop2');
 	stopButton.addEventListener('click', stop);
+
+	clearObjectButton = document.getElementById('clearObjectDrawing2');
+	clearObjectButton.style.display = "none";
+	clearObjectButton.addEventListener('click', clearObjectDrawing);
 
 	document.getElementById("objectButton2").addEventListener("click", drawObject);
 	document.getElementById("borderButton2").addEventListener("click", drawBorder);
@@ -653,16 +640,15 @@ function createPipeline2() {
 
 
 	function stopScreenshot(camNum) {
-		if (drawTimer2) {
-			clearInterval(drawTimer2);
+		if (drawTimer) {
+			clearInterval(drawTimer);
 			drawTimer = null;
-			firstTimeImage = true;
 		}
 	}
 
 	function startScreenshot(camNum) {
-		if (drawTimer2 == null) {
-			drawTimer2 = setInterval(function() {
+		if (drawTimer == null) {
+			drawTimer = setInterval(function() {
 				grabScreenshot(camNum)
 			}, 100);
 		}
@@ -709,7 +695,11 @@ function createPipeline2() {
 		console.log("entered drawObject()");
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
+
+			resetDefaultUI();
+			//isPaused must be set after resetDefaultUI()	
 			isPaused = true;
+
 			if (!videoOutput.paused) {
 
 				console.log("Entered here");
@@ -717,9 +707,10 @@ function createPipeline2() {
 				grabScreenshot(1);
 
 			}
+
 			document.getElementById("objectButton2").innerHTML = "Drawn Object of Interest";
 			document.getElementById("borderButton2").disabled = true;
-			//objectCam1 = document.getElementById("objectCam1");
+			document.getElementById("clearObjectDrawing2").style.display = "inline";
 
 			paper = paperScopes[0];
 
@@ -746,6 +737,7 @@ function createPipeline2() {
 			document.getElementById("objectButton2").innerHTML = "Tracking Object";
 			document.getElementById("borderButton2").disabled = false;
 			document.getElementById("objectTracker2").innerHTML = "Object Tracking";
+			document.getElementById("clearObjectDrawing2").style.display = "none";
 
 			objectTrackTool1.remove();
 
@@ -896,6 +888,34 @@ function createPipeline2() {
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
+	function clearObjectDrawing() {
+		if (typeof currentPathObject !== 'undefined')
+			currentPathObject.remove();
+	}
+
+	function resetDefaultUI() {
+		if (typeof(EventSource) !== "undefined") {
+			if (typeof source !== 'undefined')
+				source.close();
+		}
+
+		if (typeof currentPathObject !== 'undefined')
+			currentPathObject.remove();
+		if (typeof currentPathBorder !== 'undefined')
+			currentPathBorder.remove();
+
+		stopScreenshot(camNum);
+		isPaused = false; //Set drawing function back to initial drawing
+
+		document.getElementById("clearObjectDrawing2").style.display = "none";
+		document.getElementById("objectButton2").innerHTML = "Track Object";
+		document.getElementById("borderButton2").innerHTML = "Track Border";
+		document.getElementById("objectTracker2").innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker2").style.backgroundColor = "white";
+
+		overlayTextCanvas();
+	}
+
 	function start() {
 		if (!address.value) {
 			window.alert("You must set the video source URL first");
@@ -906,6 +926,9 @@ function createPipeline2() {
 		var options = {
 			remoteVideo: videoOutput
 		};
+
+		resetDefaultUI();
+
 		webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 			function(error) {
 				if (error) {
@@ -985,31 +1008,17 @@ function createPipeline2() {
 		}
 		hideSpinner(videoOutput);
 
-		if (typeof currentPathObject !== 'undefined')
-		//currentPathObject.removeSegments();
-			currentPathObject.remove();
-		if (typeof currentPathBorder !== 'undefined')
-		//currentPathBorder.removeSegments();
-			currentPathBorder.remove();
+		resetDefaultUI();
 
-		document.getElementById("objectButton2").innerHTML = "Track Object";
-		document.getElementById("borderButton2").innerHTML = "Track Border";
-		document.getElementById("objectTracker2").innerHTML = "Object Not Tracked";
-		document.getElementById("objectTracker2").style.backgroundColor = "white";
-
-		if (typeof source !== 'undefined')
-			source.close();
-		stopScreenshot(camNum);
-		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
-
-		overlayTextCanvas();
 
 		if (typeof pathObject !== 'undefined')
 			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
 		if (typeof currentPathObject !== 'undefined')
 			document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
 	}
+
+
 
 }; //createPipeline2
 
