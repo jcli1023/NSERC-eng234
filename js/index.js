@@ -68,7 +68,6 @@ function overlayTextCanvas() {
 		context1.font = "bold 16px Arial";
 		context1.fillText("ObjectCam" + i, 100, 100);
 
-
 		context2.fillStyle = "blue";
 		context2.font = "bold 16px Arial";
 		context2.fillText("borderCam" + i, 200, 200);
@@ -168,9 +167,8 @@ function createPipeline1() {
 	var currentPathObject;
 	var currentPathBorder;
 	var isPaused = false;
-	var source; //eventSource for serve sided events
+	var source; //eventSource for server sided events
 	var objectPresent = null;
-
 
 	var dumbCount = 0;
 	startButton = document.getElementById('start1');
@@ -255,6 +253,9 @@ function createPipeline1() {
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 			isPaused = true;
+
+			resetDefaultUI();
+
 			if (!videoOutput.paused) {
 
 				console.log("Entered here");
@@ -264,7 +265,6 @@ function createPipeline1() {
 			}
 			document.getElementById("objectButton1").innerHTML = "Drawn Object of Interest";
 			document.getElementById("borderButton1").disabled = true;
-			//objectCam1 = document.getElementById("objectCam1");
 
 			paper = paperScopes[0];
 
@@ -441,6 +441,25 @@ function createPipeline1() {
 		console.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
+	function resetDefaultUI() {
+		if (typeof(EventSource) !== "undefined") {
+			if (typeof source !== 'undefined')
+				source.close();
+		}
+
+		if (typeof currentPathObject !== 'undefined')
+			currentPathObject.remove();
+		if (typeof currentPathBorder !== 'undefined')
+			currentPathBorder.remove();
+
+		document.getElementById("objectButton1").innerHTML = "Track Object";
+		document.getElementById("borderButton1").innerHTML = "Track Border";
+		document.getElementById("objectTracker1").innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker1").style.backgroundColor = "white";
+
+		overlayTextCanvas();
+	}
+
 	function start() {
 		if (!address.value) {
 			window.alert("You must set the video source URL first");
@@ -451,6 +470,9 @@ function createPipeline1() {
 		var options = {
 			remoteVideo: videoOutput
 		};
+
+		resetDefaultUI();
+
 		webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 			function(error) {
 				if (error) {
@@ -530,31 +552,19 @@ function createPipeline1() {
 		}
 		hideSpinner(videoOutput);
 
-		if (typeof currentPathObject !== 'undefined')
-		//currentPathObject.removeSegments();
-			currentPathObject.remove();
-		if (typeof currentPathBorder !== 'undefined')
-		//currentPathBorder.removeSegments();
-			currentPathBorder.remove();
+		resetDefaultUI();
 
-		document.getElementById("objectButton1").innerHTML = "Track Object";
-		document.getElementById("borderButton1").innerHTML = "Track Border";
-		document.getElementById("objectTracker1").innerHTML = "Object Not Tracked";
-		document.getElementById("objectTracker1").style.backgroundColor = "white";
-
-		if (typeof source !== 'undefined')
-			source.close();
 		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 		console.log("STOPPED FUNCTION()");
-
-		overlayTextCanvas();
 
 		if (typeof pathObject !== 'undefined')
 			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
 		if (typeof currentPathObject !== 'undefined')
 			document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
 	}
+
+
 
 }; //createPipeline1
 
