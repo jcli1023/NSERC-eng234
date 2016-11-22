@@ -112,7 +112,6 @@ if (args.ice_servers) {
 window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams))});
 window.addEventListener("load", overlayTextCanvas);
 
-//window.pipe1 = function createPipeline1 () {
 function createPipeline(camNum) {
 
 	var createPipeline = new Object();
@@ -136,7 +135,6 @@ function createPipeline(camNum) {
 	var pipeline;
 	var webRtcPeer;
 
-//	var camNum = 1;
 	var frameDim = [1920, 1080]; //dimensions of the frames
 	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
 	var timeFrame //year month date hours minutes seconds milliseconds
@@ -164,20 +162,12 @@ function createPipeline(camNum) {
 	document.getElementById("objectButton"+camNum).addEventListener("click", drawObject);
 	document.getElementById("borderButton"+camNum).addEventListener("click", drawBorder);
 
-
-	/*	  videoOutput.addEventListener("ended",function(){
-		alert("video ended!");
-		stopScreenshot(1);
-	  	});
-	*/
 	videoOutput.addEventListener("pause", function() {
 		stopScreenshot(camNum);
 	});
 	videoOutput.addEventListener("playing", function() {
 		startScreenshot(camNum);
 	});
-
-
 
 	function stopScreenshot(camNum) {
 		if (drawTimer) {
