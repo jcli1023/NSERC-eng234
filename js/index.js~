@@ -20,6 +20,7 @@ var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var zFRONT = 1000;
 var zBACK = 500;
 var currentNumCams = 1;
+var pipeline1;
 
 //Template 1
 function setTemplate1() {
@@ -53,7 +54,6 @@ function setTemplate2() {
 	document.getElementById("template2").style.display = "inline";
 	currentNumCams = 2;
 	document.getElementById("test2").innerHTML = currentNumCams;
-
 	overlayTextCanvas();
 	createPipeline2();
 }
@@ -104,8 +104,12 @@ if (args.ice_servers) {
 	console.log("Use freeice")
 }
 
-window.addEventListener('load', createPipeline1);
-window.addEventListener('load', overlayTextCanvas);
+
+//window.addEventListener('load', createPipeline1);
+
+window.addEventListener("load", function(){ pipeline1 = new createPipeline1();});
+
+window.addEventListener("load", overlayTextCanvas);
 //window.addEventListener('load',function(){pipe1();});
 //window.addEventListener('load',pipe1());
 
@@ -118,40 +122,20 @@ function alertEnd() {
 //window.pipe1 = function createPipeline1 () {
 function createPipeline1() {
 
+	var createPipeline = new Object();
+
 	var paperScopes = [];
 	paperScopes[0] = new paper.PaperScope();
 	paperScopes[1] = new paper.PaperScope();
 
-	paperScopes[0].setup("objectCam1");
-	paperScopes[1].setup("borderCam1");
+	objectCam1 = document.getElementById("objectCam1");
+	borderCam1 = document.getElementById("borderCam1");
+	paperScopes[0].setup(objectCam1);
+	paperScopes[1].setup(borderCam1);
 
+	//paperScopes[0].setup("objectCam1");
+	//paperScopes[1].setup("borderCam1");
 
-	/*
-	paperScopes[0].view.autoUpdate = false;
-	paperScopes[1].view.autoUpdate = false;
-
-	paper = paperScopes[0];
-
-
-	var circle1 = new paper.Path.Circle(30, 30, 20);
-	circle1.style = {
-	    fillColor: new paper.Color(1, .5, .5),
-	    strokeColor: "black"
-	};
-
-
-	paper = paperScopes[1];
-
-	var circle2 = new paper.Path.Circle(60, 60, 20);
-	circle2.style = {
-	    fillColor: new paper.Color(.5, .5, 1),
-	    strokeColor: "black"
-	};
-
-	paperScopes[0].view.draw();
-	paperScopes[1].view.draw();
-	*/
-	//var pipe1 = function createPipeline1(){
 	console = new Console('console1', console);
 	var videoOutput = document.getElementById('videoOutput1');
 	var address = document.getElementById('address1');
@@ -578,7 +562,9 @@ function createPipeline1() {
 			document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
 	}
 
-
+	
+	createPipeline.stop = stop;
+	return createPipeline;
 
 }; //createPipeline1
 
@@ -589,8 +575,8 @@ function createPipeline2() {
 	paperScopes[0] = new paper.PaperScope();
 	paperScopes[1] = new paper.PaperScope();
 
-	paperScopes[0].setup("objectCam1");
-	paperScopes[1].setup("borderCam1");
+	paperScopes[0].setup("objectCam2");
+	paperScopes[1].setup("borderCam2");
 
 	console = new Console('console2', console);
 	var videoOutput = document.getElementById('videoOutput2');
