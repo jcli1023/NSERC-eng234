@@ -20,42 +20,48 @@ var MAX_VID_SIZE_TEMP2_WIDTH = 400;
 var zFRONT = 1000;
 var zBACK = 500;
 var currentNumCams = 1;
-var pipeline1;
-
+var pipeline1,pipeline2;
+var pipelines = [];
 //Template 1
 function setTemplate1() {
-	document.getElementById("test").innerHTML = "Template1";
-	document.getElementById("template2").style.display = "none";
-	document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-	document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-	document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-	document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-	document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-	document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-	//document.getElementById("template1").style.display = "inline";
 	if (currentNumCams > 1) {
+		document.getElementById("test").innerHTML = "Template1";
+		document.getElementById("template2").style.display = "none";
+		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+		document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+		document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+		document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+		document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+		//document.getElementById("template1").style.display = "inline";
 		currentNumCams = 1;
-	}
-	document.getElementById("test2").innerHTML = currentNumCams;
+		pipeline2.stop();
 
-	overlayTextCanvas();
+
+	}
+//	overlayTextCanvas();
+	document.getElementById("test2").innerHTML = currentNumCams;
+//	pipeline1.stop();
 }
 
 //Template 2
 function setTemplate2() {
-	document.getElementById("test").innerHTML = "Template2";
-	document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-	document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-	document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-	document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-	document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-	document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-	//document.getElementById("template1").style.display = "none";
-	document.getElementById("template2").style.display = "inline";
-	currentNumCams = 2;
-	document.getElementById("test2").innerHTML = currentNumCams;
-	overlayTextCanvas();
-	createPipeline2();
+	if (currentNumCams != 2)
+	{
+		document.getElementById("test").innerHTML = "Template2";
+		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+		document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+		document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+		document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+		document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+		//document.getElementById("template1").style.display = "none";
+		document.getElementById("template2").style.display = "inline";
+		currentNumCams = 2;
+		document.getElementById("test2").innerHTML = currentNumCams;
+		overlayTextCanvas();
+		pipeline2 = new createPipeline(2);
+	}
 }
 
 function overlayTextCanvas() {
@@ -104,23 +110,11 @@ if (args.ice_servers) {
 	console.log("Use freeice")
 }
 
-
-//window.addEventListener('load', createPipeline1);
-
-window.addEventListener("load", function(){ pipeline1 = new createPipeline1();});
-
+window.addEventListener("load", function(){ pipeline1 = new createPipeline(1);});
 window.addEventListener("load", overlayTextCanvas);
-//window.addEventListener('load',function(){pipe1();});
-//window.addEventListener('load',pipe1());
-
-function alertEnd() {
-	v = document.getElementById('videoOutput1');
-	console.log("HELLO ALERT ENDED?");
-	pipe1.stop();
-}
 
 //window.pipe1 = function createPipeline1 () {
-function createPipeline1() {
+function createPipeline(camNum) {
 
 	var createPipeline = new Object();
 
@@ -128,45 +122,48 @@ function createPipeline1() {
 	paperScopes[0] = new paper.PaperScope();
 	paperScopes[1] = new paper.PaperScope();
 
-	objectCam1 = document.getElementById("objectCam1");
-	borderCam1 = document.getElementById("borderCam1");
+	objectCam1 = document.getElementById("objectCam"+camNum);
+	borderCam1 = document.getElementById("borderCam"+camNum);
 	paperScopes[0].setup(objectCam1);
 	paperScopes[1].setup(borderCam1);
 
 	//paperScopes[0].setup("objectCam1");
 	//paperScopes[1].setup("borderCam1");
 
-	console = new Console('console1', console);
-	var videoOutput = document.getElementById('videoOutput1');
-	var address = document.getElementById('address1');
+	console = new Console('console'+camNum, console);
+	var videoOutput = document.getElementById('videoOutput'+camNum);
+	var address = document.getElementById('address'+camNum);
 	address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
 	var pipeline;
 	var webRtcPeer;
 
-	var camNum = 1;
+//	var camNum = 1;
 	var frameDim = [1920, 1080]; //dimensions of the frames
 	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
 	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
+
 	var currentPathObject;
 	var currentPathBorder;
+	var objectTrackTool;
+	var borderTrackTool;
+
 	var isPaused = false;
 	var source; //eventSource for server sided events
-	var objectPresent = null;
 
 	var dumbCount = 0;
-	startButton = document.getElementById('start1');
+	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
 
-	stopButton = document.getElementById('stop1');
+	stopButton = document.getElementById('stop'+camNum);
 	stopButton.addEventListener('click', stop);
 
-	clearObjectButton = document.getElementById('clearObjectDrawing1');
+	clearObjectButton = document.getElementById('clearObjectDrawing'+camNum);
 	clearObjectButton.style.display = "none";
 	clearObjectButton.addEventListener('click', clearObjectDrawing);
 
-	document.getElementById("objectButton1").addEventListener("click", drawObject);
-	document.getElementById("borderButton1").addEventListener("click", drawBorder);
+	document.getElementById("objectButton"+camNum).addEventListener("click", drawObject);
+	document.getElementById("borderButton"+camNum).addEventListener("click", drawBorder);
 
 
 	/*	  videoOutput.addEventListener("ended",function(){
@@ -234,8 +231,8 @@ function createPipeline1() {
 
 	function drawObject() {
 		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
-		document.getElementById("objectCam1").style.zIndex = zFRONT;
-		document.getElementById("borderCam1").style.zIndex = zBACK;
+		document.getElementById("objectCam"+camNum).style.zIndex = zFRONT;
+		document.getElementById("borderCam"+camNum).style.zIndex = zBACK;
 		console.log("entered drawObject()");
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
@@ -248,13 +245,13 @@ function createPipeline1() {
 
 				console.log("Entered here");
 				videoOutput.pause();
-				grabScreenshot(1);
+				grabScreenshot(camNum);
 
 			}
 
-			document.getElementById("objectButton1").innerHTML = "Drawn Object of Interest";
-			document.getElementById("borderButton1").disabled = true;
-			document.getElementById("clearObjectDrawing1").style.display = "inline";
+			document.getElementById("objectButton"+camNum).innerHTML = "Drawn Object of Interest";
+			document.getElementById("borderButton"+camNum).disabled = true;
+			document.getElementById("clearObjectDrawing"+camNum).style.display = "inline";
 
 			paper = paperScopes[0];
 
@@ -264,11 +261,11 @@ function createPipeline1() {
 				currentPathObject.add(event.point);
 			}
 
-			objectTrackTool1 = new paper.Tool();
-			objectTrackTool1.onMouseDown = onMouseDown;
+			objectTrackTool = new paper.Tool();
+			objectTrackTool.onMouseDown = onMouseDown;
 
 
-			objectTrackTool1.onMouseDrag = function(event) {
+			objectTrackTool.onMouseDrag = function(event) {
 				currentPathObject.add(event.point);
 			}
 
@@ -278,12 +275,12 @@ function createPipeline1() {
 			console.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
 
 
-			document.getElementById("objectButton1").innerHTML = "Tracking Object";
-			document.getElementById("borderButton1").disabled = false;
-			document.getElementById("objectTracker1").innerHTML = "Object Tracking";
-			document.getElementById("clearObjectDrawing1").style.display = "none";
+			document.getElementById("objectButton"+camNum).innerHTML = "Tracking Object";
+			document.getElementById("borderButton"+camNum).disabled = false;
+			document.getElementById("objectTracker"+camNum).innerHTML = "Object Tracking";
+			document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
 
-			objectTrackTool1.remove();
+			objectTrackTool.remove();
 
 			initializeDrawings(camNum, currentPathObject);
 
@@ -323,11 +320,11 @@ function createPipeline1() {
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
 					if (jsonObj[3].objectFound === "false") {
-						document.getElementById("objectTracker1").innerHTML = "OBJECT MISSING";
-						document.getElementById("objectTracker1").style.backgroundColor = 'red';
+						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT MISSING";
+						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'red';
 					} else {
-						document.getElementById("objectTracker1").innerHTML = "OBJECT TRACKED";
-						document.getElementById("objectTracker1").style.backgroundColor = 'green';
+						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT TRACKED";
+						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'green';
 					}
 
 
@@ -363,8 +360,8 @@ function createPipeline1() {
 
 	function drawBorder() {
 		//Brings borderCam1 canvas to front for mouse events, objectCam1 canvas to back
-		document.getElementById("objectCam1").style.zIndex = zBACK;
-		document.getElementById("borderCam1").style.zIndex = zFRONT;
+		document.getElementById("objectCam"+camNum).style.zIndex = zBACK;
+		document.getElementById("borderCam"+camNum).style.zIndex = zFRONT;
 
 		if (!isPaused) {
 			console.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
@@ -376,8 +373,8 @@ function createPipeline1() {
 
 			}
 
-			document.getElementById("borderButton1").innerHTML = "Drawn Border";
-			document.getElementById("objectButton1").disabled = true;
+			document.getElementById("borderButton"+camNum).innerHTML = "Drawn Border";
+			document.getElementById("objectButton"+camNum).disabled = true;
 
 			paper = paperScopes[1];
 
@@ -401,8 +398,8 @@ function createPipeline1() {
 			if (videoOutput.paused)
 				videoOutput.play();
 
-			document.getElementById("borderButton1").innerHTML = "Border Set";
-			document.getElementById("objectButton1").disabled = false;
+			document.getElementById("borderButton"+camNum).innerHTML = "Border Set";
+			document.getElementById("objectButton"+camNum).disabled = false;
 
 
 			borderTrackTool.remove();
@@ -451,11 +448,11 @@ function createPipeline1() {
 		stopScreenshot(camNum);
 		isPaused = false; //Set drawing function back to initial drawing
 
-		document.getElementById("clearObjectDrawing1").style.display = "none";
-		document.getElementById("objectButton1").innerHTML = "Track Object";
-		document.getElementById("borderButton1").innerHTML = "Track Border";
-		document.getElementById("objectTracker1").innerHTML = "Object Not Tracked";
-		document.getElementById("objectTracker1").style.backgroundColor = "white";
+		document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
+		document.getElementById("objectButton"+camNum).innerHTML = "Track Object";
+		document.getElementById("borderButton"+camNum).innerHTML = "Track Border";
+		document.getElementById("objectTracker"+camNum).innerHTML = "Object Not Tracked";
+		document.getElementById("objectTracker"+camNum).style.backgroundColor = "white";
 
 		overlayTextCanvas();
 	}
