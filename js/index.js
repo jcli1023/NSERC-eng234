@@ -130,8 +130,6 @@ function createPipeline(camNum) {
 
 	var consoleLog = new Console('console'+camNum, console);
 
-	console.log(console);
-
 	var videoOutput = document.getElementById('videoOutput'+camNum);
 	var address = document.getElementById('address'+camNum);
 	address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
@@ -189,7 +187,6 @@ function createPipeline(camNum) {
 
 	function grabScreenshot(camNum) {
 		dumbCount++;
-		//console.append("HELLO IM IN HERE SCREENSHOT" + dumbCount);
 		//consoleLog.log("HELLO IM IN HERE SCREENSHOT" + dumbCount);
 		var destinationContext;
 		var remoteVideoCanvas;
