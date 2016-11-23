@@ -214,7 +214,7 @@ function createPipeline(camNum) {
 			},
 			function(data, status) {
 
-				document.getElementById("test3").innerHTML = data + " " + status + " " + dumbCount;
+				document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
 	}
@@ -343,7 +343,7 @@ function createPipeline(camNum) {
 			}
 
 			if (typeof currentPathObject !== 'undefined')
-				document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
+				document.getElementById("debug"+camNum).innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
 					asString: true
 				});
 
