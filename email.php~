@@ -1,0 +1,7 @@
+<?php
+$to = "jcli@ryerson.ca";
+$subject = "Test My Subject";
+$txt = "Hello world! THIS ACTUALLY WORKS!";
+$headers = "From: webmaster@dsmp.ryerson.ca" . "\r\n" .
+mail($to,$subject,$txt,$headers);
+?>

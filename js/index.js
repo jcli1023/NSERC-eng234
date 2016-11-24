@@ -313,8 +313,21 @@ function createPipeline(camNum) {
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
 					if (jsonObj[3].objectFound === "false") {
+						var reportDateFrame = new Date();
+						var reportTimeFrame = reportDateFrame.getFullYear()+"-"+ reportDateFrame.getMonth() +"-"+ reportDateFrame.getDate() + "_" + reportDateFrame.getHours()+":" + reportDateFrame.getMinutes()+":" + reportDateFrame.getSeconds() +":"+ reportDateFrame.getMilliseconds();
 						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT MISSING";
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'red';
+						$.post("email.php", {
+							email: "jcli@ryerson.ca",
+							time: reportTimeFrame
+						},
+						function(data, status) {
+
+							//alert(data);
+							consoleLog.log("Object Missing : " + reportTimeFrame);
+						});
+
+
 					} else {
 						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT TRACKED";
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'green';
