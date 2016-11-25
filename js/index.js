@@ -111,7 +111,7 @@ if (args.ice_servers) {
 //window.addEventListener("load", function(){ pipeline1 = new createPipeline(currentNumCams);});
 window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
 email = document.getElementById('email');
-email.value = "testdsmp@dsmp.ryerson.ca";
+email.value = 'testdsmp@dsmp.ryerson.ca';
 });
 window.addEventListener("load", overlayTextCanvas);
 
@@ -228,7 +228,7 @@ function createPipeline(camNum) {
 		document.getElementById("borderCam"+camNum).style.zIndex = zBACK;
 		consoleLog.log("entered drawObject()");
 		if (!isPaused) {
-			consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
+			//consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 
 			resetDefaultUI();
 			//isPaused must be set after resetDefaultUI()	
@@ -236,7 +236,7 @@ function createPipeline(camNum) {
 
 			if (!videoOutput.paused) {
 
-				consoleLog.log("Entered here");
+				//consoleLog.log("Entered here");
 				videoOutput.pause();
 				grabScreenshot(camNum);
 
@@ -265,7 +265,7 @@ function createPipeline(camNum) {
 
 		} else if (isPaused) {
 			isPaused = false;
-			consoleLog.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
+			//consoleLog.log("isPaused##### videoOutput.paused2: " + videoOutput.paused);
 
 
 			document.getElementById("objectButton"+camNum).innerHTML = "Tracking Object";
@@ -282,14 +282,14 @@ function createPipeline(camNum) {
 
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
-				consoleLog.log("entered EventSource");
+				//consoleLog.log("entered EventSource");
 				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
 				source = new EventSource("sse_test.php?camNum=" + camNum);
 				source.onmessage = function(event) {
 					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var dateFrame = new Date();
 					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
-					consoleLog.log(camNum+" event "+timeEvent);
+					//consoleLog.log(camNum+" event "+timeEvent);
 					var jsonObj = JSON.parse(event.data);
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
@@ -327,8 +327,8 @@ function createPipeline(camNum) {
 						function(data, status) {
 
 							//alert(data);
-							consoleLog.log("Object Missing : " + reportTimeFrame);
-							consoleLog.log("Data: "+ data);
+							consoleLog.log("OBJECT MISSING : " + reportTimeFrame);
+							consoleLog.log(data);
 						});
 
 
@@ -374,11 +374,11 @@ function createPipeline(camNum) {
 		document.getElementById("borderCam"+camNum).style.zIndex = zFRONT;
 
 		if (!isPaused) {
-			consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
+			//consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 			isPaused = true;
 			if (!videoOutput.paused) {
 
-				consoleLog.log("Entered here");
+				//consoleLog.log("Entered here");
 				videoOutput.pause();
 
 			}
@@ -470,6 +470,10 @@ function createPipeline(camNum) {
 	function start() {
 		if (!address.value) {
 			window.alert("You must set the video source URL first");
+			return;
+		}
+		if (!email.value) {
+			window.alert("You must set the email first");
 			return;
 		}
 		address.disabled = true;
