@@ -109,7 +109,10 @@ if (args.ice_servers) {
 }
 
 //window.addEventListener("load", function(){ pipeline1 = new createPipeline(currentNumCams);});
-window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams))});
+window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
+email = document.getElementById('email');
+email.value = "testDSMP@dsmp.ryerson.ca";
+});
 window.addEventListener("load", overlayTextCanvas);
 
 function createPipeline(camNum) {
@@ -318,13 +321,14 @@ function createPipeline(camNum) {
 						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT MISSING";
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'red';
 						$.post("email.php", {
-							email: "jcli@ryerson.ca",
+							email: email.value,
 							time: reportTimeFrame
 						},
 						function(data, status) {
 
 							//alert(data);
-							consoleLog.log("initialize_drawing data ##########: " + data);
+							consoleLog.log("Object Missing : " + reportTimeFrame);
+							consoleLog.log("Data: "+ data);
 						});
 
 
