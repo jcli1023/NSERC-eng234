@@ -293,6 +293,8 @@ function createPipeline(camNum) {
 					var jsonObj = JSON.parse(event.data);
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
+
+trajectory = jsonObj[5].trajectoryCenter;
 					/*var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
