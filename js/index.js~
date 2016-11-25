@@ -294,9 +294,7 @@ function createPipeline(camNum) {
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
 
-					trajectory = jsonObj[5].trajectoryCenter;
-					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
-					currentPathObject.add(new Point(trajectory[0],trajectory[1]));
+trajectory = jsonObj[5].trajectoryCenter;
 					/*var jsonObj2 = [];
 					var segArrays = [];
 					var strokeColorArray = [];
@@ -341,7 +339,8 @@ function createPipeline(camNum) {
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'green';
 					}
 					
-					
+					trajectory = jsonObj[5].trajectoryCenter;
+					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
 
 					/*
 					var new_tweets = { };
