@@ -226,7 +226,7 @@ function createPipeline(camNum) {
 		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
 		document.getElementById("objectCam"+camNum).style.zIndex = zFRONT;
 		document.getElementById("borderCam"+camNum).style.zIndex = zBACK;
-		consoleLog.log("entered drawObject()");
+		//consoleLog.log("entered drawObject()");
 		if (!isPaused) {
 			//consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 
@@ -315,7 +315,7 @@ function createPipeline(camNum) {
 					//console.log("testObj: " + testObj);
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
-					if (jsonObj[3].objectFound === "false") {
+					if (jsonObj[4].objectFound === "false") {
 						var reportDateFrame = new Date();
 						var reportTimeFrame = reportDateFrame.getFullYear()+"-"+ reportDateFrame.getMonth() +"-"+ reportDateFrame.getDate() + "_" + reportDateFrame.getHours()+":" + reportDateFrame.getMinutes()+":" + reportDateFrame.getSeconds() +":"+ reportDateFrame.getMilliseconds();
 						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT MISSING";
@@ -336,7 +336,9 @@ function createPipeline(camNum) {
 						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT TRACKED";
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'green';
 					}
-
+					
+					trajectory = jsonObj[5].trajectoryCenter;
+					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
 
 					/*
 					var new_tweets = { };
@@ -566,7 +568,7 @@ function createPipeline(camNum) {
 
 		resetDefaultUI();
 
-		consoleLog.log("STOPPED FUNCTION()");
+		//consoleLog.log("STOPPED FUNCTION()");
 
 		if (typeof pathObject !== 'undefined')
 			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
