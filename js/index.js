@@ -25,7 +25,7 @@ var pipelines = [];
 //Template 1
 function setTemplate1() {
 	if (currentNumCams > 1) {
-		document.getElementById("test").innerHTML = "Template1";
+		//document.getElementById("test").innerHTML = "Template1";
 		document.getElementById("template2").style.display = "none";
 		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP1_WIDTH;
 		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
@@ -43,7 +43,7 @@ function setTemplate1() {
 
 	}
 //	overlayTextCanvas();
-	document.getElementById("test2").innerHTML = currentNumCams;
+	//document.getElementById("test2").innerHTML = currentNumCams;
 //	pipeline1.stop();
 }
 
@@ -51,18 +51,17 @@ function setTemplate1() {
 function setTemplate2() {
 	if (currentNumCams != 2)
 	{
-		document.getElementById("test").innerHTML = "Template2";
+		//document.getElementById("test").innerHTML = "Template2";
 		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP2_WIDTH;
 		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
 		document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
 		document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
 		document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
 		document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-		//document.getElementById("template1").style.display = "none";
 		document.getElementById("template2").style.display = "inline";
 		currentNumCams = 2;
-		document.getElementById("test2").innerHTML = currentNumCams;
-		overlayTextCanvas();
+		//document.getElementById("test2").innerHTML = currentNumCams;
+		//overlayTextCanvas();
 		pipelines.push(new createPipeline(currentNumCams));
 	}
 }
@@ -113,7 +112,7 @@ window.addEventListener("load", function(){ pipelines.push(new createPipeline(cu
 email = document.getElementById('email');
 email.value = 'testdsmp@dsmp.ryerson.ca';
 });
-window.addEventListener("load", overlayTextCanvas);
+//window.addEventListener("load", overlayTextCanvas);
 
 function createPipeline(camNum) {
 
@@ -217,7 +216,7 @@ function createPipeline(camNum) {
 			},
 			function(data, status) {
 
-				document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
+				//document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
 	}
@@ -362,10 +361,10 @@ function createPipeline(camNum) {
 				consoleLog.log("Sorry, your browser does not support server-sent events...");
 			}
 
-			if (typeof currentPathObject !== 'undefined')
-				document.getElementById("debug"+camNum).innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
-					asString: true
-				});
+			//if (typeof currentPathObject !== 'undefined')
+				//document.getElementById("debug"+camNum).innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
+				//	asString: true
+				//});
 
 		}
 
@@ -439,7 +438,7 @@ function createPipeline(camNum) {
 				currentPathObject.importJSON(data);
 			});
 
-		consoleLog.log("coordinates.exportJSON(): " + coordinates.exportJSON());
+		//consoleLog.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function clearObjectDrawing() {
@@ -467,7 +466,7 @@ function createPipeline(camNum) {
 		document.getElementById("objectTracker"+camNum).innerHTML = "Object Not Tracked";
 		document.getElementById("objectTracker"+camNum).style.backgroundColor = "white";
 
-		overlayTextCanvas();
+		//overlayTextCanvas();
 	}
 
 	function start() {
@@ -571,10 +570,10 @@ function createPipeline(camNum) {
 
 		//consoleLog.log("STOPPED FUNCTION()");
 
-		if (typeof pathObject !== 'undefined')
-			document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
-		if (typeof currentPathObject !== 'undefined')
-			document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
+		//if (typeof pathObject !== 'undefined')
+			//document.getElementById("test2").innerHTML = "pathObject: " + pathObject.segments.toString();
+		//if (typeof currentPathObject !== 'undefined')
+			//document.getElementById("test3").innerHTML = "currentPathObject: " + currentPathObject.segments.toString();
 	}
 
 	
