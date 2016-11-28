@@ -118,12 +118,15 @@
 				</div>
 			</div>
 		</div>
-		<p id="test"></p>
+</br>
+	<!--	<p id="test"></p>
 		<p id="test2">Nothing</p>
 		<p id="test3">junk</p>
 		<p id="debug1">debug1</p>
 		<p id="debug2">debug2</p>
 		<canvas id="testCanvas"></canvas>
+
+	-->
 	</div>
 
 </html>
