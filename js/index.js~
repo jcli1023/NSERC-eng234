@@ -134,11 +134,6 @@ function createPipeline(camNum) {
 
 	var videoOutput = document.getElementById('videoOutput'+camNum);
 	var address = document.getElementById('address'+camNum);
-	
-	if (camNum == 1)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
-	else if (camNum == 2)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
 
 	var pipeline;
 	var webRtcPeer;
@@ -157,6 +152,11 @@ function createPipeline(camNum) {
 	var source; //eventSource for server sided events
 
 	var dumbCount = 0;
+
+	if (camNum == 1)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
+	else if (camNum == 2)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
 
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
