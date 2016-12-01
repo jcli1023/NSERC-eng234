@@ -109,8 +109,8 @@ if (args.ice_servers) {
 
 //window.addEventListener("load", function(){ pipeline1 = new createPipeline(currentNumCams);});
 window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
-email = document.getElementById('email');
-email.value = 'testdsmp@dsmp.ryerson.ca';
+//email = document.getElementById('email');
+//email.value = 'testdsmp@dsmp.ryerson.ca';
 });
 //window.addEventListener("load", overlayTextCanvas);
 
@@ -134,7 +134,12 @@ function createPipeline(camNum) {
 
 	var videoOutput = document.getElementById('videoOutput'+camNum);
 	var address = document.getElementById('address'+camNum);
-	address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
+	
+	if (camNum == 1)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
+	else if (camNum == 2)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
+
 	var pipeline;
 	var webRtcPeer;
 
@@ -152,6 +157,10 @@ function createPipeline(camNum) {
 	var source; //eventSource for server sided events
 
 	var dumbCount = 0;
+
+	email = document.getElementById('email'+camNum);
+	email.value = 'testdsmp@dsmp.ryerson.ca';
+
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
 
@@ -322,7 +331,8 @@ function createPipeline(camNum) {
 						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'red';
 						$.post("email.php", {
 							email: email.value,
-							time: reportTimeFrame
+							time: reportTimeFrame,
+							camNum: camNum
 						},
 						function(data, status) {
 
@@ -466,7 +476,7 @@ function createPipeline(camNum) {
 		document.getElementById("objectTracker"+camNum).innerHTML = "Object Not Tracked";
 		document.getElementById("objectTracker"+camNum).style.backgroundColor = "white";
 
-		overlayTextCanvas();
+		//overlayTextCanvas();
 	}
 
 	function start() {

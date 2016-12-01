@@ -96,6 +96,8 @@
 					<canvas id="borderCam2" width="400px" height="300px"></canvas>
 					</br>
 					Set source URL: <input style="width:350px;" id="address2" type="text">
+					</br>
+					Set email : <input style="width:350px;" id="email" type="text">
 					</br></br>
 				</div>
 				<div class="col-md-2">
@@ -118,7 +120,6 @@
 				</div>
 			</div>
 		</div>
-</br>
 </br>
 	<!--	<p id="test"></p>
 		<p id="test2">Nothing</p>
