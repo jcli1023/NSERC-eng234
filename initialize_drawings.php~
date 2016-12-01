@@ -49,7 +49,12 @@ array_push($obj,$new);
 //$text = addslashes($coordinates);
 //echo "text: ".$text;
 
-$results = shell_exec("java -jar InitializeObject.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+if ($camNum == 1){
+	$results = shell_exec("java -jar InitializeObject.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+}
+elseif ($camNum == 2){
+	$results = shell_exec("java -jar InitializeObject_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+}
 
 
 $json = $results;

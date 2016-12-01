@@ -25,23 +25,23 @@ echo "id: ".$_SESSION['dumbCount']."\n";
 $input = addslashes($_SESSION['object']['cam']['cam1']);
 //$input = $_SESSION['object']['cam']['cam1'];
 
-$fp = fopen('sessionVar2.json', 'w');
-fwrite($fp, $input);
-fclose($fp);
+//$fp = fopen('sessionVar2.json', 'w');
+//fwrite($fp, $input);
+//fclose($fp);
 
-if ($camNum == 1){
-	$results = shell_exec("java -jar CheckThreshold.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
-}
-elseif ($camNum == 2){
+//if ($camNum == 1){
+//	$results = shell_exec("java -jar CheckThreshold.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
+//}
+//elseif ($camNum == 2){
 	$results = shell_exec("java -jar CheckThreshold_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
-}
+//}
 
 $_SESSION['object']['cam']["$camName"] = $results;
 
 
-$fp = fopen('sessionVar3.json', 'w');
-fwrite($fp, $results);
-fclose($fp);
+//$fp = fopen('sessionVar3.json', 'w');
+//fwrite($fp, $results);
+//fclose($fp);
 /*$arrlength = count($obj[1]->segments);
 for ($i = 0; $i < $arrlength; $i++)
 {
