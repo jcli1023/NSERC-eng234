@@ -533,6 +533,7 @@ function createPipeline(camNum) {
 		isPaused = false; //Set drawing function back to initial drawing
 
 		clearObjectDrawingButton.style.display = "none";
+		clearBorderDrawingButton.style.display = "none";
 		objectButton.innerHTML = "Track Object";
 		objectButton.disabled = false;
 		borderButton.innerHTML = "Track Border";

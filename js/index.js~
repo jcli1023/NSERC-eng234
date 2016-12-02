@@ -251,7 +251,7 @@ function createPipeline(camNum) {
 		//document.getElementById("borderCam"+camNum).style.zIndex = zBACK;
 		
 		//consoleLog.log("entered drawObject()");
-		consoleLog.log("isPaused: "+isPaused);
+		//consoleLog.log("isPaused: "+isPaused);
 		if (!isPaused) {
 			//consoleLog.log("!isPaused### videoOutput.paused: " + videoOutput.paused);
 
@@ -417,7 +417,7 @@ function createPipeline(camNum) {
 
 		}
 
-		consoleLog.log("before exit isPaused: "+isPaused);
+		//consoleLog.log("before exit isPaused: "+isPaused);
 	}
 
 	function drawBorder() {
@@ -533,6 +533,7 @@ function createPipeline(camNum) {
 		isPaused = false; //Set drawing function back to initial drawing
 
 		clearObjectDrawingButton.style.display = "none";
+		clearBorderDrawingButton.style.display = "none";
 		objectButton.innerHTML = "Track Object";
 		objectButton.disabled = false;
 		borderButton.innerHTML = "Track Border";
