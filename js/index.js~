@@ -133,6 +133,7 @@ function createPipeline(camNum) {
 	//paperScopes[1].setup("borderCam1");
 
 	var consoleLog = new Console('console'+camNum, console);
+	var consoleWindow = document.getElementById("console"+camNum);
 
 	var videoOutput = document.getElementById('videoOutput'+camNum);
 	var address = document.getElementById('address'+camNum);
@@ -192,6 +193,11 @@ function createPipeline(camNum) {
 	videoOutput.addEventListener("playing", function() {
 		startScreenshot(camNum);
 	});
+
+	function refreshConsoleScroll()
+	{
+		consoleWindow.scrollTop = consoleWindow.scrollHeight;
+	}
 
 	function stopScreenshot(camNum) {
 		if (drawTimer) {
@@ -388,7 +394,7 @@ function createPipeline(camNum) {
 					
 					trajectory = jsonObj[5].trajectoryCenter;
 					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
-
+					refreshConsoleScroll();
 					/*
 					var new_tweets = { };
 
@@ -408,6 +414,7 @@ function createPipeline(camNum) {
 				};
 			} else {
 				consoleLog.log("Sorry, your browser does not support server-sent events...");
+				refreshConsoleScroll();
 			}
 
 			//if (typeof currentPathObject !== 'undefined')
@@ -578,7 +585,7 @@ function createPipeline(camNum) {
 					if (webRtcPeer && webRtcPeer.peerConnection) {
 						consoleLog.log("oniceconnectionstatechange -> " + webRtcPeer.peerConnection.iceConnectionState);
 						consoleLog.log('icegatheringstate -> ' + webRtcPeer.peerConnection.iceGatheringState);
-
+						refreshConsoleScroll();
 					}
 				});
 			});
@@ -622,11 +629,13 @@ function createPipeline(camNum) {
 							if (error) return onError(error, consoleLog);
 
 							consoleLog.log("PlayerEndpoint-->WebRtcEndpoint connection established");
+							refreshConsoleScroll();
 
 							player.play(function(error) {
 								if (error) return onError(error, consoleLog);
 
 								consoleLog.log("Player playing ...");
+								refreshConsoleScroll();
 							});
 						});
 					});
@@ -667,7 +676,6 @@ function createPipeline(camNum) {
 function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError, console) {
 	webRtcPeer.on('icecandidate', function(candidate) {
 		console.log("Local icecandidate " + JSON.stringify(candidate));
-
 		candidate = kurentoClient.register.complexTypes.IceCandidate(candidate);
 
 		webRtcEndpoint.addIceCandidate(candidate, onError);
@@ -677,7 +685,6 @@ function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError, console) 
 		var candidate = event.candidate;
 
 		console.log("Remote icecandidate " + JSON.stringify(candidate));
-
 		webRtcPeer.addIceCandidate(candidate, onError);
 	});
 }
