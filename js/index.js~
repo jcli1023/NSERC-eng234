@@ -531,6 +531,12 @@ function createPipeline(camNum) {
 		clearDrawings(OBJECT_SCOPE);
 		clearDrawings(BORDER_SCOPE);
 
+		if (typeof objectTrackTool !== 'undefined')
+			objectTrackTool.remove();
+
+		if (typeof borderTrackTool !== 'undefined')
+			borderTrackTool.remove();
+		
 		//if (typeof currentPathObject !== 'undefined')
 		//	currentPathObject.remove();
 		//if (typeof currentPathBorder !== 'undefined')
