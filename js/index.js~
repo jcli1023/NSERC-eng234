@@ -150,6 +150,7 @@ function createPipeline(camNum) {
 	var currentPathBorder;
 	var objectTrackTool;
 	var borderTrackTool;
+	var borderCoordinates = []; //Array of the border coordinates
 
 	var isPaused = false;
 	var source; //eventSource for server sided events
@@ -248,6 +249,34 @@ function createPipeline(camNum) {
 			});
 	}
 
+	function sendEmail(camNum) {
+		var reportDateFrame = new Date();
+		var reportTimeFrame = reportDateFrame.getFullYear()+"-"+ reportDateFrame.getMonth() +"-"+ reportDateFrame.getDate() + "_" + reportDateFrame.getHours()+":" + reportDateFrame.getMinutes()+":" + reportDateFrame.getSeconds() +":"+ reportDateFrame.getMilliseconds();
+
+		$.post("email.php", {
+			email: email.value,
+			time: reportTimeFrame,
+			camNum: camNum
+		},
+		function(data, status) {
+
+			consoleLog.log("CAM " + camNum + ": OBJECT MISSING : " + reportTimeFrame);
+			consoleLog.log(data);
+		});
+	}
+
+	function setMissingTrackerText()
+	{
+		objectTrackerText.innerHTML = "OBJECT MISSING";
+		objectTrackerText.style.backgroundColor = 'red';
+	}
+	
+	function setFoundTrackerText()
+	{
+		objectTrackerText.innerHTML = "OBJECT TRACKED";
+		objectTrackerText.style.backgroundColor = 'green';
+	}
+
 	function drawObject() {
 		//Brings objectCam1 canvas to front for mouse events, borderCam1 canvas to back
 
@@ -286,15 +315,12 @@ function createPipeline(camNum) {
 			objectButton.innerHTML = "Drawn Object of Interest";
 			borderButton.disabled = true;
 			clearObjectDrawingButton.style.display = "inline";
-			//document.getElementById("objectButton"+camNum).innerHTML = "Drawn Object of Interest";
-			//document.getElementById("borderButton"+camNum).disabled = true;
-			//document.getElementById("clearObjectDrawing"+camNum).style.display = "inline";
 
 			paper = paperScopes[OBJECT_SCOPE];
 
 			function onMouseDown(event) {
 				currentPathObject = new paper.Path();
-				currentPathObject.strokeColor = 'green';
+				currentPathObject.strokeColor = 'blue';
 				currentPathObject.add(event.point);
 			}
 
@@ -317,10 +343,6 @@ function createPipeline(camNum) {
 			borderButton.disabled = false;
 			objectTrackerText.innerHTML = "Object Tracking";
 			clearObjectDrawingButton.style.display = "none";
-//			document.getElementById("objectButton"+camNum).innerHTML = "Tracking Object";
-//			document.getElementById("borderButton"+camNum).disabled = false;
-//			document.getElementById("objectTracker"+camNum).innerHTML = "Object Tracking";
-//			document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
 
 			objectTrackTool.remove();
 
@@ -332,7 +354,6 @@ function createPipeline(camNum) {
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				//consoleLog.log("entered EventSource");
-				//source = new EventSource("sse_test.php?camNum="+camNum+"&frameX="+frameDim[0]+"&frameY="+frameDim[1]+"&vidX="+vidDim[0]+"&vidY="+vidDim[1]);
 				source = new EventSource("sse_test.php?camNum=" + camNum);
 				source.onmessage = function(event) {
 					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
@@ -340,8 +361,10 @@ function createPipeline(camNum) {
 					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
 					//consoleLog.log(camNum+" event "+timeEvent);
 					var jsonObj = JSON.parse(event.data);
+					
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
+					
 
 					/*var jsonObj2 = [];
 					var segArrays = [];
@@ -366,30 +389,42 @@ function createPipeline(camNum) {
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
 					if (jsonObj[4].objectFound === "false") {
-						var reportDateFrame = new Date();
-						var reportTimeFrame = reportDateFrame.getFullYear()+"-"+ reportDateFrame.getMonth() +"-"+ reportDateFrame.getDate() + "_" + reportDateFrame.getHours()+":" + reportDateFrame.getMinutes()+":" + reportDateFrame.getSeconds() +":"+ reportDateFrame.getMilliseconds();
-						objectTrackerText.innerHTML = "OBJECT MISSING";
-						objectTrackerText.style.backgroundColor = 'red';
-//						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT MISSING";
-//						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'red';
-						$.post("email.php", {
-							email: email.value,
-							time: reportTimeFrame,
-							camNum: camNum
-						},
-						function(data, status) {
 
-							//alert(data);
-							consoleLog.log("CAM " + camNum + ": OBJECT MISSING : " + reportTimeFrame);
-							consoleLog.log(data);
-						});
+						sendEmail(camNum);
+						setMissingTrackerText();
 
+					} 
+					//Object is found inside video frame
+					else {
+						var objectInsideBorder = true;
 
-					} else {
-						objectTrackerText.innerHTML = "OBJECT TRACKED";
-						objectTrackerText.style.backgroundColor = 'green';
-//						document.getElementById("objectTracker"+camNum).innerHTML = "OBJECT TRACKED";
-//						document.getElementById("objectTracker"+camNum).style.backgroundColor = 'green';
+						consoleLog.log("currentPathBorder: "+currentPathBorder);
+						consoleLog.log("borderCoordinates: "+borderCoordinates);
+
+						//If there is a defined border, check if object is inside the border
+						if (typeof currentPathBorder !== "undefined")
+						{	
+							//Check border only if it is drawn as more than a single point
+							if (currentPathBorder.segments.length > 0)
+							{
+								consoleLog.log("currentPathBorder defined");
+								//consoleLog.log("object segs: "+jsonObj[1].segments);
+								for (i = 0; i < jsonObj[1].segments.length; i++)
+								{
+									objectInsideBorder = insideBorder(jsonObj[1].segments[i],borderCoordinates);
+									if (!objectInsideBorder)
+										break;
+								}
+							}
+						}					
+						
+						if (!objectInsideBorder){
+							sendEmail(camNum);
+							setMissingTrackerText();
+						}
+						else
+							setFoundTrackerText();
+							
 					}
 					
 					trajectory = jsonObj[5].trajectoryCenter;
@@ -464,7 +499,6 @@ function createPipeline(camNum) {
 			borderTrackTool = new paper.Tool();
 			borderTrackTool.onMouseDown = onMouseDown;
 
-
 			borderTrackTool.onMouseDrag = function(event) {
 				currentPathBorder.add(event.point);
 			}
@@ -478,6 +512,21 @@ function createPipeline(camNum) {
 			clearBorderDrawingButton.style.display = "none";
 
 			borderTrackTool.remove();
+
+			for (i = 0; i < currentPathBorder.segments.length; i++)
+			{
+				var point = [];
+				var xCoord = currentPathBorder.segments[i].point.x;
+				var yCoord = currentPathBorder.segments[i].point.y;
+				point = [xCoord,yCoord];
+				borderCoordinates.push(point);
+
+			}
+//			for (i = 0; i < borderCoordinates.length; i++)
+//			{
+//				consoleLog.log(borderCoordinates[i]);
+//				refreshConsoleScroll();
+//			}
 
 			if (videoOutput.paused) 
 				videoOutput.play();
@@ -507,6 +556,25 @@ function createPipeline(camNum) {
 		//consoleLog.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
+	function insideBorder(point, border) {
+	    // ray-casting algorithm based on
+	    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+
+	    var x = point[0], y = point[1];
+
+	    var insidePoly = false;
+	    for (var i = 0, j = border.length - 1; i < border.length; j = i++) {
+		var xi = border[i][0], yi = border[i][1];
+		var xj = border[j][0], yj = border[j][1];
+
+		var intersect = ((yi > y) != (yj > y))
+		    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+		if (intersect) insidePoly = !insidePoly;
+	    }
+
+	    return insidePoly;
+	}
+
 	function clearDrawings(scope) {
 		paper = paperScopes[scope];
 		var projectsLength = paper.projects.length;
@@ -515,11 +583,22 @@ function createPipeline(camNum) {
 			paper.projects[i].clear();
 		}
 		if (scope == OBJECT_SCOPE)
-			if (typeof currentPathObject !== 'undefined')
-				currentPathObject.removeSegments();
-		else if (scope == OBJECT_SCOPE)
-			if (typeof currentPathBorder !== 'undefined')
-				currentPathBorder.removeSegments();
+		{
+			currentPathObject = null;
+//			if (typeof currentPathObject !== 'undefined')
+//			{
+//				currentPathObject.removeSegments();
+//			}
+		}
+		else if (scope == BORDER_SCOPE)
+		{
+			borderCoordinates = [];
+			currentPathBorder = null;
+//			if (typeof currentPathBorder !== 'undefined')
+//			{
+//				currentPathBorder.removeSegments();				
+//			}
+		}
 	}
 
 	function resetDefaultUI() {
@@ -573,6 +652,9 @@ function createPipeline(camNum) {
 			window.alert("You must set the email first");
 			return;
 		}
+
+		consoleLog.log("currentPathObject def?: "+currentPathObject);
+		consoleLog.log("currentPathBorder def?: "+currentPathBorder);
 		address.disabled = true;
 		showSpinner(videoOutput);
 		var options = {
