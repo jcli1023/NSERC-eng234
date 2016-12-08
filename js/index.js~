@@ -13,11 +13,11 @@
  *
  */
 
-//var socket = io.connect('http://localhost:8554');
-//socket.on('news', function (data) {
-//console.log(data);
-//socket.emit('my other event', { my: 'data' });
-//});
+var socket = io.connect('http://localhost:8554');
+socket.on('news', function (data) {
+console.log(data);
+socket.emit('my other event', { my: 'data' });
+});
 
 
 (function(){
@@ -664,8 +664,8 @@ function createPipeline(camNum) {
 			return;
 		}
 
-		consoleLog.log("currentPathObject def?: "+currentPathObject);
-		consoleLog.log("currentPathBorder def?: "+currentPathBorder);
+//		consoleLog.log("currentPathObject def?: "+currentPathObject);
+//		consoleLog.log("currentPathBorder def?: "+currentPathBorder);
 		address.disabled = true;
 		showSpinner(videoOutput);
 		var options = {
