@@ -13,6 +13,16 @@
  *
  */
 
+var io = require('socket.io').listen(8554);
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+
 var socket = io.connect('http://localhost:8554');
 socket.on('news', function (data) {
 console.log(data);

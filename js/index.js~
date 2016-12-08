@@ -13,6 +13,13 @@
  *
  */
 
+//var socket = io.connect('http://localhost:8554');
+//socket.on('news', function (data) {
+//console.log(data);
+//socket.emit('my other event', { my: 'data' });
+//});
+
+
 (function(){
 	var MAX_CAMERAS = 2;
 	var MAX_VID_SIZE_TEMP1_HEIGHT = 400;

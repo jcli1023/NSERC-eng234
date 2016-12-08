@@ -2,7 +2,7 @@
   "name": "nserc_demo_app",
   "version": "1.0.0",
   "description": "Files for testing demo Meaningful Camera",
-  "main": "index.js",
+  "main": "nserc_app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
