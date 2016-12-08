@@ -12,75 +12,84 @@
  * Lesser General Public License for more details.
  *
  */
-var MAX_CAMERAS = 2;
-var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
-var MAX_VID_SIZE_TEMP1_WIDTH = 640;
-var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
-var MAX_VID_SIZE_TEMP2_WIDTH = 400;
-var zFRONT = 1000;
-var zBACK = 500;
-var currentNumCams = 1;
-var pipelines = [];
 
-//Template 1
-function setTemplate1() {
-	if (currentNumCams > 1) {
-		//document.getElementById("test").innerHTML = "Template1";
-		document.getElementById("template2").style.display = "none";
-		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-		document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-		document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-		document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
-		document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
-		//document.getElementById("template1").style.display = "inline";
-		currentNumCams = 1;
-		for (i = currentNumCams; i >= 1; i--)
-		{
-			pipelines[i].stop();
-			pipelines.pop();
+(function(){
+	var MAX_CAMERAS = 2;
+	var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
+	var MAX_VID_SIZE_TEMP1_WIDTH = 640;
+	var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
+	var MAX_VID_SIZE_TEMP2_WIDTH = 400;
+	var currentNumCams = 1;
+	var pipelines = [];
+
+	//Template 1
+	function setTemplate1() {
+		if (currentNumCams > 1) {
+			//document.getElementById("test").innerHTML = "Template1";
+			document.getElementById("template2").style.display = "none";
+			document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+			document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+			document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+			document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+			document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP1_WIDTH;
+			document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP1_HEIGHT;
+			//document.getElementById("template1").style.display = "inline";
+			currentNumCams = 1;
+			for (i = currentNumCams; i >= 1; i--)
+			{
+				pipelines[i].stop();
+				pipelines.pop();
+			}
+
 		}
-
-	}
-//	overlayTextCanvas();
-	//document.getElementById("test2").innerHTML = currentNumCams;
-//	pipeline1.stop();
-}
-
-//Template 2
-function setTemplate2() {
-	if (currentNumCams != 2)
-	{
-		//document.getElementById("test").innerHTML = "Template2";
-		document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-		document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-		document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-		document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-		document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
-		document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
-		document.getElementById("template2").style.display = "inline";
-		currentNumCams = 2;
+	//	overlayTextCanvas();
 		//document.getElementById("test2").innerHTML = currentNumCams;
-		//overlayTextCanvas();
-		pipelines.push(new createPipeline(currentNumCams));
+	//	pipeline1.stop();
 	}
-}
 
-function overlayTextCanvas() {
-	for (i = 1; i <= currentNumCams; i++) {
-		var canvas1 = document.getElementById("objectCam" + i);
-		var context1 = canvas1.getContext("2d");
-		var canvas2 = document.getElementById("borderCam" + i);
-		var context2 = canvas2.getContext("2d");
-		context1.fillStyle = "green";
-		context1.font = "bold 16px Arial";
-		context1.fillText("ObjectCam" + i, 100, 100);
-
-		context2.fillStyle = "blue";
-		context2.font = "bold 16px Arial";
-		context2.fillText("borderCam" + i, 200, 200);
+	//Template 2
+	function setTemplate2() {
+		if (currentNumCams != 2)
+		{
+			//document.getElementById("test").innerHTML = "Template2";
+			document.getElementById("videoOutput1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+			document.getElementById("videoOutput1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+			document.getElementById("objectCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+			document.getElementById("objectCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+			document.getElementById("borderCam1").width = MAX_VID_SIZE_TEMP2_WIDTH;
+			document.getElementById("borderCam1").height = MAX_VID_SIZE_TEMP2_HEIGHT;
+			document.getElementById("template2").style.display = "inline";
+			currentNumCams = 2;
+			//document.getElementById("test2").innerHTML = currentNumCams;
+			//overlayTextCanvas();
+			pipelines.push(new createPipeline(currentNumCams));
+		}
 	}
-}
+
+	function overlayTextCanvas() {
+		for (i = 1; i <= currentNumCams; i++) {
+			var canvas1 = document.getElementById("objectCam" + i);
+			var context1 = canvas1.getContext("2d");
+			var canvas2 = document.getElementById("borderCam" + i);
+			var context2 = canvas2.getContext("2d");
+			context1.fillStyle = "green";
+			context1.font = "bold 16px Arial";
+			context1.fillText("ObjectCam" + i, 100, 100);
+
+			context2.fillStyle = "blue";
+			context2.font = "bold 16px Arial";
+			context2.fillText("borderCam" + i, 200, 200);
+		}
+	}
+
+	window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
+		var template1Button = document.getElementById("template1Button");
+		var template2Button = document.getElementById("template2Button");		
+		template1Button.onclick = setTemplate1;
+		template2Button.onclick = setTemplate2;	
+	});
+	
+})();
 
 function getopts(args, opts) {
 	var result = opts.default || {};
@@ -107,18 +116,13 @@ if (args.ice_servers) {
 	console.log("Use freeice")
 }
 
-//window.addEventListener("load", function(){ pipeline1 = new createPipeline(currentNumCams);});
-window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
-//email = document.getElementById('email');
-//email.value = 'testdsmp@dsmp.ryerson.ca';
-});
-//window.addEventListener("load", overlayTextCanvas);
-
 function createPipeline(camNum) {
 
-	var createPipeline = new Object();
+	var createPipeline = {};
 	var OBJECT_SCOPE = 0;
-	var BORDER_SCOPE = 1;	
+	var BORDER_SCOPE = 1;
+	var zFRONT = 1000;
+	var zBACK = 500;
 	
 	var paperScopes = [];
 	paperScopes[OBJECT_SCOPE] = new paper.PaperScope();
@@ -141,8 +145,8 @@ function createPipeline(camNum) {
 	var pipeline;
 	var webRtcPeer;
 
-	var frameDim = [1920, 1080]; //dimensions of the frames
-	var vidDim = [MAX_VID_SIZE_TEMP1_WIDTH, MAX_VID_SIZE_TEMP1_HEIGHT]; //dimensions of the video
+	var frameDim = []; //dimensions of the frames
+	var vidDim = []; //dimensions of the video
 	var timeFrame //year month date hours minutes seconds milliseconds
 	var drawTimer = null;
 
