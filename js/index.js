@@ -116,7 +116,7 @@ window.addEventListener("load", function(){ pipelines.push(new createPipeline(cu
 
 function createPipeline(camNum) {
 
-	var createPipeline = new Object();
+	var createPipeline = {};
 	var OBJECT_SCOPE = 0;
 	var BORDER_SCOPE = 1;	
 	
