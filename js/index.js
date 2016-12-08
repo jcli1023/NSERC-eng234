@@ -398,8 +398,8 @@ function createPipeline(camNum) {
 					else {
 						var objectInsideBorder = true;
 
-						consoleLog.log("currentPathBorder: "+currentPathBorder);
-						consoleLog.log("borderCoordinates: "+borderCoordinates);
+						//consoleLog.log("currentPathBorder: "+currentPathBorder);
+						//consoleLog.log("borderCoordinates: "+borderCoordinates);
 
 						//If there is a defined border, check if object is inside the border
 						if (typeof currentPathBorder !== "undefined")
@@ -407,7 +407,7 @@ function createPipeline(camNum) {
 							//Check border only if it is drawn as more than a single point
 							if (currentPathBorder.segments.length > 0)
 							{
-								consoleLog.log("currentPathBorder defined");
+								//consoleLog.log("currentPathBorder defined");
 								//consoleLog.log("object segs: "+jsonObj[1].segments);
 								for (i = 0; i < jsonObj[1].segments.length; i++)
 								{

@@ -398,8 +398,8 @@ function createPipeline(camNum) {
 					else {
 						var objectInsideBorder = true;
 
-						consoleLog.log("currentPathBorder: "+currentPathBorder);
-						consoleLog.log("borderCoordinates: "+borderCoordinates);
+						//consoleLog.log("currentPathBorder: "+currentPathBorder);
+						//consoleLog.log("borderCoordinates: "+borderCoordinates);
 
 						//If there is a defined border, check if object is inside the border
 						if (typeof currentPathBorder !== "undefined")
@@ -584,7 +584,7 @@ function createPipeline(camNum) {
 		}
 		if (scope == OBJECT_SCOPE)
 		{
-			currentPathObject = null;
+			currentPathObject = void 0;
 //			if (typeof currentPathObject !== 'undefined')
 //			{
 //				currentPathObject.removeSegments();
@@ -593,7 +593,7 @@ function createPipeline(camNum) {
 		else if (scope == BORDER_SCOPE)
 		{
 			borderCoordinates = [];
-			currentPathBorder = null;
+			currentPathBorder = void 0;
 //			if (typeof currentPathBorder !== 'undefined')
 //			{
 //				currentPathBorder.removeSegments();				
