@@ -168,6 +168,7 @@ function createPipeline(camNum) {
 	var borderCoordinates = []; //Array of the border coordinates
 
 	var isPaused = false;
+	var initializedObject = false;
 	var source; //eventSource for server sided events
 
 	var objectButton = document.getElementById("objectButton"+camNum);
@@ -365,44 +366,19 @@ function createPipeline(camNum) {
 			initializeDrawings(camNum, currentPathObject);
 
 			if (videoOutput.paused)
+			{
 				videoOutput.play();
+			}
 
-			//When server sends information to client
-			if (typeof(EventSource) !== "undefined") {
-				//consoleLog.log("entered EventSource");
-				source = new EventSource("sse_test.php?camNum=" + camNum);
-				source.onmessage = function(event) {
-					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
+			checkThresholds = setInterval(function() {
+				socket.emit("checkThreshold", { cam: camNum });
+				socket.on("thresholdChecked", function(data) {
 					var dateFrame = new Date();
 					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
-					//consoleLog.log(camNum+" event "+timeEvent);
-					var jsonObj = JSON.parse(event.data);
-					
+					var jsonObj = JSON.parse(data.jsonOutput);
+
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
-					
-
-					/*var jsonObj2 = [];
-					var segArrays = [];
-					var strokeColorArray = [];
-					var jsonObj3 = {
-						"name": "currentPathObject",
-						"applyMatrix": true,
-						"segments": currentPathObject.segments.toString(),
-						"strokeColor": currentPathObject.strokeColor.toString()
-					};
-					var jsonObj4 = {
-						"word": "hello"
-					};
-					jsonObj2.push("Path");
-					jsonObj2.push(jsonObj3);
-					jsonObj2.push(jsonObj4);
-					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
-*/
-					//jsonObj[1].segments.length = 0;
-					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
-					//console.log("testObj: " + testObj);
-					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
 					if (jsonObj[4].objectFound === "false") {
 
@@ -414,17 +390,12 @@ function createPipeline(camNum) {
 					else {
 						var objectInsideBorder = true;
 
-						//consoleLog.log("currentPathBorder: "+currentPathBorder);
-						//consoleLog.log("borderCoordinates: "+borderCoordinates);
-
 						//If there is a defined border, check if object is inside the border
 						if (typeof currentPathBorder !== "undefined")
 						{	
 							//Check border only if it is drawn as more than a single point
 							if (currentPathBorder.segments.length > 0)
 							{
-								//consoleLog.log("currentPathBorder defined");
-								//consoleLog.log("object segs: "+jsonObj[1].segments);
 								for (i = 0; i < jsonObj[1].segments.length; i++)
 								{
 									objectInsideBorder = insideBorder(jsonObj[1].segments[i],borderCoordinates);
@@ -446,27 +417,110 @@ function createPipeline(camNum) {
 					trajectory = jsonObj[5].trajectoryCenter;
 					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
 					refreshConsoleScroll();
-					/*
-					var new_tweets = { };
 
-					new_tweets.k = { };
+				});				
+			}, 50);
 
-					new_tweets.k.tweet_id = 98745521;
-					new_tweets.k.user_id = 54875;
+//			//When server sends information to client
+//			if (typeof(EventSource) !== "undefined") {
+//				//consoleLog.log("entered EventSource");
+//				source = new EventSource("sse_test.php?camNum=" + camNum);
+//				source.onmessage = function(event) {
+//					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
+//					var dateFrame = new Date();
+//					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
+//					//consoleLog.log(camNum+" event "+timeEvent);
+//					var jsonObj = JSON.parse(event.data);
+//					
+//					currentPathObject.clear();
+//					currentPathObject.importJSON(jsonObj);
+//					
 
-					new_tweets.k.data = { };
+//					/*var jsonObj2 = [];
+//					var segArrays = [];
+//					var strokeColorArray = [];
+//					var jsonObj3 = {
+//						"name": "currentPathObject",
+//						"applyMatrix": true,
+//						"segments": currentPathObject.segments.toString(),
+//						"strokeColor": currentPathObject.strokeColor.toString()
+//					};
+//					var jsonObj4 = {
+//						"word": "hello"
+//					};
+//					jsonObj2.push("Path");
+//					jsonObj2.push(jsonObj3);
+//					jsonObj2.push(jsonObj4);
+//					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
+//*/
+//					//jsonObj[1].segments.length = 0;
+//					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
+//					//console.log("testObj: " + testObj);
+//					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
 
-					new_tweets.k.data.in_reply_to_screen_name = 'other_user';
-					new_tweets.k.data.text = 'tweet text';
+//					if (jsonObj[4].objectFound === "false") {
 
-					// Will create the JSON string you're looking for.
-					var json = JSON.stringify(new_tweets);
-					*/
-				};
-			} else {
-				consoleLog.log("Sorry, your browser does not support server-sent events...");
-				refreshConsoleScroll();
-			}
+//						sendEmail(camNum);
+//						setMissingTrackerText();
+
+//					} 
+//					//Object is found inside video frame
+//					else {
+//						var objectInsideBorder = true;
+
+//						//consoleLog.log("currentPathBorder: "+currentPathBorder);
+//						//consoleLog.log("borderCoordinates: "+borderCoordinates);
+
+//						//If there is a defined border, check if object is inside the border
+//						if (typeof currentPathBorder !== "undefined")
+//						{	
+//							//Check border only if it is drawn as more than a single point
+//							if (currentPathBorder.segments.length > 0)
+//							{
+//								//consoleLog.log("currentPathBorder defined");
+//								//consoleLog.log("object segs: "+jsonObj[1].segments);
+//								for (i = 0; i < jsonObj[1].segments.length; i++)
+//								{
+//									objectInsideBorder = insideBorder(jsonObj[1].segments[i],borderCoordinates);
+//									if (!objectInsideBorder)
+//										break;
+//								}
+//							}
+//						}					
+//						
+//						if (!objectInsideBorder){
+//							sendEmail(camNum);
+//							setMissingTrackerText();
+//						}
+//						else
+//							setFoundTrackerText();
+//							
+//					}
+//					
+//					trajectory = jsonObj[5].trajectoryCenter;
+//					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
+//					refreshConsoleScroll();
+//					/*
+//					var new_tweets = { };
+
+//					new_tweets.k = { };
+
+//					new_tweets.k.tweet_id = 98745521;
+//					new_tweets.k.user_id = 54875;
+
+//					new_tweets.k.data = { };
+
+//					new_tweets.k.data.in_reply_to_screen_name = 'other_user';
+//					new_tweets.k.data.text = 'tweet text';
+
+//					// Will create the JSON string you're looking for.
+//					var json = JSON.stringify(new_tweets);
+//					*/
+//				};
+//			} else {
+//				consoleLog.log("Sorry, your browser does not support server-sent events...");
+//				refreshConsoleScroll();
+//			}
 
 			//if (typeof currentPathObject !== 'undefined')
 				//document.getElementById("debug"+camNum).innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
@@ -551,25 +605,30 @@ function createPipeline(camNum) {
 	}
 
 	function initializeDrawings(camNum, coordinates) {
-		$.post("initialize_drawings.php", {
-				cam: camNum,
-				coordinates: coordinates.exportJSON(),
-				timeFrame: timeFrame,
-				frameDim: frameDim,
-				vidDim: vidDim
-			},
-			function(data, status) {
+		initializedObject = false;
+		socket.emit("initializeDrawings", { cam: camNum, coordinates: coordinates.exportJSON(), timeFrame: timeFrame, frameDim: frameDim, vidDim: vidDim });
+		socket.on("initialCoordinates", function(data){
+			currentPathObject.importJSON(data.jsonOutput);
+			initializedObject = true;
+		});
+//		$.post("initialize_drawings.php", {
+//				cam: camNum,
+//				coordinates: coordinates.exportJSON(),
+//				timeFrame: timeFrame,
+//				frameDim: frameDim,
+//				vidDim: vidDim
+//			},
+//			function(data, status) {
 
-				//alert(data);
-				//console.log("initialize_drawing data ##########: " + data);
-				//alert("Data: " + data + "\nStatus: " + status);
-				/*var jsonObj = JSON.parse(data);
-				jsonObj[1].segments.length = 0;
-				currentPathObject.importJSON(jsonObj);*/
-				currentPathObject.importJSON(data);
-			});
+//				//alert(data);
+//				//console.log("initialize_drawing data ##########: " + data);
+//				//alert("Data: " + data + "\nStatus: " + status);
+//				/*var jsonObj = JSON.parse(data);
+//				jsonObj[1].segments.length = 0;
+//				currentPathObject.importJSON(jsonObj);*/
+//				currentPathObject.importJSON(data);
+//			});
 
-		//consoleLog.log("coordinates.exportJSON(): " + coordinates.exportJSON());
 	}
 
 	function insideBorder(point, border) {

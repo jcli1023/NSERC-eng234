@@ -43,60 +43,74 @@ io.on('connection', function(socket) {
 	var jarFile;
 	var StringDecoder = require("string_decoder").StringDecoder;
 	var decoder = new StringDecoder("utf8");
-	var cameras = {};
-
-	socket.newData = {};
-	socket.emit('news', {
-		hello: 'world'
-	});
+	var time = {};
+	var frameRatio = {};
+	var jsonOutput;
+	
 	socket.on("testing",function(data) {
 		console.log("testing message: "+data.hello);
 	});
 
 	socket.on("saveFrame",function(data) {
-		var camPath = "./CAMERA-"+data.camNum+"/";
+		var camPath = "./CAMERA-"+data.cam+"/";
 		var frameName = data.time;
 		var fileName = frameName + ".jpg";
+		var frameDim = data.frameDim;
+		var vidDim = data.vidDim;
+		var camIndex = data.cam-1;
+		time[camIndex] = data.time;
+		
+		if (typeof frameRatio[camIndex] !== "undefined")
+		{
+			frameRatio[camIndex]["x"] = data.frameDim[0]/data.vidDim[0];
+			frameRatio[camIndex]["y"] = data.frameDim[1]/data.vidDim[1];
+//			console.log("frameRatio: "+frameRatio[data.cam-1]["x"]+"x"+frameRatio[data.cam-1]["y"]);
+		}
+		else
+		{
+			frameRatio[camIndex]={};
+		}
+				 
 		try {
 			var imageBuffer = decodeBase64Image(data.frame);
 			mkdirp(camPath, function(err) {
 				if (err) console.error(err)
-				else console.log('Done!')
+//				else console.log('Done!')
 			});
 			fs.writeFile(camPath+fileName, imageBuffer.data,
 				function() {
-					console.log('DEBUG - feed:message: Saved to disk image attached by user:', camPath+fileName);
+//					console.log('DEBUG - feed:message: Saved to disk image attached by user:', camPath+fileName);
 				});
 		} catch (error) {
 			console.log("SAVING FRAME ERROR: " + error);
 		}
 	});
-	socket.on("camera1", function(data) {
-		socket.newData = "hello";
-		cameras[data.camera.cameraNum] = {};
-		cameras[data.camera.cameraNum]["x"] = data.camera.cameraX;
-		cameras[data.camera.cameraNum]["y"] = data.camera.cameraY;
-		console.log("cameras[" + data.camera.cameraNum + "]: " + cameras[data.camera.cameraNum]["x"] + "," + cameras[data.camera.cameraNum]["y"]);
-		console.log("socket.newData: " + socket.newData);
+
+	socket.on("initializeDrawings", function(data) {
+		var camIndex = data.cam-1;
+		console.log("initializeDrawings");
+		jarFile = spawn("java", ["-jar", "InitializeObject_old.jar",data.cam,time[camIndex],frameRatio[camIndex]["x"],frameRatio[camIndex]["y"],data.coordinates]);
+		jarFile.stdout.on("data", function(data) {
+			jsonOutput = data.toString();
+			socket.emit("initialCoordinates",{ jsonOutput: jsonOutput });
+		});
 	});
+
+	socket.on("checkThreshold", function(data) {
+		var camIndex = data.cam-1;
+		console.log("checkThreshold");
+		//console.log("data.cam: "+data.cam+" time["+camIndex+"]: "+time[camIndex]+"frameRatio["+camIndex+"][\"x\"]: "+frameRatio[camIndex]["x"]+" frameRatio["+camIndex+"][\"y\"]: "+frameRatio[camIndex]["y"]+" jsonOutput: "+jsonOutput);
+		jarFile = spawn("java", ["-jar", "CheckThreshold_old.jar",data.cam,time[camIndex],frameRatio[camIndex]["x"],frameRatio[camIndex]["y"],jsonOutput]);
+		jarFile.stdout.on("data", function(data) {
+			jsonOutput = data.toString();
+			console.log(jsonOutput);
+			socket.emit("thresholdChecked",{ jsonOutput: jsonOutput });
+		});
+	});
+
 	socket.on("start jar", function(data) {
 		console.log(data.jar);
 		console.log(data.frame);
-		console.log("start socket.newData: " + socket.newData);
-		try {
-			var imageBuffer = decodeBase64Image(data.frame);
-			mkdirp('./image', function(err) {
-				if (err) console.error(err)
-				else console.log('Done!')
-			});
-			fs.writeFile("./image/test1.jpg", imageBuffer.data,
-				function() {
-					console.log('DEBUG - feed:message: Saved to disk image attached by user:', "./image/test1.jpg");
-				});
-		} catch (error) {
-			console.log("ERROR: " + error);
-		}
-
 
 		jarFile = spawn("java", ["-jar", data.jar]);
 		jarFile.stdout.on("data", function(data) {
@@ -108,7 +122,7 @@ io.on('connection', function(socket) {
 		console.log(data.command);
 		console.log("stop socket.newData: " + socket.newData);
 		jarFile.stdin.write(data.command + "\n");
-		//		jarFile.stdout.pipe(process.stdout);	
+		//jarFile.stdout.pipe(process.stdout);	
 	});
 });
 
