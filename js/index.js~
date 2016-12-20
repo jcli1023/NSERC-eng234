@@ -13,12 +13,14 @@
  *
  */
 
-//var socket = io.connect('http://localhost:8554');
-var socket = io.connect('http://localhost:8555');
-socket.on('news', function (data) {
-console.log(data);
-socket.emit('my other event', { my: 'data' });
-});
+var socket = io.connect('http://localhost:8554');
+//var socket = io.connect('http://localhost:8555');
+console.log("socket connected");
+
+//socket.on('news', function (data) {
+//console.log(data);
+//socket.emit('my other event', { my: 'data' });
+//});
 
 
 (function(){
@@ -90,7 +92,8 @@ socket.emit('my other event', { my: 'data' });
 		}
 	}
 
-	window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
+	window.addEventListener("load", function(){ 
+		pipelines.push(new createPipeline(currentNumCams));
 		var template1Button = document.getElementById("template1Button");
 		var template2Button = document.getElementById("template2Button");		
 		template1Button.onclick = setTemplate1;
