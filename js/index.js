@@ -177,8 +177,8 @@ function createPipeline(camNum) {
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
 
-	trainButton = document.getElementById("trainButton");
-	trainButton.addEventListener('click', trainModel);
+	trainButton = document.getElementById("kmeansButton");
+	trainButton.addEventListener('click', kmeansProgram);
 
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
@@ -615,15 +615,22 @@ function createPipeline(camNum) {
 		}
 	}
 
-	function trainModel() {
-		consoleLog.log("TRAINING $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	function kmeansProgram() {
+		consoleLog.log("-------K-MEANS------------");
 		if (trajectoryLog.length < 60) {
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
 				tempTrajectoryLog.unshift(trajectoryLog[0]);
 			}
 		}
-		consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		$.post("kmeans.php", {
+		},
+		function(data, status) {
+
+			consoleLog.log(data);
+		});
+
 	}
 
 	function resetDefaultUI() {
