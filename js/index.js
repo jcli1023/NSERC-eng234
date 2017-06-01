@@ -177,8 +177,11 @@ function createPipeline(camNum) {
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
 
-	trainButton = document.getElementById("kmeansButton");
-	trainButton.addEventListener('click', kmeansProgram);
+	kmeansButton = document.getElementById("kmeansButton");
+	kmeansButton.addEventListener('click', kmeansProgram);
+
+	svmButton = document.getElementById("svmButton");
+	svmButton.addEventListener('click', classifiersProgram);
 
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
@@ -625,6 +628,24 @@ function createPipeline(camNum) {
 		}
 		//consoleLog.log(JSON.stringify(tempTrajectoryLog));
 		$.post("kmeans.php", {
+		},
+		function(data, status) {
+
+			consoleLog.log(data);
+		});
+
+	}
+
+	function classifiersProgram() {
+		consoleLog.log("-------Classifiers------------");
+		if (trajectoryLog.length < 60) {
+			var tempTrajectoryLog = trajectoryLog.slice(0);
+			while (tempTrajectoryLog.length < 60) {
+				tempTrajectoryLog.unshift(trajectoryLog[0]);
+			}
+		}
+		//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		$.post("svm.php", {
 		},
 		function(data, status) {
 
