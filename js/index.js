@@ -13,8 +13,11 @@
  *
  */
 
+var movementsNum = 0;
+var correctPredictionsNum = 0;
+
 (function(){
-	var MAX_CAMERAS = 2;
+	var MAX_CAMERAS = 4;
 	var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
 	var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 	var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
@@ -164,24 +167,36 @@ function createPipeline(camNum) {
 	var clearObjectDrawingButton = document.getElementById("clearObjectDrawing"+camNum);
 	var clearBorderDrawingButton = document.getElementById("clearBorderDrawing"+camNum);
 	var objectTrackerText = document.getElementById("objectTracker"+camNum);
+	var predictedMovementText = document.getElementById("predictedMovement"+camNum);
+
 
 	var dumbCount = 0;
 	var trajectoryLog = [];
 
 
 	if (camNum == 1)
+		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
+	else if (camNum == 2)
+		address.value = 'rtsp://192.168.41.129:8554/test_vid03.mkv';
+/*	if (camNum == 1)
 		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
 	else if (camNum == 2)
 		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
-
+*/
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
+
+	var movementLabel = document.getElementById('movement'+camNum);
+	movementLabel.value = "Half-Circle";
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
 
+	trainButton = document.getElementById("trainButton");
+	trainButton.addEventListener('click', trainProgram);
+
 	svmButton = document.getElementById("svmButton");
-	svmButton.addEventListener('click', classifiersProgram);
+	svmButton.addEventListener('click', svmProgram);
 
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
@@ -443,8 +458,8 @@ function createPipeline(camNum) {
 					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
 
 					trajectoryLog.push({x: trajectory[0], y: trajectory[1]});
-					consoleLog.log(JSON.stringify(trajectoryLog));
-					consoleLog.log(trajectoryLog.length);
+					//consoleLog.log(JSON.stringify(trajectoryLog));
+					//consoleLog.log(trajectoryLog.length);
 
 					refreshConsoleScroll();
 					/*
@@ -618,38 +633,103 @@ function createPipeline(camNum) {
 		}
 	}
 
+	//Not Complete
 	function kmeansProgram() {
 		consoleLog.log("-------K-MEANS------------");
 		if (trajectoryLog.length < 60) {
+			if (trajectoryLog.length < 1)
+			{
+				trajectoryLog.push({x: 0, y: 0});
+			}
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
 				tempTrajectoryLog.unshift(trajectoryLog[0]);
 			}
+			trajectoryFinal = tempTrajectoryLog;
+			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
 		}
-		//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		else
+		{
+			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+		}
+	
+		//consoleLog.log(JSON.stringify(trajectoryFinal));
+
 		$.post("kmeans.php", {
 		},
 		function(data, status) {
 
 			consoleLog.log(data);
+
+			calculateCorrectLabels();
 		});
 
 	}
 
-	function classifiersProgram() {
-		consoleLog.log("-------Classifiers------------");
+	function trainProgram() {
+		$.post("train_models.php", {
+		},
+		function(data, status) {
+		});
+	}
+
+	function svmProgram() {
+		//consoleLog.log("-------Classifiers------------");
+		var trajectoryLogFinal;
+
+		resetPredictedMovementText();
+		svmButton.innerHTML = "Predicting...";
+		movementsNum++;
+
 		if (trajectoryLog.length < 60) {
+			if (trajectoryLog.length < 1)
+			{
+				trajectoryLog.push({x: 0, y: 0});
+			}
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
 				tempTrajectoryLog.unshift(trajectoryLog[0]);
 			}
+			trajectoryFinal = tempTrajectoryLog;
+			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
 		}
-		//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		else
+		{
+			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+		}
+	
+		//consoleLog.log(JSON.stringify(trajectoryFinal));
+
+		$.post("write_test_traj_data.php", {
+			traj_data : JSON.stringify(trajectoryFinal),
+			movementLabel: movementLabel.value
+		},
+		function(data, status) {
+			consoleLog.log(data);
+		});
+
+
 		$.post("svm.php", {
 		},
 		function(data, status) {
 
-			consoleLog.log(data);
+			//consoleLog.log(data);
+			predictedMovementText.innerHTML = "Predicted Movement: " + data;
+			
+			//Trim any white spaces
+			if (strcmp(movementLabel.value.trim(),data.trim())==0)
+			{
+				
+				correctPredictionsNum++;
+				predictedMovementText.style.backgroundColor = "green";
+			}
+			else
+			{
+				predictedMovementText.style.backgroundColor = "red";
+			}
+
+			calculateCorrectLabels();
+			svmButton.innerHTML = "SVM";
 		});
 
 	}
@@ -685,6 +765,9 @@ function createPipeline(camNum) {
 		borderButton.disabled = false;
 		objectTrackerText.innerHTML = "Object Not Tracked";
 		objectTrackerText.style.backgroundColor = "white";
+		
+		resetPredictedMovementText();
+
 		//document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
 		//document.getElementById("objectButton"+camNum).innerHTML = "Track Object";
 		//document.getElementById("objectButton"+camNum).disabled = false;
@@ -694,6 +777,12 @@ function createPipeline(camNum) {
 		//document.getElementById("objectTracker"+camNum).style.backgroundColor = "white";
 
 		//overlayTextCanvas();
+	}
+
+	function resetPredictedMovementText()
+	{
+		predictedMovementText.innerHTML = "Predicted Movement: ";
+		predictedMovementText.style.backgroundColor = "white";
 	}
 
 	function start() {
@@ -798,6 +887,8 @@ function createPipeline(camNum) {
 		}
 		hideSpinner(videoOutput);
 
+		trajectoryLog.length = 0; //Clears list by setting length to 0
+		
 		resetDefaultUI();
 
 		//consoleLog.log("STOPPED FUNCTION()");
@@ -830,6 +921,13 @@ function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError, console) 
 	});
 }
 
+function calculateCorrectLabels()
+{
+	var correctPercentage = (correctPredictionsNum / movementsNum) * 100;
+	var correctTotalLabel = document.getElementById("correctTotal");
+	correctTotalLabel.innerHTML = "CORRECT: " + correctPercentage + "%	" + correctPredictionsNum + "/" + movementsNum;
+}
+
 function onError(error, console) {
 	if (error) {
 		console.error(error);
@@ -850,6 +948,12 @@ function hideSpinner() {
 		arguments[i].poster = 'img/webrtc.png';
 		arguments[i].style.background = '';
 	}
+}
+
+function strcmp(a, b) {
+    if (a.toString() < b.toString()) return -1;
+    if (a.toString() > b.toString()) return 1;
+    return 0;
 }
 
 /**

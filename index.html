@@ -51,7 +51,9 @@
 			<button id="template1Button">Template 1</button>
 			<button id="template2Button">Template 2</button>
 			<button id="kmeansButton">K-Means</button>
+			<button id="trainButton">Train Model(s)</button>
 			<button id="svmButton">SVM</button>
+			<p id="correctTotal">CORRECT %</p>
 		</div>
 		<div id="template1">
 			<div class="row">
@@ -65,8 +67,10 @@
 					Set source URL: <input style="width:350px;" id="address1" type="text">
 					</br>
 					Set email : <input style="width:350px;" id="email1" type="text">
-					</br></br>
-					
+					</br>
+					Set movement label : <input style="width:350px;" id="movement1" type="text">
+					</br>
+					<p id="predictedMovement1">Predicted Movement: </p>		
 				</div>
 				<div class="col-md-2">
 					<a id="start1" href="#" class="btn btn-success"><span
