@@ -29,7 +29,7 @@ public class ClusterWeka {
 		kmeans.setPreserveInstancesOrder(true);
 		kmeans.setNumClusters(3);
  
-		BufferedReader datafile = readDataFile("trajdataTestclustering.txt"); 
+		BufferedReader datafile = readDataFile("train_traj_data.txt"); 
 		Instances data = new Instances(datafile);
  
  
