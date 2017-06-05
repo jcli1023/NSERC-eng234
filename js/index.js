@@ -667,6 +667,31 @@ function createPipeline(camNum) {
 	}
 
 	function trainProgram() {
+		var trajectoryLogFinal;
+		if (trajectoryLog.length < 60) {
+			if (trajectoryLog.length < 1)
+			{
+				trajectoryLog.push({x: 0, y: 0});
+			}
+			var tempTrajectoryLog = trajectoryLog.slice(0);
+			while (tempTrajectoryLog.length < 60) {
+				tempTrajectoryLog.unshift(trajectoryLog[0]);
+			}
+			trajectoryFinal = tempTrajectoryLog;
+			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		}
+		else
+		{
+			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+		}
+
+		$.post("write_train_traj_data.php", {
+			traj_data : JSON.stringify(trajectoryFinal),
+			movementLabel: movementLabel.value
+		},
+		function(data, status) {
+		});
+
 		$.post("train_models.php", {
 		},
 		function(data, status) {

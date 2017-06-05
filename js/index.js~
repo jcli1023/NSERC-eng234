@@ -667,27 +667,9 @@ function createPipeline(camNum) {
 	}
 
 	function trainProgram() {
-		$.post("svm.php", {
+		$.post("train_models.php", {
 		},
 		function(data, status) {
-
-			//consoleLog.log(data);
-			predictedMovementText.innerHTML = "Predicted Movement: " + data;
-			
-			//Trim any white spaces
-			if (strcmp(movementLabel.value.trim(),data.trim())==0)
-			{
-				
-				correctPredictionsNum++;
-				predictedMovementText.style.backgroundColor = "green";
-			}
-			else
-			{
-				predictedMovementText.style.backgroundColor = "red";
-			}
-
-			calculateCorrectLabels();
-			svmButton.innerHTML = "SVM";
 		});
 	}
 
