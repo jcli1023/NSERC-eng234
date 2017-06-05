@@ -643,7 +643,8 @@ function createPipeline(camNum) {
 			}
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
-				tempTrajectoryLog.unshift(trajectoryLog[0]);
+				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
 			}
 			trajectoryFinal = tempTrajectoryLog;
 			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
@@ -675,7 +676,8 @@ function createPipeline(camNum) {
 			}
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
-				tempTrajectoryLog.unshift(trajectoryLog[0]);
+				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
 			}
 			trajectoryFinal = tempTrajectoryLog;
 			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
@@ -713,7 +715,8 @@ function createPipeline(camNum) {
 			}
 			var tempTrajectoryLog = trajectoryLog.slice(0);
 			while (tempTrajectoryLog.length < 60) {
-				tempTrajectoryLog.unshift(trajectoryLog[0]);
+				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
 			}
 			trajectoryFinal = tempTrajectoryLog;
 			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
