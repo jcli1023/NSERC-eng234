@@ -18,6 +18,8 @@ import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+//Hello this is a comment
+
 public class InitializeObject {
 
 	private static final String EXTENSION_JPEG = ".jpg";
@@ -106,24 +108,24 @@ public class InitializeObject {
 					Core.split(hsv,hsvChannels);
 					
 					//Get the min and max values of H
-//					Core.MinMaxLocResult minMaxValuesH = new Core.MinMaxLocResult();
-//					minMaxValuesH = Core.minMaxLoc(hsvChannels.get(0),mask);
+					Core.MinMaxLocResult minMaxValuesH = new Core.MinMaxLocResult();
+					minMaxValuesH = Core.minMaxLoc(hsvChannels.get(0),mask);
 					//System.out.println("minMaxValuesH: "+minMaxValuesH.minVal+" "+minMaxValuesH.maxVal);
-					Scalar averageH = Core.mean(hsvChannels.get(0),mask);
+//					Scalar averageH = Core.mean(hsvChannels.get(0),mask);
 //					System.out.println("averageH: "+averageH);
 
 					//Get the min and max values of S
-//					Core.MinMaxLocResult minMaxValuesS = new Core.MinMaxLocResult();
-//					minMaxValuesS = Core.minMaxLoc(hsvChannels.get(1),mask);
+					Core.MinMaxLocResult minMaxValuesS = new Core.MinMaxLocResult();
+					minMaxValuesS = Core.minMaxLoc(hsvChannels.get(1),mask);
 					//System.out.println("minMaxValuesS: "+minMaxValuesS.minVal+" "+minMaxValuesS.maxVal);
-					Scalar averageS = Core.mean(hsvChannels.get(1),mask);
+//					Scalar averageS = Core.mean(hsvChannels.get(1),mask);
 //					System.out.println("averageS: "+averageS);
 
 					//Get the min and max values of V
-//					Core.MinMaxLocResult minMaxValuesV = new Core.MinMaxLocResult();
-//					minMaxValuesV = Core.minMaxLoc(hsvChannels.get(2),mask);
+					Core.MinMaxLocResult minMaxValuesV = new Core.MinMaxLocResult();
+					minMaxValuesV = Core.minMaxLoc(hsvChannels.get(2),mask);
 					//System.out.println("minMaxValuesV: "+minMaxValuesV.minVal+" "+minMaxValuesV.maxVal);
-					Scalar averageV = Core.mean(hsvChannels.get(2),mask);
+//					Scalar averageV = Core.mean(hsvChannels.get(2),mask);
 //					System.out.println("averageV: "+averageV);
 
 
@@ -135,18 +137,16 @@ public class InitializeObject {
 //					System.out.println(averageH.val[0]*1.15+","+averageS.val[0]*1.15+","+averageV.val[0]*1.15);
 //					System.out.println(averageH.val[0]*0.85+","+averageS.val[0]*0.85+","+averageV.val[0]*0.85);
 					
-					Scalar upperBound = new Scalar(averageH.val[0]*1.25,averageS.val[0]*1.25,averageV.val[0]*1.25);
-					Scalar lowerBound = new Scalar(averageH.val[0]*0.75,averageS.val[0]*0.75,averageV.val[0]*0.75);
-//					Scalar upperBound = new Scalar(minMaxValuesH.maxVal+10,255,255);
-//					Scalar lowerBound = new Scalar(minMaxValuesH.minVal-10,100,100);
+//					Scalar upperBound = new Scalar(averageH.val[0]*1.25,averageS.val[0]*1.25,averageV.val[0]*1.25);
+//					Scalar lowerBound = new Scalar(averageH.val[0]*0.75,averageS.val[0]*0.75,averageV.val[0]*0.75);
+					Scalar upperBound = new Scalar(minMaxValuesH.maxVal+10,255,255);
+					Scalar lowerBound = new Scalar(minMaxValuesH.minVal-10,100,150);
 					Core.inRange(hsv,lowerBound,upperBound,objectThresholdMask);
 
 //					Imgcodecs.imwrite("objectThresholdMask_initialize_"+fileName,objectThresholdMask);
 					 
-//					int erosionSize = 15;
-//					int dilationSize = 15;
-					int erosionSize = 2;
-					int dilationSize = 2;
+					int erosionSize = 15;
+					int dilationSize = 15;
 
 					//Erode the objectThresholdMask to remove small noise
 					Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(2*erosionSize + 1, 2*erosionSize+1));
