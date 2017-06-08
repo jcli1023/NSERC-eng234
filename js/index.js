@@ -172,6 +172,8 @@ function createPipeline(camNum) {
 
 	var dumbCount = 0;
 	var trajectoryLog = [];
+	var trajectoryLogFinal = []; //trajectory points for classification
+	var predictedMovement = "";
 
 
 	if (camNum == 1)
@@ -186,8 +188,10 @@ function createPipeline(camNum) {
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
 
-	var movementLabel = document.getElementById('movement'+camNum);
-	movementLabel.value = "Half-Circle";
+	//var movementLabel = document.getElementById('movement'+camNum);
+	//movementLabel.value = "Half-Circle";
+
+	var timingLabel = document.getElementById('timing'+camNum);
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
@@ -203,6 +207,9 @@ function createPipeline(camNum) {
 
 	stopButton = document.getElementById('stop'+camNum);
 	stopButton.addEventListener('click', stop);
+
+	submitCheckButton = document.getElementById('submitCheck'+camNum);
+	submitCheckButton.addEventListener('click', submitCheck);
 
 	clearObjectDrawingButton.style.display = "none";
 	clearObjectDrawingButton.addEventListener('click',function(){ clearDrawings(OBJECT_SCOPE); });
@@ -662,13 +669,13 @@ function createPipeline(camNum) {
 
 			consoleLog.log(data);
 
-			calculateCorrectLabels();
+			//calculateCorrectLabels();
 		});
 
 	}
 
 	function trainProgram() {
-		var trajectoryLogFinal;
+
 		if (trajectoryLog.length < 60) {
 			if (trajectoryLog.length < 1)
 			{
@@ -702,8 +709,7 @@ function createPipeline(camNum) {
 
 	function svmProgram() {
 		//consoleLog.log("-------Classifiers------------");
-		var trajectoryLogFinal;
-
+		var beginTimeSVM = performance.now();
 		resetPredictedMovementText();
 		svmButton.innerHTML = "Predicting...";
 		movementsNum++;
@@ -730,7 +736,7 @@ function createPipeline(camNum) {
 
 		$.post("write_test_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
-			movementLabel: movementLabel.value
+			//movementLabel: movementLabel.value
 		},
 		function(data, status) {
 			consoleLog.log(data);
@@ -740,10 +746,12 @@ function createPipeline(camNum) {
 		$.post("svm.php", {
 		},
 		function(data, status) {
-
+			var endTimeSVM = performance.now();
 			//consoleLog.log(data);
-			predictedMovementText.innerHTML = "Predicted Movement: " + data;
-			
+			predictedMovement = data;
+			predictedMovementText.innerHTML = "Predicted Movement: " + predictedMovement;
+
+			/*
 			//Trim any white spaces
 			if (strcmp(movementLabel.value.trim(),data.trim())==0)
 			{
@@ -755,11 +763,36 @@ function createPipeline(camNum) {
 			{
 				predictedMovementText.style.backgroundColor = "red";
 			}
-
-			calculateCorrectLabels();
+			*/
+			//calculateCorrectLabels();
 			svmButton.innerHTML = "SVM";
+			timingLabel.innerHTML = "SVM Timing: " + (endTimeSVM-beginTimeSVM) + " ms";
+
+			
 		});
 
+	}
+
+	function submitCheck() {
+		var correctButton = document.getElementById("correctCheck1");
+		var response;
+		if (correctButton.checked)
+		{
+			correctPredictionsNum++;
+			response = "correct";
+		}
+		else
+			response = "incorrect";
+		
+		$.post("write_responses.php", {
+			response : response,
+			traj_data : JSON.stringify(trajectoryFinal),
+			predicted : predictedMovement
+		},
+		function(data, status) {
+
+		});
+		calculateCorrectLabels();
 	}
 
 	function resetDefaultUI() {
@@ -793,7 +826,9 @@ function createPipeline(camNum) {
 		borderButton.disabled = false;
 		objectTrackerText.innerHTML = "Object Not Tracked";
 		objectTrackerText.style.backgroundColor = "white";
-		
+		svmButton.innerHTML = "SVM";		
+
+		timingLabel.innerHTML = "Timing: ";
 		resetPredictedMovementText();
 
 		//document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
@@ -916,6 +951,7 @@ function createPipeline(camNum) {
 		hideSpinner(videoOutput);
 
 		trajectoryLog.length = 0; //Clears list by setting length to 0
+		trajectoryLogFinal.length = 0;
 		
 		resetDefaultUI();
 
@@ -948,6 +984,7 @@ function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError, console) 
 		webRtcPeer.addIceCandidate(candidate, onError);
 	});
 }
+
 
 function calculateCorrectLabels()
 {

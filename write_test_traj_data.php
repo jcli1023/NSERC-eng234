@@ -2,7 +2,7 @@
 session_start();
 
 $traj_data = $_POST['traj_data'];
-$movementLabel = $_POST['movementLabel'];
+//$movementLabel = $_POST['movementLabel'];
 
 $fp = fopen('test_traj_data.txt', 'w');
 
@@ -143,7 +143,8 @@ for ($i = 0; $i < $arrlength; $i++)
 	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->y . ",";
 }
 
-$new_traj_data = $new_traj_data . $movementLabel . "\n";
+//$new_traj_data = $new_traj_data . $movementLabel . "\n";
+$new_traj_data = $new_traj_data . "Half-Circle\n";
 
 
 fwrite($fp, $new_traj_data);
