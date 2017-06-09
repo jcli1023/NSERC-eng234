@@ -50,6 +50,10 @@
 		<div id="template_options">
 			<button id="template1Button">Template 1</button>
 			<button id="template2Button">Template 2</button>
+			<button id="kmeansButton">K-Means</button>
+			<button id="trainButton">Train Model(s)</button>
+			<button id="svmButton">SVM</button>
+			<p id="correctTotal">CORRECT %</p>
 		</div>
 		<div id="template1">
 			<div class="row">
@@ -64,7 +68,15 @@
 					</br>
 					Set email : <input style="width:350px;" id="email1" type="text">
 					</br></br>
-					
+					<!--Set movement label : <input style="width:350px;" id="movement1" type="text">
+					</br>-->
+					Correct: <input type="radio" name="checkCorrect1" id="correctCheck1" checked> 
+					Incorrect: <input type="radio" name="checkCorrect1" id="incorrectCheck1">
+					<button id="submitCheck1">Submit</button>
+					</br></br>
+					<p id="predictedMovement1">Predicted Movement: </p>
+					</br>
+					<p id="timing1">Timing: </p>	
 				</div>
 				<div class="col-md-2">
 					<a id="start1" href="#" class="btn btn-success"><span
