@@ -452,8 +452,6 @@ function createPipeline(camNum) {
 					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
 					var jsonObj = JSON.parse(data.jsonOutput);
 
-					console.log(jsonObj.toString());
-
 					currentPathObject.clear();
 					currentPathObject.importJSON(jsonObj);
 =======

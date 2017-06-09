@@ -13,26 +13,11 @@
  *
  */
 
-<<<<<<< HEAD
-var socket = io.connect('http://localhost:8554');
-//var socket = io.connect('http://localhost:8555');
-console.log("socket connected");
-
-//socket.on('news', function (data) {
-//console.log(data);
-//socket.emit('my other event', { my: 'data' });
-//});
-
-
-(function(){
-	var MAX_CAMERAS = 2;
-=======
 var movementsNum = 0;
 var correctPredictionsNum = 0;
 
 (function(){
 	var MAX_CAMERAS = 4;
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	var MAX_VID_SIZE_TEMP1_HEIGHT = 400;
 	var MAX_VID_SIZE_TEMP1_WIDTH = 640;
 	var MAX_VID_SIZE_TEMP2_HEIGHT = 300;
@@ -100,12 +85,7 @@ var correctPredictionsNum = 0;
 		}
 	}
 
-<<<<<<< HEAD
-	window.addEventListener("load", function(){ 
-		pipelines.push(new createPipeline(currentNumCams));
-=======
 	window.addEventListener("load", function(){ pipelines.push(new createPipeline(currentNumCams));
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 		var template1Button = document.getElementById("template1Button");
 		var template2Button = document.getElementById("template2Button");		
 		template1Button.onclick = setTemplate1;
@@ -180,10 +160,6 @@ function createPipeline(camNum) {
 	var borderCoordinates = []; //Array of the border coordinates
 
 	var isPaused = false;
-<<<<<<< HEAD
-	var initializedObject = false;
-=======
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	var source; //eventSource for server sided events
 
 	var objectButton = document.getElementById("objectButton"+camNum);
@@ -191,19 +167,6 @@ function createPipeline(camNum) {
 	var clearObjectDrawingButton = document.getElementById("clearObjectDrawing"+camNum);
 	var clearBorderDrawingButton = document.getElementById("clearBorderDrawing"+camNum);
 	var objectTrackerText = document.getElementById("objectTracker"+camNum);
-<<<<<<< HEAD
-
-	var dumbCount = 0;
-
-	if (camNum == 1)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
-	else if (camNum == 2)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
-
-	email = document.getElementById('email'+camNum);
-	email.value = 'testdsmp@dsmp.ryerson.ca';
-
-=======
 	var predictedMovementText = document.getElementById("predictedMovement"+camNum);
 
 
@@ -239,19 +202,15 @@ function createPipeline(camNum) {
 	svmButton = document.getElementById("svmButton");
 	svmButton.addEventListener('click', svmProgram);
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
 
 	stopButton = document.getElementById('stop'+camNum);
 	stopButton.addEventListener('click', stop);
 
-<<<<<<< HEAD
-=======
 	submitCheckButton = document.getElementById('submitCheck'+camNum);
 	submitCheckButton.addEventListener('click', submitCheck);
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	clearObjectDrawingButton.style.display = "none";
 	clearObjectDrawingButton.addEventListener('click',function(){ clearDrawings(OBJECT_SCOPE); });
 
@@ -310,21 +269,6 @@ function createPipeline(camNum) {
 		frameDim = [saveCurrentFrame.width, saveCurrentFrame.height];
 		vidDim = [videoOutput.width, videoOutput.height];
 
-<<<<<<< HEAD
-		socket.emit("saveFrame", { cam: camNum, time: timeFrame, frame: saveToServerFrame, frameDim: frameDim, vidDim: vidDim }); 
-//		$.post("saveScreenshot.php", {
-//				cam: camNum,
-//				time: timeFrame,
-//				frame: saveToServerFrame,
-//				frameDim: frameDim,
-//				vidDim: vidDim
-//			},
-//			function(data, status) {
-
-//				//document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
-//				//alert("Data: " + data + "\nStatus: " + status);
-//			});
-=======
 		$.post("saveScreenshot.php", {
 				cam: camNum,
 				time: timeFrame,
@@ -337,7 +281,6 @@ function createPipeline(camNum) {
 				//document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	}
 
 	function sendEmail(camNum) {
@@ -440,21 +383,6 @@ function createPipeline(camNum) {
 			initializeDrawings(camNum, currentPathObject);
 
 			if (videoOutput.paused)
-<<<<<<< HEAD
-			{
-				videoOutput.play();
-			}
-
-			checkThresholds = setInterval(function() {
-				socket.emit("checkThreshold", { cam: camNum });
-				socket.on("thresholdChecked", function(data) {
-					var dateFrame = new Date();
-					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
-					var jsonObj = JSON.parse(data.jsonOutput);
-
-					currentPathObject.clear();
-					currentPathObject.importJSON(jsonObj);
-=======
 				videoOutput.play();
 
 			//When server sends information to client
@@ -493,7 +421,6 @@ function createPipeline(camNum) {
 					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
 					//console.log("testObj: " + testObj);
 					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 
 					if (jsonObj[4].objectFound === "false") {
 
@@ -505,23 +432,17 @@ function createPipeline(camNum) {
 					else {
 						var objectInsideBorder = true;
 
-<<<<<<< HEAD
-=======
 						//consoleLog.log("currentPathBorder: "+currentPathBorder);
 						//consoleLog.log("borderCoordinates: "+borderCoordinates);
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 						//If there is a defined border, check if object is inside the border
 						if (typeof currentPathBorder !== "undefined")
 						{	
 							//Check border only if it is drawn as more than a single point
 							if (currentPathBorder.segments.length > 0)
 							{
-<<<<<<< HEAD
-=======
 								//consoleLog.log("currentPathBorder defined");
 								//consoleLog.log("object segs: "+jsonObj[1].segments);
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 								for (i = 0; i < jsonObj[1].segments.length; i++)
 								{
 									objectInsideBorder = insideBorder(jsonObj[1].segments[i],borderCoordinates);
@@ -542,113 +463,6 @@ function createPipeline(camNum) {
 					
 					trajectory = jsonObj[5].trajectoryCenter;
 					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
-<<<<<<< HEAD
-					refreshConsoleScroll();
-
-				});				
-			}, 50);
-
-//			//When server sends information to client
-//			if (typeof(EventSource) !== "undefined") {
-//				//consoleLog.log("entered EventSource");
-//				source = new EventSource("sse_test.php?camNum=" + camNum);
-//				source.onmessage = function(event) {
-//					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
-//					var dateFrame = new Date();
-//					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
-//					//consoleLog.log(camNum+" event "+timeEvent);
-//					var jsonObj = JSON.parse(event.data);
-//					
-//					currentPathObject.clear();
-//					currentPathObject.importJSON(jsonObj);
-//					
-
-//					/*var jsonObj2 = [];
-//					var segArrays = [];
-//					var strokeColorArray = [];
-//					var jsonObj3 = {
-//						"name": "currentPathObject",
-//						"applyMatrix": true,
-//						"segments": currentPathObject.segments.toString(),
-//						"strokeColor": currentPathObject.strokeColor.toString()
-//					};
-//					var jsonObj4 = {
-//						"word": "hello"
-//					};
-//					jsonObj2.push("Path");
-//					jsonObj2.push(jsonObj3);
-//					jsonObj2.push(jsonObj4);
-//					console.log("jsonObj2: " + jsonObj2[1].segments + " " + jsonObj2[1].strokeColor);
-//*/
-//					//jsonObj[1].segments.length = 0;
-//					//testObj = jsonObj[0] + "," + jsonObj[1].applyMatrix + "," + jsonObj[1].segments + "," + jsonObj[1].strokeColor + "," + jsonObj[3].objectFound;
-//					//console.log("testObj: " + testObj);
-//					//console.log("typeof jsonObj[3]: " + typeof jsonObj[3].objectFound);
-
-//					if (jsonObj[4].objectFound === "false") {
-
-//						sendEmail(camNum);
-//						setMissingTrackerText();
-
-//					} 
-//					//Object is found inside video frame
-//					else {
-//						var objectInsideBorder = true;
-
-//						//consoleLog.log("currentPathBorder: "+currentPathBorder);
-//						//consoleLog.log("borderCoordinates: "+borderCoordinates);
-
-//						//If there is a defined border, check if object is inside the border
-//						if (typeof currentPathBorder !== "undefined")
-//						{	
-//							//Check border only if it is drawn as more than a single point
-//							if (currentPathBorder.segments.length > 0)
-//							{
-//								//consoleLog.log("currentPathBorder defined");
-//								//consoleLog.log("object segs: "+jsonObj[1].segments);
-//								for (i = 0; i < jsonObj[1].segments.length; i++)
-//								{
-//									objectInsideBorder = insideBorder(jsonObj[1].segments[i],borderCoordinates);
-//									if (!objectInsideBorder)
-//										break;
-//								}
-//							}
-//						}					
-//						
-//						if (!objectInsideBorder){
-//							sendEmail(camNum);
-//							setMissingTrackerText();
-//						}
-//						else
-//							setFoundTrackerText();
-//							
-//					}
-//					
-//					trajectory = jsonObj[5].trajectoryCenter;
-//					consoleLog.log("Trajectory: "+trajectory[0]+","+trajectory[1]);
-//					refreshConsoleScroll();
-//					/*
-//					var new_tweets = { };
-
-//					new_tweets.k = { };
-
-//					new_tweets.k.tweet_id = 98745521;
-//					new_tweets.k.user_id = 54875;
-
-//					new_tweets.k.data = { };
-
-//					new_tweets.k.data.in_reply_to_screen_name = 'other_user';
-//					new_tweets.k.data.text = 'tweet text';
-
-//					// Will create the JSON string you're looking for.
-//					var json = JSON.stringify(new_tweets);
-//					*/
-//				};
-//			} else {
-//				consoleLog.log("Sorry, your browser does not support server-sent events...");
-//				refreshConsoleScroll();
-//			}
-=======
 
 					trajectoryLog.push({x: trajectory[0], y: trajectory[1]});
 					//consoleLog.log(JSON.stringify(trajectoryLog));
@@ -676,7 +490,6 @@ function createPipeline(camNum) {
 				consoleLog.log("Sorry, your browser does not support server-sent events...");
 				refreshConsoleScroll();
 			}
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 
 			//if (typeof currentPathObject !== 'undefined')
 				//document.getElementById("debug"+camNum).innerHTML = "currentPathObject: " + currentPathObject.exportJSON({
@@ -761,32 +574,6 @@ function createPipeline(camNum) {
 	}
 
 	function initializeDrawings(camNum, coordinates) {
-<<<<<<< HEAD
-		initializedObject = false;
-		socket.emit("initializeDrawings", { cam: camNum, coordinates: coordinates.exportJSON(), timeFrame: timeFrame, frameDim: frameDim, vidDim: vidDim });
-		socket.on("initialCoordinates", function(data){
-			currentPathObject.importJSON(data.jsonOutput);
-			initializedObject = true;
-		});
-//		$.post("initialize_drawings.php", {
-//				cam: camNum,
-//				coordinates: coordinates.exportJSON(),
-//				timeFrame: timeFrame,
-//				frameDim: frameDim,
-//				vidDim: vidDim
-//			},
-//			function(data, status) {
-
-//				//alert(data);
-//				//console.log("initialize_drawing data ##########: " + data);
-//				//alert("Data: " + data + "\nStatus: " + status);
-//				/*var jsonObj = JSON.parse(data);
-//				jsonObj[1].segments.length = 0;
-//				currentPathObject.importJSON(jsonObj);*/
-//				currentPathObject.importJSON(data);
-//			});
-
-=======
 		$.post("initialize_drawings.php", {
 				cam: camNum,
 				coordinates: coordinates.exportJSON(),
@@ -806,7 +593,6 @@ function createPipeline(camNum) {
 			});
 
 		//consoleLog.log("coordinates.exportJSON(): " + coordinates.exportJSON());
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	}
 
 	function insideBorder(point, border) {
@@ -854,8 +640,6 @@ function createPipeline(camNum) {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	//Not Complete
 	function kmeansProgram() {
 		consoleLog.log("-------K-MEANS------------");
@@ -1011,7 +795,6 @@ function createPipeline(camNum) {
 		calculateCorrectLabels();
 	}
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	function resetDefaultUI() {
 		if (typeof(EventSource) !== "undefined") {
 			if (typeof source !== 'undefined')
@@ -1043,14 +826,11 @@ function createPipeline(camNum) {
 		borderButton.disabled = false;
 		objectTrackerText.innerHTML = "Object Not Tracked";
 		objectTrackerText.style.backgroundColor = "white";
-<<<<<<< HEAD
-=======
 		svmButton.innerHTML = "SVM";		
 
 		timingLabel.innerHTML = "Timing: ";
 		resetPredictedMovementText();
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 		//document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
 		//document.getElementById("objectButton"+camNum).innerHTML = "Track Object";
 		//document.getElementById("objectButton"+camNum).disabled = false;
@@ -1062,15 +842,12 @@ function createPipeline(camNum) {
 		//overlayTextCanvas();
 	}
 
-<<<<<<< HEAD
-=======
 	function resetPredictedMovementText()
 	{
 		predictedMovementText.innerHTML = "Predicted Movement: ";
 		predictedMovementText.style.backgroundColor = "white";
 	}
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 	function start() {
 		if (!address.value) {
 			window.alert("You must set the video source URL first");
@@ -1081,13 +858,8 @@ function createPipeline(camNum) {
 			return;
 		}
 
-<<<<<<< HEAD
-//		consoleLog.log("currentPathObject def?: "+currentPathObject);
-//		consoleLog.log("currentPathBorder def?: "+currentPathBorder);
-=======
 		consoleLog.log("currentPathObject def?: "+currentPathObject);
 		consoleLog.log("currentPathBorder def?: "+currentPathBorder);
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 		address.disabled = true;
 		showSpinner(videoOutput);
 		var options = {
@@ -1178,12 +950,9 @@ function createPipeline(camNum) {
 		}
 		hideSpinner(videoOutput);
 
-<<<<<<< HEAD
-=======
 		trajectoryLog.length = 0; //Clears list by setting length to 0
 		trajectoryLogFinal.length = 0;
 		
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 		resetDefaultUI();
 
 		//consoleLog.log("STOPPED FUNCTION()");
@@ -1216,8 +985,6 @@ function setIceCandidateCallbacks(webRtcEndpoint, webRtcPeer, onError, console) 
 	});
 }
 
-<<<<<<< HEAD
-=======
 
 function calculateCorrectLabels()
 {
@@ -1226,7 +993,6 @@ function calculateCorrectLabels()
 	correctTotalLabel.innerHTML = "CORRECT: " + correctPercentage + "%	" + correctPredictionsNum + "/" + movementsNum;
 }
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 function onError(error, console) {
 	if (error) {
 		console.error(error);
@@ -1249,15 +1015,12 @@ function hideSpinner() {
 	}
 }
 
-<<<<<<< HEAD
-=======
 function strcmp(a, b) {
     if (a.toString() < b.toString()) return -1;
     if (a.toString() > b.toString()) return 1;
     return 0;
 }
 
->>>>>>> parent of 9f33d6b... Merge branch 'working_branch' of https://github.com/jcli1023/NSERC-eng234
 /**
  * Lightbox utility (to display media pipeline image in a modal dialog)
  */
