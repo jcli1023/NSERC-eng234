@@ -1,0 +1,22 @@
+{
+  "name": "nserc_demo_app",
+  "version": "1.0.0",
+  "description": "Files for testing demo Meaningful Camera",
+  "main": "nserc_app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcli1023/NSERC-eng234.git"
+  },
+  "author": "eng234-Jason Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcli1023/NSERC-eng234/issues"
+  },
+  "homepage": "https://github.com/jcli1023/NSERC-eng234#readme",
+  "dependencies": {
+    "socket.io": "^1.7.1"
+  }
+}
