@@ -34,7 +34,11 @@ $input = addslashes($_SESSION['object']['cam']["$camName"]);
 //	$results = shell_exec("java -jar CheckThreshold.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
 //}
 //elseif ($camNum == 2){
-	$results = shell_exec("java -jar CheckThreshold_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
+//	$results = shell_exec("java -jar CheckThreshold_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
+
+$resultsCompile = shell_exec("javac -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310.jar: CheckThreshold.java");
+$results = shell_exec("java -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310.jar: CheckThreshold ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
+//$results = shell_exec("java -jar CheckThreshold_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".$input);
 //}
 
 $_SESSION['object']['cam']["$camName"] = $results;
