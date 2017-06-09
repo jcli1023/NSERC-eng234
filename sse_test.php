@@ -22,8 +22,7 @@ echo "id: ".$_SESSION['dumbCount']."\n";
 
 //$obj = json_decode($_SESSION['object']['cam']["$camName"]);
 
-//$input = addslashes($_SESSION['object']['cam']['cam1']);
-$input = addslashes($_SESSION['object']['cam']["$camName"]);
+$input = addslashes($_SESSION['object']['cam']['cam1']);
 //$input = $_SESSION['object']['cam']['cam1'];
 
 //$fp = fopen('sessionVar2.json', 'w');
