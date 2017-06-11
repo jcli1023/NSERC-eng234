@@ -22,8 +22,8 @@
 <script src="bower_components/kurento-utils/js/kurento-utils.js"></script>
 <script src="bower_components/paper/dist/paper-full.js"></script>
 <script src="./js/console.js"></script>
-<script src="http://localhost:8555/socket.io/socket.io.js"></script>
-<!--<script src="http://localhost:8554/socket.io/socket.io.js"></script>-->
+<!--<script src="http://localhost:8555/socket.io/socket.io.js"></script>-->
+<script src="http://localhost:8554/socket.io/socket.io.js"></script>
 <script src="./js/index.js"></script>
 
 <title>Kurento RTSP to WebRTC player</title>
@@ -70,7 +70,7 @@
 					</br></br>
 					<!--Set movement label : <input style="width:350px;" id="movement1" type="text">
 					</br>-->
-					Correct: <input type="radio" name="checkCorrect1" id="correctCheck1"> 
+					Correct: <input type="radio" name="checkCorrect1" id="correctCheck1" checked> 
 					Incorrect: <input type="radio" name="checkCorrect1" id="incorrectCheck1">
 					<button id="submitCheck1">Submit</button>
 					</br></br>
