@@ -174,6 +174,9 @@ function createPipeline(camNum) {
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
 	var predictedMovement = "";
+	var beginTimeInterval;
+	var endTimeInterval;
+	var totalTimeInterval;
 
 
 	if (camNum == 1)
@@ -384,6 +387,8 @@ function createPipeline(camNum) {
 
 			if (videoOutput.paused)
 				videoOutput.play();
+
+			beginTimeInterval = performance.now();
 
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
@@ -795,6 +800,27 @@ function createPipeline(camNum) {
 		calculateCorrectLabels();
 	}
 
+	function fixTrajectoryInterval()
+	{
+		var numTrajPoints = trajectoryLog.length;
+		var newTrajectoryLog = [];
+		var steps;
+		var currentStep = 0;
+		steps = Math.floor (numTrajPoints/totalTimeInterval);
+		if (steps < 1)
+			steps = 1;
+		while (currentStep < numTrajPoints-1)
+		{
+			newTrajectoryLog.push(trajectoryLog[currentStep]);
+			currentStep += steps;
+		}
+		
+		trajectoryLog = newTrajectoryLog;
+		consoleLog.log(JSON.stringify(trajectoryLog));
+		consoleLog.log("totalTimeInterval: " + totalTimeInterval);
+		consoleLog.log("steps: " + steps);	
+	}
+
 	function resetDefaultUI() {
 		if (typeof(EventSource) !== "undefined") {
 			if (typeof source !== 'undefined')
@@ -939,6 +965,11 @@ function createPipeline(camNum) {
 	}
 	//	this.stop = function() {
 	function stop() {
+
+		endTimeInterval = performance.now();
+		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
+		fixTrajectoryInterval();
+
 		address.disabled = false;
 		if (webRtcPeer) {
 			webRtcPeer.dispose();

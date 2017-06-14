@@ -56,7 +56,7 @@ array_push($obj,$new);
 
 //$resultsCompile = shell_exec("javac -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310.jar: InitializeObject.java");
 $results = shell_exec("java -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310.jar: InitializeObject ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
-	//$results = shell_exec("java -jar InitializeObject_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
+//	$results = shell_exec("java -jar InitializeObject_old.jar ".$camNum." ".$time." ".$ratioDim[0]." ".$ratioDim[1]." ".addslashes($coordinates));
 //}
 
 
