@@ -5,5 +5,5 @@ session_start();
 $results = shell_exec("java -cp weka.jar: ClusterWeka");
 
 echo $results
-flush();
+//flush();
 ?>

@@ -59,5 +59,5 @@ echo "data: ".$obj;*/
 echo "data: ".$results;
 echo "\n\n";
 
-flush();
+//flush();
 ?>

@@ -5,5 +5,5 @@ session_start();
 $results = shell_exec("java -cp weka.jar:libsvm.jar: TestModel");
 
 echo trim($results);
-flush();
+//flush();
 ?>
