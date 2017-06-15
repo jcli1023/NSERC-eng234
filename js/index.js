@@ -177,16 +177,17 @@ function createPipeline(camNum) {
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
-
+/*
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
 	else if (camNum == 2)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid03.mkv';
-/*	if (camNum == 1)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
-	else if (camNum == 2)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
 */
+	if (camNum == 1)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/hcircle/hcircle-right15.mkv';
+	else if (camNum == 2)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/hcircle/hcircle-right12.mkv';
+
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
 
