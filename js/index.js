@@ -174,9 +174,11 @@ function createPipeline(camNum) {
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
 	var predictedMovement = "";
+
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
+
 
 
 	if (camNum == 1)
@@ -389,6 +391,7 @@ function createPipeline(camNum) {
 				videoOutput.play();
 
 			beginTimeInterval = performance.now();
+
 
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
@@ -965,7 +968,6 @@ function createPipeline(camNum) {
 	}
 	//	this.stop = function() {
 	function stop() {
-
 		endTimeInterval = performance.now();
 		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
 		fixTrajectoryInterval();

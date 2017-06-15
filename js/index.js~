@@ -174,9 +174,12 @@ function createPipeline(camNum) {
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
 	var predictedMovement = "";
+<<<<<<< HEAD
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
+=======
+>>>>>>> 44d7e299358c8502d74cc3af9fcaf3bb10379cca
 
 
 	if (camNum == 1)
@@ -388,8 +391,11 @@ function createPipeline(camNum) {
 			if (videoOutput.paused)
 				videoOutput.play();
 
+<<<<<<< HEAD
 			beginTimeInterval = performance.now();
 
+=======
+>>>>>>> 44d7e299358c8502d74cc3af9fcaf3bb10379cca
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				//consoleLog.log("entered EventSource");
@@ -800,6 +806,7 @@ function createPipeline(camNum) {
 		calculateCorrectLabels();
 	}
 
+<<<<<<< HEAD
 	function fixTrajectoryInterval()
 	{
 		var numTrajPoints = trajectoryLog.length;
@@ -814,11 +821,15 @@ function createPipeline(camNum) {
 			newTrajectoryLog.push(trajectoryLog[currentStep]);
 			currentStep += steps;
 		}
-		consoleLog.log(JSON.stringify(newTrajectoryLog));
+		
+		trajectoryLog = newTrajectoryLog;
+		consoleLog.log(JSON.stringify(trajectoryLog));
 		consoleLog.log("totalTimeInterval: " + totalTimeInterval);
 		consoleLog.log("steps: " + steps);	
 	}
 
+=======
+>>>>>>> 44d7e299358c8502d74cc3af9fcaf3bb10379cca
 	function resetDefaultUI() {
 		if (typeof(EventSource) !== "undefined") {
 			if (typeof source !== 'undefined')
@@ -963,11 +974,14 @@ function createPipeline(camNum) {
 	}
 	//	this.stop = function() {
 	function stop() {
+<<<<<<< HEAD
 
 		endTimeInterval = performance.now();
 		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
 		fixTrajectoryInterval();
 
+=======
+>>>>>>> 44d7e299358c8502d74cc3af9fcaf3bb10379cca
 		address.disabled = false;
 		if (webRtcPeer) {
 			webRtcPeer.dispose();
