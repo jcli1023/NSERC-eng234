@@ -2,3 +2,9 @@
 *.mp4
 *.class
 test_traj_data.txt
+CAMERA-*
+responses_train_offline.txt
+resultsPaperJs.json
+resultsPhp.json
+sessionVar1.json
+train_offline_traj_data.txt

@@ -174,15 +174,9 @@ function createPipeline(camNum) {
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
 	var predictedMovement = "";
-<<<<<<< HEAD
-
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
-=======
->>>>>>> 4099fb804477475b5e8799017da101aec3b2f703
-
-
 
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
@@ -393,12 +387,10 @@ function createPipeline(camNum) {
 			if (videoOutput.paused)
 				videoOutput.play();
 
-<<<<<<< HEAD
+
 			beginTimeInterval = performance.now();
 
 
-=======
->>>>>>> 4099fb804477475b5e8799017da101aec3b2f703
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				//consoleLog.log("entered EventSource");
@@ -787,6 +779,27 @@ function createPipeline(camNum) {
 
 	}
 
+	function fixTrajectoryInterval()
+	{
+		var numTrajPoints = trajectoryLog.length;
+		var newTrajectoryLog = [];
+		var steps;
+		var currentStep = 0;
+		steps = Math.floor (numTrajPoints/totalTimeInterval);
+		if (steps < 1)
+			steps = 1;
+		while (currentStep < numTrajPoints-1)
+		{
+			newTrajectoryLog.push(trajectoryLog[currentStep]);
+			currentStep += steps;
+		}
+		
+		trajectoryLog = newTrajectoryLog;
+		consoleLog.log(JSON.stringify(trajectoryLog));
+		consoleLog.log("totalTimeInterval: " + totalTimeInterval);
+		consoleLog.log("steps: " + steps);	
+	}
+
 	function submitCheck() {
 		var correctButton = document.getElementById("correctCheck1");
 		var response;
@@ -953,13 +966,10 @@ function createPipeline(camNum) {
 	}
 	//	this.stop = function() {
 	function stop() {
-<<<<<<< HEAD
 		endTimeInterval = performance.now();
 		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
 		fixTrajectoryInterval();
 
-=======
->>>>>>> 4099fb804477475b5e8799017da101aec3b2f703
 		address.disabled = false;
 		if (webRtcPeer) {
 			webRtcPeer.dispose();
