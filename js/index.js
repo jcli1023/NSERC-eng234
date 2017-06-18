@@ -749,7 +749,7 @@ function createPipeline(camNum) {
 
 		$.post("write_train_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
-			movementLabel: movementLabel.value
+			//movementLabel: movementLabel.value
 		},
 		function(data, status) {
 		});
@@ -757,6 +757,7 @@ function createPipeline(camNum) {
 		$.post("train_models.php", {
 		},
 		function(data, status) {
+			resultProgramOutput.innerHTML = "Finished Training Models";
 		});
 	}
 
