@@ -53,6 +53,18 @@ video,#console1,#console2 {
 	padding-top: 120px;
 }
 
+.screenContainer {
+  display: flex;
+}
+.screenContainer > div {
+  flex: 1; /*grow*/
+}
+
+.outputPrograms {
+  position: relative;
+  left: 10%;
+}
+
 /*
 z-index are important for these 3 components:
 videOutput*, objectCam*, borderCam* has to maintain these z-indexes

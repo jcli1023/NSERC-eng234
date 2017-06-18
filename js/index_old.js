@@ -174,20 +174,17 @@ function createPipeline(camNum) {
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
 	var predictedMovement = "";
-	var beginTimeInterval;
-	var endTimeInterval;
-	var totalTimeInterval;
-/*
+
+
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
 	else if (camNum == 2)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid03.mkv';
-*/
-	if (camNum == 1)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/hcircle/hcircle-right15.mkv';
+/*	if (camNum == 1)
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid.mkv';
 	else if (camNum == 2)
-		address.value = 'rtsp://dsmp.ryerson.ca:8000/hcircle/hcircle-right12.mkv';
-
+		address.value = 'rtsp://dsmp.ryerson.ca:8000/test_vid03.mkv';
+*/
 	email = document.getElementById('email'+camNum);
 	email.value = 'testdsmp@dsmp.ryerson.ca';
 
@@ -195,7 +192,6 @@ function createPipeline(camNum) {
 	//movementLabel.value = "Half-Circle";
 
 	var timingLabel = document.getElementById('timing'+camNum);
-	var resultProgramOutput = document.getElementById('resultPrograms'+camNum);
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
@@ -205,9 +201,6 @@ function createPipeline(camNum) {
 
 	svmButton = document.getElementById("svmButton");
 	svmButton.addEventListener('click', svmProgram);
-
-	svmBatchButton = document.getElementById("svmBatchButton");
-	svmBatchButton.addEventListener('click', svmBatchProgram);
 
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
@@ -392,18 +385,11 @@ function createPipeline(camNum) {
 			if (videoOutput.paused)
 				videoOutput.play();
 
-
-			beginTimeInterval = performance.now();
-
-			//previousSSETime = performance.now();
 			//When server sends information to client
 			if (typeof(EventSource) !== "undefined") {
 				//consoleLog.log("entered EventSource");
 				source = new EventSource("sse_test.php?camNum=" + camNum);
 				source.onmessage = function(event) {
-					//currentSSETime = performance.now();
-					//consoleLog.log("SSE Response: " + (currentSSETime - previousSSETime));
-					//previousSSETime = currentSSETime;
 					//console.log("event.data: "+event.data + " event.lastEventId: " + event.lastEventId);
 					var dateFrame = new Date();
 					var timeEvent = dateFrame.getMinutes() +"_"+ dateFrame.getSeconds() +"_"+ dateFrame.getMilliseconds();
@@ -657,7 +643,6 @@ function createPipeline(camNum) {
 	//Not Complete
 	function kmeansProgram() {
 		consoleLog.log("-------K-MEANS------------");
-		var beginTimeKmeans = performance.now();
 		if (trajectoryLog.length < 60) {
 			if (trajectoryLog.length < 1)
 			{
@@ -681,48 +666,10 @@ function createPipeline(camNum) {
 		$.post("kmeans.php", {
 		},
 		function(data, status) {
-			var endTimeKmeans = performance.now();
-			var cleanLookingData  = data.replace(/;/g, "</br></br>")
-			resultProgramOutput.innerHTML = cleanLookingData;
-			//resultProgramOutput.innerHTML = data;
+
+			consoleLog.log(data);
+
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "K-Means Timing: " + (endTimeKmeans-beginTimeKmeans) + " ms";
-		});
-
-	}
-
-	function svmBatchProgram() {
-		consoleLog.log("-------SVM BATCH------------");
-		var beginTimeSVMBatch = performance.now();
-		if (trajectoryLog.length < 60) {
-			if (trajectoryLog.length < 1)
-			{
-				trajectoryLog.push({x: 0, y: 0});
-			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
-			while (tempTrajectoryLog.length < 60) {
-				//tempTrajectoryLog.unshift(trajectoryLog[0]);
-				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
-			}
-			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
-		}
-		else
-		{
-			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
-		}
-	
-		//consoleLog.log(JSON.stringify(trajectoryFinal));
-
-		$.post("svm_batch.php", {
-		},
-		function(data, status) {
-			var endTimeSVMBatch = performance.now();
-			var cleanLookingData  = data.replace(/;/g, "</br></br>")
-			resultProgramOutput.innerHTML = cleanLookingData;
-			//resultProgramOutput.innerHTML = data;
-			//calculateCorrectLabels();
-			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
 		});
 
 	}
@@ -818,33 +765,12 @@ function createPipeline(camNum) {
 			}
 			*/
 			//calculateCorrectLabels();
-			svmButton.innerHTML = "SVM Real-Time";
+			svmButton.innerHTML = "SVM";
 			timingLabel.innerHTML = "SVM Timing: " + (endTimeSVM-beginTimeSVM) + " ms";
 
 			
 		});
 
-	}
-
-	function fixTrajectoryInterval()
-	{
-		var numTrajPoints = trajectoryLog.length;
-		var newTrajectoryLog = [];
-		var steps;
-		var currentStep = 0;
-		steps = Math.floor (numTrajPoints/totalTimeInterval);
-		if (steps < 1)
-			steps = 1;
-		while (currentStep < numTrajPoints-1)
-		{
-			newTrajectoryLog.push(trajectoryLog[currentStep]);
-			currentStep += steps;
-		}
-		
-		trajectoryLog = newTrajectoryLog;
-		consoleLog.log(JSON.stringify(trajectoryLog));
-		consoleLog.log("totalTimeInterval: " + totalTimeInterval);
-		consoleLog.log("steps: " + steps);	
 	}
 
 	function submitCheck() {
@@ -900,8 +826,7 @@ function createPipeline(camNum) {
 		borderButton.disabled = false;
 		objectTrackerText.innerHTML = "Object Not Tracked";
 		objectTrackerText.style.backgroundColor = "white";
-		svmButton.innerHTML = "SVM Real-Time";
-		resultProgramOutput.innerHTML = "";
+		svmButton.innerHTML = "SVM";		
 
 		timingLabel.innerHTML = "Timing: ";
 		resetPredictedMovementText();
@@ -1014,10 +939,6 @@ function createPipeline(camNum) {
 	}
 	//	this.stop = function() {
 	function stop() {
-		endTimeInterval = performance.now();
-		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
-		fixTrajectoryInterval();
-
 		address.disabled = false;
 		if (webRtcPeer) {
 			webRtcPeer.dispose();
