@@ -8,12 +8,14 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.NominalPrediction;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.rules.DecisionTable;
 import weka.classifiers.rules.PART;
 import weka.classifiers.trees.DecisionStump;
 import weka.classifiers.trees.J48;
 import weka.core.FastVector;
 import weka.core.Instances;
+import weka.filters.unsupervised.attribute.Remove;
 
 public class TrainModel {
 
@@ -55,10 +57,15 @@ public class TrainModel {
 
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("train_traj_data.txt");
+		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
 
 		Instances data = new Instances(datafile);
 
+//		Remove remove = new Remove();                
+//		remove.setAttributeIndices("last");
+//		FilteredClassifier fc = new FilteredClassifier();
+//		fc.setFilter(remove);
+		
 		data.setClassIndex(data.numAttributes() - 1);
 
 		// Use a set of classifiers
@@ -84,7 +91,8 @@ public class TrainModel {
 
 			// Uncomment to see the summary for each training-testing pair.
 			//System.out.println(models[j].toString());
-
+//			fc.setClassifier(models[j]);
+//			fc.buildClassifier(data);
 			models[j].buildClassifier(data);
 			// evaluate classifier and print some statistics
 		}
@@ -95,3 +103,4 @@ public class TrainModel {
 
 
 }
+

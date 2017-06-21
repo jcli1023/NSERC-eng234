@@ -79,18 +79,18 @@ public class SVMBatch {
 
 			// evaluate classifier and print some statistics
 			Evaluation eval = new Evaluation(data);
-			eval.evaluateModel(models[j], data);
+			eval.evaluateModel(models[j], test);
 			predictions.appendElements(eval.predictions());
 
 
 			//			System.out.println("\n"+models[j].getClass().getSimpleName()+" Predictions");
 
 			// create copy
-			Instances predictedLabels = new Instances(data);
+			Instances predictedLabels = new Instances(test);
 
 			// label instances
-			for (int i = 0; i < data.numInstances(); i++) {
-				double clsLabel = models[j].classifyInstance(data.instance(i));
+			for (int i = 0; i < test.numInstances(); i++) {
+				double clsLabel = models[j].classifyInstance(test.instance(i));
 				predictedLabels.instance(i).setClassValue(clsLabel);
 				//				System.out.println(predictedLabels.instance(i).toString());
 				//				System.out.println(i+": "+predictedLabels.instance(i).stringValue(data.numAttributes()-1));
@@ -110,16 +110,16 @@ public class SVMBatch {
 		}
 
 		// create copy
-		Instances predictedLabels = new Instances(data);
+		Instances predictedLabels = new Instances(test);
 
 		// for SMO/SVM
-		for (int i = 0; i < data.numInstances(); i++) {
-			double clsLabel = models[4].classifyInstance(data.instance(i));
+		for (int i = 0; i < test.numInstances(); i++) {
+			double clsLabel = models[4].classifyInstance(test.instance(i));
 			predictedLabels.instance(i).setClassValue(clsLabel);
 			if ( ((i+1) %50) == 0)
-				System.out.println("Movement "+ (i+1) + ": " + predictedLabels.instance(i).stringValue(data.numAttributes()-1) + ";");
+				System.out.println("Movement "+ (i+1) + ": " + predictedLabels.instance(i).stringValue(test.numAttributes()-1) + ";");
 			else
-				System.out.println("Movement "+ (i+1) + ": " + predictedLabels.instance(i).stringValue(data.numAttributes()-1));
+				System.out.println("Movement "+ (i+1) + ": " + predictedLabels.instance(i).stringValue(test.numAttributes()-1));
 		}
 	}
 }

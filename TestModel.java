@@ -5,12 +5,14 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.NominalPrediction;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.rules.DecisionTable;
 import weka.classifiers.rules.PART;
 import weka.classifiers.trees.DecisionStump;
 import weka.classifiers.trees.J48;
 import weka.core.FastVector;
 import weka.core.Instances;
+import weka.filters.unsupervised.attribute.Remove;
 
 public class TestModel {
 	public static BufferedReader readDataFile(String filename) {
@@ -49,14 +51,22 @@ public class TestModel {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("train_traj_data.txt");
-		BufferedReader testfile = readDataFile("test_traj_data.txt");
+		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
+		BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
 		
 
 		Instances data = new Instances(datafile);
 		Instances test = new Instances(testfile);
 		
+		Remove remove = new Remove();                
+		remove.setAttributeIndices("last");
+		FilteredClassifier fc = new FilteredClassifier();
+		fc.setFilter(remove);
 
+		FilteredClassifier svmFiltered = new FilteredClassifier();
+		
+//		data.setClassIndex(data.numAttributes() - 2);
+//		test.setClassIndex(test.numAttributes() - 2);
 		data.setClassIndex(data.numAttributes() - 1);
 		test.setClassIndex(test.numAttributes() - 1);
 
@@ -77,8 +87,15 @@ public class TestModel {
 			// Collect every group of predictions for current model in a FastVector
 			FastVector predictions = new FastVector();
 
+//			fc.setClassifier(models[j]);
+//			fc.buildClassifier(data);
+			
+//			if (j == models.length - 1)
+//				svmFiltered = fc;
+			
 			// evaluate classifier and print some statistics
 			Evaluation eval = new Evaluation(data);
+//			eval.evaluateModel(fc, test);
 			eval.evaluateModel(models[j], test);
 			predictions.appendElements(eval.predictions());
 
@@ -91,6 +108,7 @@ public class TestModel {
 			// label instances
 			for (int i = 0; i < test.numInstances(); i++) {
 				double clsLabel = models[j].classifyInstance(test.instance(i));
+//				double clsLabel = fc.classifyInstance(test.instance(i));
 				predictedLabels.instance(i).setClassValue(clsLabel);
 				//				System.out.println(predictedLabels.instance(i).toString());
 //				System.out.println(i+": "+predictedLabels.instance(i).stringValue(data.numAttributes()-1));
@@ -116,10 +134,12 @@ public class TestModel {
 		
 		// for SMO/SVM
 		for (int i = 0; i < test.numInstances(); i++) {
+//			double clsLabel = svmFiltered.classifyInstance(test.instance(i));
 			double clsLabel = models[4].classifyInstance(test.instance(i));
 			predictedLabels.instance(i).setClassValue(clsLabel);
 			if (i == test.numInstances()-1)
 			{
+//				System.out.println(predictedLabels.instance(i).stringValue(data.numAttributes()-2));
 				System.out.println(predictedLabels.instance(i).stringValue(data.numAttributes()-1));
 			}
 		}

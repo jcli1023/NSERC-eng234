@@ -167,13 +167,13 @@ function createPipeline(camNum) {
 	var clearObjectDrawingButton = document.getElementById("clearObjectDrawing"+camNum);
 	var clearBorderDrawingButton = document.getElementById("clearBorderDrawing"+camNum);
 	var objectTrackerText = document.getElementById("objectTracker"+camNum);
-	var predictedMovementText = document.getElementById("predictedMovement"+camNum);
+	var classifiedMovementText = document.getElementById("classifiedMovement"+camNum);
 
 
 	var dumbCount = 0;
 	var trajectoryLog = [];
 	var trajectoryLogFinal = []; //trajectory points for classification
-	var predictedMovement = "";
+	var classifiedMovement = "";
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
@@ -764,8 +764,8 @@ function createPipeline(camNum) {
 	function svmProgram() {
 		//consoleLog.log("-------Classifiers------------");
 		var beginTimeSVM = performance.now();
-		resetPredictedMovementText();
-		svmButton.innerHTML = "Predicting...";
+		resetClassifiedMovementText();
+		svmButton.innerHTML = "Classifying...";
 		movementsNum++;
 
 		if (trajectoryLog.length < 60) {
@@ -802,8 +802,8 @@ function createPipeline(camNum) {
 		function(data, status) {
 			var endTimeSVM = performance.now();
 			//consoleLog.log(data);
-			predictedMovement = data;
-			predictedMovementText.innerHTML = "Predicted Movement: " + predictedMovement;
+			classifiedMovement = data;
+			classifiedMovementText.innerHTML = "Classified Movement: " + classifiedMovement;
 
 			/*
 			//Trim any white spaces
@@ -811,11 +811,11 @@ function createPipeline(camNum) {
 			{
 				
 				correctPredictionsNum++;
-				predictedMovementText.style.backgroundColor = "green";
+				classifiedMovementText.style.backgroundColor = "green";
 			}
 			else
 			{
-				predictedMovementText.style.backgroundColor = "red";
+				classifiedMovementText.style.backgroundColor = "red";
 			}
 			*/
 			//calculateCorrectLabels();
@@ -862,7 +862,7 @@ function createPipeline(camNum) {
 		$.post("write_responses.php", {
 			response : response,
 			traj_data : JSON.stringify(trajectoryFinal),
-			predicted : predictedMovement
+			predicted : classifiedMovement
 		},
 		function(data, status) {
 
@@ -905,7 +905,7 @@ function createPipeline(camNum) {
 		resultProgramOutput.innerHTML = "";
 
 		timingLabel.innerHTML = "Timing: ";
-		resetPredictedMovementText();
+		resetClassifiedMovementText();
 
 		//document.getElementById("clearObjectDrawing"+camNum).style.display = "none";
 		//document.getElementById("objectButton"+camNum).innerHTML = "Track Object";
@@ -918,10 +918,10 @@ function createPipeline(camNum) {
 		//overlayTextCanvas();
 	}
 
-	function resetPredictedMovementText()
+	function resetClassifiedMovementText()
 	{
-		predictedMovementText.innerHTML = "Predicted Movement: ";
-		predictedMovementText.style.backgroundColor = "white";
+		classifiedMovementText.innerHTML = "Classified Movement: ";
+		classifiedMovementText.style.backgroundColor = "white";
 	}
 
 	function start() {

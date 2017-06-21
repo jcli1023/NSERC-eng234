@@ -32,7 +32,7 @@ public class ClusterWeka {
 		kmeans.setPreserveInstancesOrder(true);
 		kmeans.setNumClusters(3);
 
-		BufferedReader datafile = readDataFile("train_traj_data_backup.txt"); 
+		BufferedReader datafile = readDataFile("test_traj_data_backup.txt"); 
 		Instances data = new Instances(datafile);
 		data.setClassIndex(data.numAttributes()-1);
 
@@ -72,35 +72,35 @@ public class ClusterWeka {
 //			System.out.println();
 //		}
 
-		int i=0;
+		int movementNum=0;
 		for(int clusterNum : assignments) {
 			//   System.out.printf("Instance %d -> Cluster %d \n", i, clusterNum);
 			//System.out.printf("%d \n", clusterNum);
-			i++;
-			if ( (i%50) == 0 )
-				System.out.println("Movement "+ i + ": " + clusterNum + ";");
+			movementNum++;
+			if ( (movementNum%50) == 0 )
+				System.out.println("Movement "+ movementNum + ": " + clusterNum + ";");
 			else
-				System.out.println("Movement "+ i + ": " + clusterNum);
+				System.out.println("Movement "+ movementNum + ": " + clusterNum);
 		}
 		
-//		int totalInstances = newData.numInstances();
-//		int correctlyClassified = 0;
-//		
-//		for (int i = 0; i < totalInstances; i++)
-//		{
-//			int instanceClass = (int) data.get(i).value(data.classIndex());
-//			int predictedClass = kmeans.clusterInstance(newData.get(i));
+		int totalInstances = newData.numInstances();
+		int correctlyClassified = 0;
+		
+		for (int i = 0; i < totalInstances; i++)
+		{
+			int instanceClass = (int) data.get(i).value(data.classIndex());
+			int clusteredClass = kmeans.clusterInstance(newData.get(i));
 //			System.out.println("instanceClass: "+instanceClass+" predictedClass: "+predictedClass);
-//			if (instanceClass == predictedClass)
-//			{
-//				correctlyClassified++;
-//			}
-////			System.out.println("Movement "+ (i+1) + ": " + predictedClass);
-//		}
-//		
-//		System.out.println("correctlyClassified: "+correctlyClassified + "totalInstances: "+totalInstances);
-//		double accuracy = (double)correctlyClassified / totalInstances * 100;
-//		System.out.println("Accuracy: "+ accuracy + "%");
+			if (instanceClass == clusteredClass)
+			{
+				correctlyClassified++;
+			}
+//			System.out.println("Movement "+ (i+1) + ": " + predictedClass);
+		}
+		
+		System.out.println("correctlyClassified: "+correctlyClassified + " totalInstances: "+totalInstances);
+		double accuracy = (double)correctlyClassified / totalInstances * 100;
+		System.out.println("Accuracy: "+ accuracy + "%");
 	}
 }
 
