@@ -77,7 +77,7 @@ public class ClusterWeka {
 			//   System.out.printf("Instance %d -> Cluster %d \n", i, clusterNum);
 			//System.out.printf("%d \n", clusterNum);
 			movementNum++;
-			if ( (movementNum%50) == 0 )
+			if ( (movementNum%10) == 0 )
 				System.out.println("Movement "+ movementNum + ": " + clusterNum + ";");
 			else
 				System.out.println("Movement "+ movementNum + ": " + clusterNum);
@@ -98,7 +98,7 @@ public class ClusterWeka {
 //			System.out.println("Movement "+ (i+1) + ": " + predictedClass);
 		}
 		
-		System.out.println("correctlyClassified: "+correctlyClassified + " totalInstances: "+totalInstances);
+		System.out.println("correctlyClassified: "+correctlyClassified + " totalInstances: "+totalInstances + ";");
 		double accuracy = (double)correctlyClassified / totalInstances * 100;
 		System.out.println("Accuracy: "+ accuracy + "%");
 	}
