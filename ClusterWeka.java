@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import weka.clusterers.SimpleKMeans;
+import weka.clusterers.ClusterEvaluation;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -33,6 +34,7 @@ public class ClusterWeka {
 		kmeans.setNumClusters(3);
 
 		BufferedReader datafile = readDataFile("test_traj_data_backup.txt"); 
+//		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
 		Instances data = new Instances(datafile);
 		data.setClassIndex(data.numAttributes()-1);
 
@@ -50,12 +52,55 @@ public class ClusterWeka {
 		
 		kmeans.buildClusterer(newData);
 		
-//		System.out.println(data.get(149).value(data.classIndex()));
-//		System.out.println(kmeans.clusterInstance(newData.get(149)));
+		ClusterEvaluation eval = new ClusterEvaluation();
+	        eval.setClusterer(kmeans);
+		eval.evaluateClusterer(newData);
+	
+		//System.out.println("Cluster Results \n =================== \n "+eval.clusterResultsToString()+ ";");
+
 		
 		// This array returns the cluster number (starting with 0) for each instance
 		// The array has as many elements as the number of instances
 		int[] assignments = kmeans.getAssignments();
+
+
+		int totalInstances = newData.numInstances();	
+		int confusionMatrix[][] = new int[kmeans.numberOfClusters()][3];
+
+		for (int i = 0; i < totalInstances; i++)
+		{
+			int instanceClass = (int) data.get(i).value(data.classIndex());
+			int clusteredClass = assignments[i];
+			confusionMatrix[clusteredClass][instanceClass]++;
+		}
+
+//		for (int i = 0; i < confusionMatrix.length; i++)
+//		{
+//			for (int j = 0; j < confusionMatrix[0].length; j++)
+//			{
+//				System.out.print(confusionMatrix[i][j]+" ");
+//			}
+//			System.out.println();
+//		}
+
+
+		int correctlyClustered = 0;
+		for (int i = 0; i < confusionMatrix.length; i++)
+		{
+			int maxInstances = 0;
+			maxInstances = confusionMatrix[i][0];
+
+			for (int j = 0; j < confusionMatrix[0].length; j++)
+			{
+				if (confusionMatrix[i][j] > maxInstances)
+				{
+					maxInstances = confusionMatrix[i][j];
+				}				
+			}
+			
+			correctlyClustered+= maxInstances;
+		}
+	
 
 //		System.out.println(newData.numAttributes());
 //		System.out.println(newData.numInstances());
@@ -83,23 +128,9 @@ public class ClusterWeka {
 				System.out.println("Movement "+ movementNum + ": " + clusterNum);
 		}
 		
-		int totalInstances = newData.numInstances();
-		int correctlyClassified = 0;
-		
-		for (int i = 0; i < totalInstances; i++)
-		{
-			int instanceClass = (int) data.get(i).value(data.classIndex());
-			int clusteredClass = kmeans.clusterInstance(newData.get(i));
-//			System.out.println("instanceClass: "+instanceClass+" predictedClass: "+predictedClass);
-			if (instanceClass == clusteredClass)
-			{
-				correctlyClassified++;
-			}
-//			System.out.println("Movement "+ (i+1) + ": " + predictedClass);
-		}
-		
-		System.out.println("correctlyClassified: "+correctlyClassified + " totalInstances: "+totalInstances + ";");
-		double accuracy = (double)correctlyClassified / totalInstances * 100;
+	
+		System.out.println("correctlyClustered: "+correctlyClustered + " totalInstances: "+totalInstances + ";");
+		double accuracy = (double)correctlyClustered / totalInstances * 100;
 		System.out.println("Accuracy: "+ accuracy + "%");
 	}
 }
