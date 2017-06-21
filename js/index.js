@@ -373,6 +373,9 @@ function createPipeline(camNum) {
 				currentPathObject.add(event.point);
 			}
 
+			trajectoryLog.length = 0; //Clears list by setting length to 0
+			trajectoryLogFinal.length = 0;
+
 
 		}	
 		else if (isPaused) {
@@ -729,30 +732,9 @@ function createPipeline(camNum) {
 
 	function trainProgram() {
 
-		if (trajectoryLog.length < 60) {
-			if (trajectoryLog.length < 1)
-			{
-				trajectoryLog.push({x: 0, y: 0});
-			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
-			while (tempTrajectoryLog.length < 60) {
-				//tempTrajectoryLog.unshift(trajectoryLog[0]);
-				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
-			}
-			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
-		}
-		else
-		{
-			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
-		}
+		fixTrajectoryLength();
 
-		$.post("write_train_traj_data.php", {
-			traj_data : JSON.stringify(trajectoryFinal),
-			//movementLabel: movementLabel.value
-		},
-		function(data, status) {
-		});
+		writeTrainingData();
 
 		$.post("train_models.php", {
 		},
@@ -768,23 +750,7 @@ function createPipeline(camNum) {
 		svmButton.innerHTML = "Classifying...";
 		movementsNum++;
 
-		if (trajectoryLog.length < 60) {
-			if (trajectoryLog.length < 1)
-			{
-				trajectoryLog.push({x: 0, y: 0});
-			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
-			while (tempTrajectoryLog.length < 60) {
-				//tempTrajectoryLog.unshift(trajectoryLog[0]);
-				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
-			}
-			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
-		}
-		else
-		{
-			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
-		}
+		fixTrajectoryLength();
 	
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
@@ -848,6 +814,27 @@ function createPipeline(camNum) {
 		consoleLog.log("steps: " + steps);	
 	}
 
+	function fixTrajectoryLength()
+	{
+		if (trajectoryLog.length < 60) {
+			if (trajectoryLog.length < 1)
+			{
+				trajectoryLog.push({x: 0, y: 0});
+			}
+			var tempTrajectoryLog = trajectoryLog.slice(0);
+			while (tempTrajectoryLog.length < 60) {
+				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
+			}
+			trajectoryFinal = tempTrajectoryLog;
+			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+		}
+		else
+		{
+			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+		}
+	}
+
 	function submitCheck() {
 		var correctButton = document.getElementById("correctCheck1");
 		var response;
@@ -868,6 +855,30 @@ function createPipeline(camNum) {
 
 		});
 		calculateCorrectLabels();
+	}
+
+	function writeTrainingData()
+	{
+		var videoName = address.value;
+		var movementName = "";
+		if (videoName.search("hcircle") > -1)
+		{
+			movementName = "Half-Circle";
+		}
+		else if (videoName.search("sine") > -1)
+		{
+			movementName = "Sine";
+		}
+		else if (videoName.search("line") > -1)
+		{
+			movementName = "Line";
+		}
+		$.post("write_train_traj_data.php", {
+			traj_data : JSON.stringify(trajectoryFinal),
+			movementName: movementName
+		},
+		function(data, status) {
+		});
 	}
 
 	function resetDefaultUI() {
@@ -1018,6 +1029,8 @@ function createPipeline(camNum) {
 		endTimeInterval = performance.now();
 		totalTimeInterval = (endTimeInterval - beginTimeInterval) / 1000;
 		fixTrajectoryInterval();
+		fixTrajectoryLength();
+		writeTrainingData();
 
 		address.disabled = false;
 		if (webRtcPeer) {
@@ -1030,8 +1043,9 @@ function createPipeline(camNum) {
 		}
 		hideSpinner(videoOutput);
 
-		trajectoryLog.length = 0; //Clears list by setting length to 0
-		trajectoryLogFinal.length = 0;
+		
+//		trajectoryLog.length = 0; //Clears list by setting length to 0
+//		trajectoryLogFinal.length = 0;
 		
 		resetDefaultUI();
 

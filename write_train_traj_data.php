@@ -2,14 +2,14 @@
 session_start();
 
 $traj_data = $_POST['traj_data'];
-$movementLabel = $_POST['movementLabel'];
+$movementName = $_POST['movementName'];
 
 $new_traj_data = "";
 
 if (!file_exists("train_offline_traj_data.txt"))
 {
 	$fp = fopen('train_offline_traj_data.txt', 'w');
-	$new_traj_data = "@relation trajdataTest
+	$new_traj_data = "@relation trajdataTrain
 
 @attribute x1 numeric
 @attribute y1 numeric
@@ -152,7 +152,7 @@ for ($i = 0; $i < $arrlength; $i++)
 	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->y . ",";
 }
 
-$new_traj_data = $new_traj_data . $movementLabel . "\n";
+$new_traj_data = $new_traj_data . $movementName . "\n";
 
 
 fwrite($fp, $new_traj_data);
