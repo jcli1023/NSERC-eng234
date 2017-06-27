@@ -50,7 +50,9 @@ public class SVMBatch {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
-		BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
+		//BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
+		BufferedReader testfile = readDataFile("test_traj_data_batch.txt");
+
 
 
 		Instances data = new Instances(datafile);

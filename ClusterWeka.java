@@ -33,7 +33,8 @@ public class ClusterWeka {
 		kmeans.setPreserveInstancesOrder(true);
 		kmeans.setNumClusters(3);
 
-		BufferedReader datafile = readDataFile("test_traj_data_backup.txt"); 
+		BufferedReader datafile = readDataFile("test_traj_data_batch.txt"); 
+//		BufferedReader datafile = readDataFile("test_traj_data_backup.txt"); 
 //		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
 		Instances data = new Instances(datafile);
 		data.setClassIndex(data.numAttributes()-1);
