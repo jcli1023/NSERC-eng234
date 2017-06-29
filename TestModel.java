@@ -52,8 +52,8 @@ public class TestModel {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
-		BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
-		
+//		BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
+		BufferedReader testfile = readDataFile("test_traj_data.txt");
 
 		Instances data = new Instances(datafile);
 		Instances test = new Instances(testfile);

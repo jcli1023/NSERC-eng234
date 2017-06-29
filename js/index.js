@@ -791,6 +791,8 @@ function createPipeline(camNum) {
 			
 		});
 
+		writeTrainingData();
+
 	}
 
 	function fixTrajectoryInterval()
