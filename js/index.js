@@ -754,9 +754,11 @@ function createPipeline(camNum) {
 	
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
+		var movementName = findMovementVideoName();
+
 		$.post("write_test_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
-			//movementLabel: movementLabel.value
+			movementName: movementName
 		},
 		function(data, status) {
 			consoleLog.log(data);
@@ -859,7 +861,7 @@ function createPipeline(camNum) {
 		calculateCorrectLabels();
 	}
 
-	function writeTrainingData()
+	function findMovementVideoName()
 	{
 		var videoName = address.value;
 		var movementName = "";
@@ -875,6 +877,13 @@ function createPipeline(camNum) {
 		{
 			movementName = "Line";
 		}
+		return movementName;
+	}
+
+	function writeTrainingData()
+	{
+		var movementName = findMovementVideoName();
+
 		$.post("write_train_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
 			movementName: movementName
