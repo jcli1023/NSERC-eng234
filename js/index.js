@@ -734,7 +734,7 @@ function createPipeline(camNum) {
 
 		fixTrajectoryLength();
 
-		writeTrainingData();
+//		writeTrainingData();
 
 		$.post("train_models.php", {
 		},
@@ -791,7 +791,7 @@ function createPipeline(camNum) {
 			
 		});
 
-		writeTrainingData();
+//		writeTrainingData();
 
 	}
 
