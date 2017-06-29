@@ -146,6 +146,7 @@ for ($i = 0; $i < $arrlength; $i++)
 $new_traj_data = $new_traj_data . $movementName . "\n";
 
 
+
 fwrite($fp, $new_traj_data);
 fclose($fp);
 

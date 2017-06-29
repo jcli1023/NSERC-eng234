@@ -755,6 +755,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		var movementName = findMovementVideoName();
+//		console.log("svmProgram: "+movementName);
 
 		$.post("write_test_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
@@ -877,6 +878,7 @@ function createPipeline(camNum) {
 		{
 			movementName = "Line";
 		}
+//		console.log("findMovementVideoName: " + movementName);
 		return movementName;
 	}
 
