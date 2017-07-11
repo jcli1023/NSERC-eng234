@@ -441,7 +441,7 @@ function createPipeline(camNum) {
 
 					if (jsonObj[4].objectFound === "false") {
 
-						sendEmail(camNum);
+//						sendEmail(camNum);
 						setMissingTrackerText();
 
 					} 
@@ -470,7 +470,7 @@ function createPipeline(camNum) {
 						}					
 						
 						if (!objectInsideBorder){
-							sendEmail(camNum);
+//							sendEmail(camNum);
 							setMissingTrackerText();
 						}
 						else
@@ -755,7 +755,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		var movementName = findMovementVideoName();
-//		console.log("svmProgram: "+movementName);
+		console.log("svmProgram: "+movementName);
 
 		$.post("write_test_traj_data.php", {
 			traj_data : JSON.stringify(trajectoryFinal),
@@ -878,7 +878,7 @@ function createPipeline(camNum) {
 		{
 			movementName = "Line";
 		}
-//		console.log("findMovementVideoName: " + movementName);
+		console.log("findMovementVideoName: " + movementName);
 		return movementName;
 	}
 
