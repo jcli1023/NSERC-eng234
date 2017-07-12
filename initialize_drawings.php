@@ -15,9 +15,9 @@ $time = $_SESSION['time']["$camName"];
 
 //echo "ratioDim[0]: ".$ratioDim[0]." ratioDim[1]: ".$ratioDim[1];
 
-$fp = fopen('resultsPaperJs.json', 'w');
-fwrite($fp, $coordinates);
-fclose($fp);
+#$fp = fopen('resultsPaperJs.json', 'w');
+#fwrite($fp, $coordinates);
+#fclose($fp);
 
 //$obj = json_decode($coordinates);
 
@@ -35,20 +35,21 @@ $results = shell_exec("java -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310
 $json = $results;
 //$json = json_encode($obj);
 
-$fp = fopen('resultsPhp.json', 'w');
-fwrite($fp, $json);
-fclose($fp);
+#$fp = fopen('resultsPhp.json', 'w');
+#fwrite($fp, $json);
+#fclose($fp);
 
 
 $_SESSION['object']['cam']["$camName"] = $json;
+session_write_close();  
 //echo "sessionVar: ".$_SESSION['object']['cam']['cam1'];
 echo $_SESSION['object']['cam']["$camName"];
 
 
 
-$fp = fopen('sessionVar1.json', 'w');
-fwrite($fp,$_SESSION['object']['cam']['cam1']);
-fclose($fp);
+#$fp = fopen('sessionVar1.json', 'w');
+#fwrite($fp,$_SESSION['object']['cam']['cam1']);
+#fclose($fp);
 
 ?>
 

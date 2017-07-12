@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 $traj_data = $_POST['traj_data'];
 $response = $_POST['response'];
@@ -7,7 +6,7 @@ $predicted = $_POST['predicted'];
 
 $new_traj_data = "";
 
-$fp = fopen('responses_train_offline.txt', 'a');
+
 
 $traj_data_decoded = json_decode($traj_data);
 
@@ -21,9 +20,15 @@ for ($i = 0; $i < $arrlength; $i++)
 
 $text = $response . " " . trim($predicted) . " " . trim($new_traj_data) . "\n";
 
+$startTime = microtime(true);
+
+$fp = fopen('responses_train_offline.txt', 'a');
 fwrite($fp, $text);
 fclose($fp);
 
+$endTime = microtime(true);
+$write_time = $endTime - $startTime;
+file_put_contents("timings.txt","response_train_offlineWrite: ".$write_time."\n",FILE_APPEND);
 ?>
 
 

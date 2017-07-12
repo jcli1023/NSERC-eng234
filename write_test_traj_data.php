@@ -4,9 +4,20 @@ session_start();
 $traj_data = $_POST['traj_data'];
 $movementName = $_POST['movementName'];
 
-$fp = fopen('test_traj_data.txt', 'w');
-
 $traj_data_decoded = json_decode($traj_data);
+
+$arrlength = count($traj_data_decoded);
+
+$new_traj_data = "";
+
+for ($i = 0; $i < $arrlength; $i++)
+{
+	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->x . ",";
+	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->y . ",";
+}
+
+$new_traj_data = $new_traj_data . $movementName . "\n";
+
 
 $new_traj_data = "@relation trajdataTest
 
@@ -133,22 +144,17 @@ $new_traj_data = "@relation trajdataTest
 @attribute result {Half-Circle, Line, Sine}
 
 
-@data\n";
+@data\n" . $new_traj_data;
 
-$arrlength = count($traj_data_decoded);
+$startTime = microtime(true);
 
-for ($i = 0; $i < $arrlength; $i++)
-{
-	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->x . ",";
-	$new_traj_data = $new_traj_data . $traj_data_decoded[$i]->y . ",";
-}
-
-$new_traj_data = $new_traj_data . $movementName . "\n";
-
-
-
+$fp = fopen('test_traj_data.txt', 'w');
 fwrite($fp, $new_traj_data);
 fclose($fp);
+
+$endTime = microtime(true);
+$write_time = $endTime - $startTime;
+file_put_contents("timings.txt","write_test_traj_dataWrite: ".$write_time."\n",FILE_APPEND);
 
 ?>
 

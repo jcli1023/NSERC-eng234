@@ -40,7 +40,7 @@ $results = shell_exec("java -cp lib/x64/json-simple-1.1.1.jar:lib/x64/opencv-310
 //}
 
 $_SESSION['object']['cam']["$camName"] = $results;
-
+session_write_close();  
 
 //$fp = fopen('sessionVar3.json', 'w');
 //fwrite($fp, $results);
