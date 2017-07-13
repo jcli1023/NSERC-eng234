@@ -27,5 +27,17 @@ $endTime = microtime(true);
 $write_time = $endTime - $startTime;
 file_put_contents("timings.txt","screenshotWrite: ".$write_time."\n",FILE_APPEND);
 
+$shmid = shmop_open(864, 'c', 0755, 1024);
+shmop_write($shmid, "Im cool".PHP_EOL, 0);
+$content = shmop_read($shmid, 0, 11);
+shmop_close($shmid);
+
+#$fp2 = fopen("testingMemoryConfirm.txt",'a');
+#fwrite($fp2,$content);
+#fclose($fp2);
+
+
+
+
 die("frameDim: ".$frameDim[0]."x".$frameDim[1]." vidDim: ".$vidDim[0]."x".$vidDim[1]." time: ".$time);
 ?>

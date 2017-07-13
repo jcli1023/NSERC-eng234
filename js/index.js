@@ -288,6 +288,11 @@ function createPipeline(camNum) {
 				//document.getElementById("debug"+camNum).innerHTML = data + " " + status + " " + dumbCount;
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
+
+		$.post("testingMemory.php", {
+			},
+			function(data, status) {
+			});
 	}
 
 	function sendEmail(camNum) {
