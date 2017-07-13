@@ -209,6 +209,9 @@ function createPipeline(camNum) {
 	svmBatchButton = document.getElementById("svmBatchButton");
 	svmBatchButton.addEventListener('click', svmBatchProgram);
 
+	svmBatchTestButton = document.getElementById("svmBatchTest");
+	svmBatchTestButton.addEventListener('click', svmBatchTestProgram);
+
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
 
@@ -723,6 +726,24 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("svm_batch.php", {
+		},
+		function(data, status) {
+			var endTimeSVMBatch = performance.now();
+			var cleanLookingData  = data.replace(/;/g, "</br></br>")
+			resultProgramOutput.innerHTML = cleanLookingData;
+			//resultProgramOutput.innerHTML = data;
+			//calculateCorrectLabels();
+			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+		});
+
+	}
+
+	function svmBatchTestProgram() {
+		consoleLog.log("-------SVM BATCH TEST 30------------");
+		var beginTimeSVMBatch = performance.now();
+
+
+		$.post("svm_batch_test.php", {
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();

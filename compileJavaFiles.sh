@@ -5,3 +5,4 @@ javac -cp weka.jar: ClusterWeka.java
 javac -cp weka.jar:libsvm.jar: SVMBatch.java
 javac -cp weka.jar:libsvm.jar: TrainModel.java
 javac -cp weka.jar:libsvm.jar: TestModel.java
+javac -cp weka.jar:libsvm.jar: SVMBatchTest.java
