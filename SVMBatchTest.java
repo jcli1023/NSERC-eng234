@@ -13,6 +13,12 @@ import weka.core.FastVector;
 import weka.core.Instances;
 
 public class SVMBatchTest {
+
+	public static final int ORIGINAL_DATASET = 0;
+	public static final int ORIGINAL_DELTA_DATASET = 1;
+	public static final int ORIENTATIONS_DATASET = 2;
+	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
 
@@ -49,8 +55,45 @@ public class SVMBatchTest {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
-		BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
+
+		int datasetOption = ORIGINAL_DATASET;
+
+		if (args.length > 0)
+		{
+			datasetOption = Integer.parseInt(args[0]);
+		}
+
+		String pathToTrainingDataset, pathToTestDataset;
+
+		if (datasetOption == ORIGINAL_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_backup.txt";
+		}
+		else if (datasetOption == ORIGINAL_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_backup.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_backup.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_backup.txt";
+		}
+		else
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_backup.txt";
+		}
+
+
+		BufferedReader datafile = readDataFile(pathToTrainingDataset);
+		BufferedReader testfile = readDataFile(pathToTestDataset);
 
 		Instances data = new Instances(datafile);
 		Instances test = new Instances(testfile);

@@ -12,6 +12,11 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class ClusterWeka {
 
+	public static final int ORIGINAL_DATASET = 0;
+	public static final int ORIGINAL_DELTA_DATASET = 1;
+	public static final int ORIENTATIONS_DATASET = 2;
+	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
 
@@ -25,6 +30,7 @@ public class ClusterWeka {
 	}
 
 	public static void main(String[] args) throws Exception {
+
 		SimpleKMeans kmeans = new SimpleKMeans();
 
 		kmeans.setSeed(10);
@@ -33,10 +39,40 @@ public class ClusterWeka {
 		kmeans.setPreserveInstancesOrder(true);
 		kmeans.setNumClusters(3);
 
-		BufferedReader datafile = readDataFile("test_traj_data_batch.txt"); 
+		int datasetOption = ORIGINAL_DATASET;
+
+		if (args.length > 0)
+		{
+			datasetOption = Integer.parseInt(args[0]);
+		}
+
+		String pathToDataset;
+		if (datasetOption == ORIGINAL_DATASET)
+		{
+			pathToDataset = "test_traj_data_batch.txt";
+		}
+		else if (datasetOption == ORIGINAL_DELTA_DATASET)
+		{
+			pathToDataset = "test_traj_data_batch.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DATASET)
+		{
+			pathToDataset = "test_traj_data_batch.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			pathToDataset = "test_traj_data_batch.txt";
+		}
+		else
+		{
+			pathToDataset = "test_traj_data_batch.txt";
+		}
+
+		BufferedReader datafile = readDataFile(pathToDataset); 
 //		BufferedReader datafile = readDataFile("test_traj_data_backup.txt"); 
 //		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
 		Instances data = new Instances(datafile);
+
 		data.setClassIndex(data.numAttributes()-1);
 
 		String[] options = new String[2];
