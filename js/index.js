@@ -15,8 +15,8 @@
 
 var movementsNum = 0;
 var correctPredictionsNum = 0;
-var ORIGINAL_DATASET = 0;
-var ORIGINAL_DELTA_DATASET = 1;
+var REGULAR_DATASET = 0;
+var REGULAR_DELTA_DATASET = 1;
 var ORIENTATIONS_DATASET = 2;
 var ORIENTATIONS_DELTA_DATASET = 3;
 
@@ -182,7 +182,7 @@ function createPipeline(camNum) {
 	var endTimeInterval;
 	var totalTimeInterval;
 
-	var datasetOption = ORIGINAL_DATASET;
+	var datasetOption = REGULAR_DATASET;
 /*
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
@@ -203,11 +203,11 @@ function createPipeline(camNum) {
 	var timingLabel = document.getElementById('timing'+camNum);
 	var resultProgramOutput = document.getElementById('resultPrograms'+camNum);
 
-	originalDatasetButton = document.getElementById("originalButton");
-	originalDatasetButton.addEventListener('click', function(){ setDataset(ORIGINAL_DATASET); });
+	regularDatasetButton = document.getElementById("regularButton");
+	regularDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DATASET); });
 
-	originalDeltaDatasetButton = document.getElementById("originalDeltaButton");
-	originalDeltaDatasetButton.addEventListener('click', function(){ setDataset(ORIGINAL_DELTA_DATASET); });
+	regularDeltaDatasetButton = document.getElementById("regularDeltaButton");
+	regularDeltaDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DELTA_DATASET); });
 
 	orientationsDatasetButton = document.getElementById("orientationsButton");
 	orientationsDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DATASET); });
@@ -687,13 +687,13 @@ function createPipeline(camNum) {
 	{
 		datasetOption = dataset;
 		var datasetName = "";
-		if (dataset == ORIGINAL_DATASET)
+		if (dataset == REGULAR_DATASET)
 		{
-			datasetName = "Original Dataset";
+			datasetName = "Regular Dataset";
 		}
-		else if (dataset == ORIGINAL_DELTA_DATASET)
+		else if (dataset == REGULAR_DELTA_DATASET)
 		{
-			datasetName = "Original Delta Dataset";
+			datasetName = "Regular Delta Dataset";
 		}
 		else if (dataset == ORIENTATIONS_DATASET)
 		{
@@ -830,7 +830,7 @@ function createPipeline(camNum) {
 		consoleLog.log(JSON.stringify(trajectoryFinal));
 		consoleLog.log("");
 
-		if (datasetOption == ORIGINAL_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
+		if (datasetOption == REGULAR_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
 		{
 			testTrajectory = calculateDeltaTrajectory();
 		}

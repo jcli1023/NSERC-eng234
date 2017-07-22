@@ -14,8 +14,8 @@ import weka.core.Instances;
 
 public class SVMBatch {
 
-	public static final int ORIGINAL_DATASET = 0;
-	public static final int ORIGINAL_DELTA_DATASET = 1;
+	public static final int REGULAR_DATASET = 0;
+	public static final int REGULAR_DELTA_DATASET = 1;
 	public static final int ORIENTATIONS_DATASET = 2;
 	public static final int ORIENTATIONS_DELTA_DATASET = 3;
 
@@ -56,7 +56,7 @@ public class SVMBatch {
 
 	public static void main(String[] args) throws Exception {
 
-		int datasetOption = ORIGINAL_DATASET;
+		int datasetOption = REGULAR_DATASET;
 
 		if (args.length > 0)
 		{
@@ -65,12 +65,12 @@ public class SVMBatch {
 
 		String pathToTrainingDataset, pathToTestDataset;
 
-		if (datasetOption == ORIGINAL_DATASET)
+		if (datasetOption == REGULAR_DATASET)
 		{
 			pathToTrainingDataset = "train_traj_data_original_batch.txt";
 			pathToTestDataset = "test_traj_data_original_batch.txt";
 		}
-		else if (datasetOption == ORIGINAL_DELTA_DATASET)
+		else if (datasetOption == REGULAR_DELTA_DATASET)
 		{
 			pathToTrainingDataset = "train_traj_data_original_delta_batch.txt";
 			pathToTestDataset = "test_traj_data_original_delta_batch.txt";

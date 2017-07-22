@@ -19,8 +19,8 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class TrainModel {
 
-	public static final int ORIGINAL_DATASET = 0;
-	public static final int ORIGINAL_DELTA_DATASET = 1;
+	public static final int REGULAR_DATASET = 0;
+	public static final int REGULAR_DELTA_DATASET = 1;
 	public static final int ORIENTATIONS_DATASET = 2;
 	public static final int ORIENTATIONS_DELTA_DATASET = 3;
 
@@ -63,7 +63,7 @@ public class TrainModel {
 
 	public static void main(String[] args) throws Exception {
 
-		int datasetOption = ORIGINAL_DATASET;
+		int datasetOption = REGULAR_DATASET;
 
 		if (args.length > 0)
 		{
@@ -72,21 +72,21 @@ public class TrainModel {
 
 		String pathToTrainingDataset;
 
-		if (datasetOption == ORIGINAL_DATASET)
+		if (datasetOption == REGULAR_DATASET)
 		{
 			pathToTrainingDataset = "train_traj_data_backup.txt";
 		}
-		else if (datasetOption == ORIGINAL_DELTA_DATASET)
+		else if (datasetOption == REGULAR_DELTA_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTrainingDataset = "deltaRegular-Train.txt";
 		}
 		else if (datasetOption == ORIENTATIONS_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTrainingDataset = "trainDiffOrientations.txt";
 		}
 		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
 		}
 		else
 		{
