@@ -310,10 +310,10 @@ function createPipeline(camNum) {
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
 
-		$.post("testingMemory.php", {
-			},
-			function(data, status) {
-			});
+//		$.post("testingMemory.php", {
+//			},
+//			function(data, status) {
+//			});
 	}
 
 	function sendEmail(camNum) {
@@ -827,12 +827,16 @@ function createPipeline(camNum) {
 
 		var testTrajectory = trajectoryFinal;
 
+		consoleLog.log(JSON.stringify(trajectoryFinal));
+		consoleLog.log("");
+
 		if (datasetOption == ORIGINAL_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
 		{
 			testTrajectory = calculateDeltaTrajectory();
 		}
 	
-		//consoleLog.log(JSON.stringify(trajectoryFinal));
+		
+		consoleLog.log(JSON.stringify(testTrajectory));
 
 		var movementName = findMovementVideoName();
 		console.log("svmProgram: "+movementName);
@@ -907,7 +911,9 @@ function createPipeline(camNum) {
 			{
 				trajectoryLog.push({x: 0, y: 0});
 			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
+//			var tempTrajectoryLog = arrayClone(trajectoryLog);
+//			var tempTrajectoryLog = trajectoryLog.slice(0);
+			var tempTrajectoryLog = aClone(trajectoryLog);
 			while (tempTrajectoryLog.length < 60) {
 				//tempTrajectoryLog.unshift(trajectoryLog[0]);
 				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
@@ -924,7 +930,16 @@ function createPipeline(camNum) {
 	//TO-DO
 	function calculateDeltaTrajectory()
 	{
-		var deltaTrajectory = trajectoryFinal.slice(0);
+		var deltaTrajectory = aClone(trajectoryFinal);
+		deltaTrajectory[0].x = 0;
+		deltaTrajectory[0].y = 0;
+		for (var i = 1; i < trajectoryFinal.length; i++)
+		{
+			deltaTrajectory[i].x = Math.abs(trajectoryFinal[i].x - trajectoryFinal[i-1].x); 
+			deltaTrajectory[i].y = Math.abs(trajectoryFinal[i].y - trajectoryFinal[i-1].y);
+		}
+
+		return deltaTrajectory;
 	}
 
 	function submitCheck() {
@@ -1216,6 +1231,18 @@ function strcmp(a, b) {
     if (a.toString() < b.toString()) return -1;
     if (a.toString() > b.toString()) return 1;
     return 0;
+}
+
+function aClone(arr)
+{
+
+	var clone = [];
+	for (var i = 0; i < arr.length; i++)
+	{
+		clone.push({x: arr[i].x, y: arr[i].y})
+	}
+	return clone;
+
 }
 
 /**
