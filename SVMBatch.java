@@ -13,6 +13,12 @@ import weka.core.FastVector;
 import weka.core.Instances;
 
 public class SVMBatch {
+
+	public static final int REGULAR_DATASET = 0;
+	public static final int REGULAR_DELTA_DATASET = 1;
+	public static final int ORIENTATIONS_DATASET = 2;
+	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
 
@@ -49,9 +55,46 @@ public class SVMBatch {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
+
+		int datasetOption = REGULAR_DATASET;
+
+		if (args.length > 0)
+		{
+			datasetOption = Integer.parseInt(args[0]);
+		}
+
+		String pathToTrainingDataset, pathToTestDataset;
+
+		if (datasetOption == REGULAR_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_original_batch.txt";
+			pathToTestDataset = "test_traj_data_original_batch.txt";
+		}
+		else if (datasetOption == REGULAR_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_original_delta_batch.txt";
+			pathToTestDataset = "test_traj_data_original_delta_batch.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_orientations_batch.txt";
+			pathToTestDataset = "test_traj_data_orientations_batch.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_orientations_delta_batch.txt";
+			pathToTestDataset = "test_traj_data_orientations_delta_batch.txt";
+		}
+		else
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_batch.txt";
+		}
+
+		BufferedReader datafile = readDataFile(pathToTrainingDataset);
+		BufferedReader testfile = readDataFile(pathToTestDataset);
 		//BufferedReader testfile = readDataFile("test_traj_data_backup.txt");
-		BufferedReader testfile = readDataFile("test_traj_data_batch.txt");
+		//BufferedReader testfile = readDataFile("test_traj_data_batch.txt");
 
 
 

@@ -19,6 +19,11 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class TrainModel {
 
+	public static final int REGULAR_DATASET = 0;
+	public static final int REGULAR_DELTA_DATASET = 1;
+	public static final int ORIENTATIONS_DATASET = 2;
+	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
 
@@ -57,7 +62,39 @@ public class TrainModel {
 
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("train_traj_data_backup.txt");
+
+		int datasetOption = REGULAR_DATASET;
+
+		if (args.length > 0)
+		{
+			datasetOption = Integer.parseInt(args[0]);
+		}
+
+		String pathToTrainingDataset;
+
+		if (datasetOption == REGULAR_DATASET)
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+		}
+		else if (datasetOption == REGULAR_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "deltaRegular-Train.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DATASET)
+		{
+			pathToTrainingDataset = "trainDiffOrientations.txt";
+		}
+		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
+		}
+		else
+		{
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+		}
+
+
+		BufferedReader datafile = readDataFile(pathToTrainingDataset);
 
 		Instances data = new Instances(datafile);
 

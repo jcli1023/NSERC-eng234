@@ -15,6 +15,10 @@
 
 var movementsNum = 0;
 var correctPredictionsNum = 0;
+var REGULAR_DATASET = 0;
+var REGULAR_DELTA_DATASET = 1;
+var ORIENTATIONS_DATASET = 2;
+var ORIENTATIONS_DELTA_DATASET = 3;
 
 (function(){
 	var MAX_CAMERAS = 4;
@@ -177,6 +181,8 @@ function createPipeline(camNum) {
 	var beginTimeInterval;
 	var endTimeInterval;
 	var totalTimeInterval;
+
+	var datasetOption = REGULAR_DATASET;
 /*
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
@@ -196,6 +202,18 @@ function createPipeline(camNum) {
 
 	var timingLabel = document.getElementById('timing'+camNum);
 	var resultProgramOutput = document.getElementById('resultPrograms'+camNum);
+
+	regularDatasetButton = document.getElementById("regularButton");
+	regularDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DATASET); });
+
+	regularDeltaDatasetButton = document.getElementById("regularDeltaButton");
+	regularDeltaDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DELTA_DATASET); });
+
+	orientationsDatasetButton = document.getElementById("orientationsButton");
+	orientationsDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DATASET); });
+
+	orientationsDeltaDatasetButton = document.getElementById("orientationsDeltaButton");
+	orientationsDeltaDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DELTA_DATASET); });
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
@@ -292,10 +310,10 @@ function createPipeline(camNum) {
 				//alert("Data: " + data + "\nStatus: " + status);
 			});
 
-		$.post("testingMemory.php", {
-			},
-			function(data, status) {
-			});
+//		$.post("testingMemory.php", {
+//			},
+//			function(data, status) {
+//			});
 	}
 
 	function sendEmail(camNum) {
@@ -665,31 +683,57 @@ function createPipeline(camNum) {
 		}
 	}
 
+	function setDataset(dataset)
+	{
+		datasetOption = dataset;
+		var datasetName = "";
+		if (dataset == REGULAR_DATASET)
+		{
+			datasetName = "Regular Dataset";
+		}
+		else if (dataset == REGULAR_DELTA_DATASET)
+		{
+			datasetName = "Regular Delta Dataset";
+		}
+		else if (dataset == ORIENTATIONS_DATASET)
+		{
+			datasetName = "Orientations Dataset";
+		}
+		if (dataset == ORIENTATIONS_DELTA_DATASET)
+		{
+			datasetName = "Orientations Delta Dataset";
+		}
+		
+		document.getElementById("datasetName").innerHTML = "Dataset: " + datasetName;
+		
+	}
+
 	//Not Complete
 	function kmeansProgram() {
 		consoleLog.log("-------K-MEANS------------");
 		var beginTimeKmeans = performance.now();
-		if (trajectoryLog.length < 60) {
-			if (trajectoryLog.length < 1)
-			{
-				trajectoryLog.push({x: 0, y: 0});
-			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
-			while (tempTrajectoryLog.length < 60) {
-				//tempTrajectoryLog.unshift(trajectoryLog[0]);
-				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
-			}
-			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
-		}
-		else
-		{
-			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
-		}
+//		if (trajectoryLog.length < 60) {
+//			if (trajectoryLog.length < 1)
+//			{
+//				trajectoryLog.push({x: 0, y: 0});
+//			}
+//			var tempTrajectoryLog = trajectoryLog.slice(0);
+//			while (tempTrajectoryLog.length < 60) {
+//				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+//				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
+//			}
+//			trajectoryFinal = tempTrajectoryLog;
+//			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+//		}
+//		else
+//		{
+//			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+//		}
 	
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("kmeans.php", {
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeKmeans = performance.now();
@@ -705,27 +749,28 @@ function createPipeline(camNum) {
 	function svmBatchProgram() {
 		consoleLog.log("-------SVM BATCH------------");
 		var beginTimeSVMBatch = performance.now();
-		if (trajectoryLog.length < 60) {
-			if (trajectoryLog.length < 1)
-			{
-				trajectoryLog.push({x: 0, y: 0});
-			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
-			while (tempTrajectoryLog.length < 60) {
-				//tempTrajectoryLog.unshift(trajectoryLog[0]);
-				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
-			}
-			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
-		}
-		else
-		{
-			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
-		}
+//		if (trajectoryLog.length < 60) {
+//			if (trajectoryLog.length < 1)
+//			{
+//				trajectoryLog.push({x: 0, y: 0});
+//			}
+//			var tempTrajectoryLog = trajectoryLog.slice(0);
+//			while (tempTrajectoryLog.length < 60) {
+//				//tempTrajectoryLog.unshift(trajectoryLog[0]);
+//				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
+//			}
+//			trajectoryFinal = tempTrajectoryLog;
+//			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+//		}
+//		else
+//		{
+//			trajectoryFinal = trajectoryLog.slice(Math.max(trajectoryLog.length - 60, 0))
+//		}
 	
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("svm_batch.php", {
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -744,6 +789,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm_batch_test.php", {
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -763,6 +809,7 @@ function createPipeline(camNum) {
 //		writeTrainingData();
 
 		$.post("train_models.php", {
+			dataset: datasetOption
 		},
 		function(data, status) {
 			resultProgramOutput.innerHTML = "Finished Training Models";
@@ -774,17 +821,28 @@ function createPipeline(camNum) {
 		var beginTimeSVM = performance.now();
 		resetClassifiedMovementText();
 		svmButton.innerHTML = "Classifying...";
-		movementsNum++;
+		//movementsNum++;
 
 		fixTrajectoryLength();
+
+		var testTrajectory = trajectoryFinal;
+
+		consoleLog.log(JSON.stringify(trajectoryFinal));
+		consoleLog.log("");
+
+		if (datasetOption == REGULAR_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			testTrajectory = calculateDeltaTrajectory();
+		}
 	
-		//consoleLog.log(JSON.stringify(trajectoryFinal));
+		
+		consoleLog.log(JSON.stringify(testTrajectory));
 
 		var movementName = findMovementVideoName();
 		console.log("svmProgram: "+movementName);
 
 		$.post("write_test_traj_data.php", {
-			traj_data : JSON.stringify(trajectoryFinal),
+			traj_data : JSON.stringify(testTrajectory),
 			movementName: movementName
 		},
 		function(data, status) {
@@ -793,6 +851,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm.php", {
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVM = performance.now();
@@ -852,7 +911,9 @@ function createPipeline(camNum) {
 			{
 				trajectoryLog.push({x: 0, y: 0});
 			}
-			var tempTrajectoryLog = trajectoryLog.slice(0);
+//			var tempTrajectoryLog = arrayClone(trajectoryLog);
+//			var tempTrajectoryLog = trajectoryLog.slice(0);
+			var tempTrajectoryLog = aClone(trajectoryLog);
 			while (tempTrajectoryLog.length < 60) {
 				//tempTrajectoryLog.unshift(trajectoryLog[0]);
 				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
@@ -866,9 +927,27 @@ function createPipeline(camNum) {
 		}
 	}
 
+	//TO-DO
+	function calculateDeltaTrajectory()
+	{
+		var deltaTrajectory = aClone(trajectoryFinal);
+		deltaTrajectory[0].x = 0;
+		deltaTrajectory[0].y = 0;
+		for (var i = 1; i < trajectoryFinal.length; i++)
+		{
+			deltaTrajectory[i].x = Math.abs(trajectoryFinal[i].x - trajectoryFinal[i-1].x); 
+			deltaTrajectory[i].y = Math.abs(trajectoryFinal[i].y - trajectoryFinal[i-1].y);
+		}
+
+		return deltaTrajectory;
+	}
+
 	function submitCheck() {
 		var correctButton = document.getElementById("correctCheck1");
 		var response;
+
+		movementsNum++;
+
 		if (correctButton.checked)
 		{
 			correctPredictionsNum++;
@@ -1152,6 +1231,18 @@ function strcmp(a, b) {
     if (a.toString() < b.toString()) return -1;
     if (a.toString() > b.toString()) return 1;
     return 0;
+}
+
+function aClone(arr)
+{
+
+	var clone = [];
+	for (var i = 0; i < arr.length; i++)
+	{
+		clone.push({x: arr[i].x, y: arr[i].y})
+	}
+	return clone;
+
 }
 
 /**
