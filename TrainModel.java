@@ -23,6 +23,7 @@ public class TrainModel {
 	public static final int REGULAR_DELTA_DATASET = 1;
 	public static final int ORIENTATIONS_DATASET = 2;
 	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+	public static final int USER_DATASET = 4;
 
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
@@ -88,9 +89,9 @@ public class TrainModel {
 		{
 			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
 		}
-		else
+		else if (datasetOption == USER_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTrainingDataset = "user_train_traj_data.txt";
 		}
 
 

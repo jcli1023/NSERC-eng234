@@ -5,10 +5,17 @@ $datasetChoice = $_POST['datasetChoice'];
 
 if(isset($_FILES['datasetChosen'])){
 	$file_tmp = $_FILES['datasetChosen']['tmp_name'];
-	move_uploaded_file($file_tmp,"test/test_file.txt");
+	if ($datasetChoice == $TRAINING_DATASET)
+	{
+		move_uploaded_file($file_tmp,"user_train_traj_data.txt");
+	}
+	else if ($datasetChoice == $TEST_DATASET)
+	{
+		move_uploaded_file($file_tmp,"user_test_traj_data.txt");
+	}
 }
 
-echo "upload_dataset.php";
-#if ($datasetChoice == TRAINING_DATASET)
-#else if ($datasetChoice == TEST_DATASET)
+print_r($_FILES);
+print_r($_POST);
+
 ?>

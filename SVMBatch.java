@@ -86,7 +86,7 @@ public class SVMBatch {
 			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
 			pathToTestDataset = "test_traj_data_orientations_delta_batch.txt";
 		}
-		else
+		else if (datasetOption == USER_DATASET)
 		{
 			pathToTrainingDataset = "user_train_traj_data.txt";
 			pathToTestDataset = "test_traj_data_user_batch.txt";

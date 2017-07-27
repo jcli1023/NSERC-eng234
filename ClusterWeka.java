@@ -16,6 +16,7 @@ public class ClusterWeka {
 	public static final int REGULAR_DELTA_DATASET = 1;
 	public static final int ORIENTATIONS_DATASET = 2;
 	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+	public static final int USER_DATASET = 4;
 
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
@@ -63,9 +64,9 @@ public class ClusterWeka {
 		{
 			pathToDataset = "deltaTestDiffOrientation.txt";
 		}
-		else
+		else if (datasetOption == USER_DATASET)
 		{
-			pathToDataset = "test_traj_data_batch.txt";
+			pathToDataset = "user_test_traj_data.txt";
 		}
 
 		BufferedReader datafile = readDataFile(pathToDataset); 

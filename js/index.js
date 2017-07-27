@@ -221,7 +221,7 @@ function createPipeline(camNum) {
 	chooseDatasetFile = document.getElementById("chooseDatasetFile");
 
 	submitDatasetButton = document.getElementById("submitDatasetButton");
-	submitDatasetButton.addEventListener('click', findDataset);
+	submitDatasetButton.addEventListener('click', submitDataset);
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
@@ -270,13 +270,10 @@ function createPipeline(camNum) {
 		consoleWindow.scrollTop = consoleWindow.scrollHeight;
 	}
 
-	function findDataset()
+	function submitDataset()
 	{
 		var datasetChoice = 0;
-		var datasetChosen = chooseDatasetFile.prop("files")[0];
-		var form_data = new FormData();                  
-		form_data.append("datasetChosen", datasetChosen);
-		form_data.append("datasetChoice", datasetChoice);
+		
 		var trainingDatasetButton = document.getElementById("trainingDataset"+camNum);
 		if (trainingDatasetButton.checked)
 		{
@@ -291,11 +288,25 @@ function createPipeline(camNum) {
 	
 		consoleLog.log("datasetChoice = " + datasetChoice);
 		
-		$.post("upload_dataset.php", {
-			form_data
-		},
-		function(data, status) {
+		var datasetChosen = chooseDatasetFile.files[0];
+		consoleLog.log("name : " + datasetChosen.name);
 
+		var form_data = new FormData();                  
+		form_data.append("datasetChosen", datasetChosen);
+		form_data.append("datasetChoice", datasetChoice);
+
+		var request = $.ajax({
+		        url: "upload_dataset.php",
+		        dataType: 'script',
+		        cache: false,
+		        contentType: false,
+		        processData: false,
+		        data: form_data,                        
+		        type: 'post',
+			
+	       })
+
+		request.done(function (response, textStatus, jqXHR) {
 			if (trainingFileGiven && !testFileGiven)
 			{
 				document.getElementById("datasetName").innerHTML = "User Dataset: Training Set Given";
@@ -308,8 +319,31 @@ function createPipeline(camNum) {
 			{
 				document.getElementById("datasetName").innerHTML = "User Dataset: Training & Test Set Given";
 			}
-			consoleLog.log(data);
-		});	
+		});
+
+
+
+//	//create a new XMLHttpRequest
+//            var xhr = new XMLHttpRequest();     
+//            
+//            //post file data for upload
+//            xhr.open('POST', 'upload_dataset.php', true);  
+//            xhr.send(form_data);
+//            xhr.onload = function () {
+//                //get response and show the uploading status
+//                var response = JSON.parse(xhr.responseText);
+//                if(xhr.status === 200 && response.status == 'ok'){
+//                    consoleLog.log("File has been uploaded successfully. Click to upload another.");
+//                }else if(response.status == 'type_err'){
+//                    consoleLog.log("Please choose an images file. Click to upload another.");
+//                }else{
+//                    consoleLog.log("Some problem occured, please try again.");
+//                }
+//            };
+
+
+
+	
 	}
 
 
