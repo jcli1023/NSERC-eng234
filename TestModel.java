@@ -66,7 +66,7 @@ public class TestModel {
 			datasetOption = Integer.parseInt(args[0]);
 		}
 
-		String pathToTrainingDataset;
+		String pathToTrainingDataset = "";
 
 		if (datasetOption == REGULAR_DATASET)
 		{
@@ -84,7 +84,7 @@ public class TestModel {
 		{
 			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
 		}
-		else if (datasetOption = USER_DATASET)
+		else if (datasetOption == USER_DATASET)
 		{
 			pathToTrainingDataset = "user_train_traj_data.txt";
 		}

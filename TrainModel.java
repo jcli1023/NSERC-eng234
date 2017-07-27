@@ -71,7 +71,7 @@ public class TrainModel {
 			datasetOption = Integer.parseInt(args[0]);
 		}
 
-		String pathToTrainingDataset;
+		String pathToTrainingDataset = "";
 
 		if (datasetOption == REGULAR_DATASET)
 		{

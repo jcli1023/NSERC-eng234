@@ -47,7 +47,7 @@ public class ClusterWeka {
 			datasetOption = Integer.parseInt(args[0]);
 		}
 
-		String pathToDataset;
+		String pathToDataset = "";
 		if (datasetOption == REGULAR_DATASET)
 		{
 			pathToDataset = "test_traj_data_backup.txt";

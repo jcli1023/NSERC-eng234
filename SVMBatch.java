@@ -64,7 +64,7 @@ public class SVMBatch {
 			datasetOption = Integer.parseInt(args[0]);
 		}
 
-		String pathToTrainingDataset, pathToTestDataset;
+		String pathToTrainingDataset = "", pathToTestDataset = "";
 
 		if (datasetOption == REGULAR_DATASET)
 		{
