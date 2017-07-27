@@ -18,6 +18,7 @@ public class SVMBatch {
 	public static final int REGULAR_DELTA_DATASET = 1;
 	public static final int ORIENTATIONS_DATASET = 2;
 	public static final int ORIENTATIONS_DELTA_DATASET = 3;
+	public static final int USER_DATASET = 4;
 
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
@@ -67,28 +68,28 @@ public class SVMBatch {
 
 		if (datasetOption == REGULAR_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_original_batch.txt";
-			pathToTestDataset = "test_traj_data_original_batch.txt";
+			pathToTrainingDataset = "train_traj_data_backup.txt";
+			pathToTestDataset = "test_traj_data_regular_batch.txt";
 		}
 		else if (datasetOption == REGULAR_DELTA_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_original_delta_batch.txt";
-			pathToTestDataset = "test_traj_data_original_delta_batch.txt";
+			pathToTrainingDataset = "deltaRegular-Train.txt";
+			pathToTestDataset = "test_traj_data_regular_delta_batch.txt";
 		}
 		else if (datasetOption == ORIENTATIONS_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_orientations_batch.txt";
+			pathToTrainingDataset = "trainDiffOrientations.txt";
 			pathToTestDataset = "test_traj_data_orientations_batch.txt";
 		}
 		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
 		{
-			pathToTrainingDataset = "train_traj_data_orientations_delta_batch.txt";
+			pathToTrainingDataset = "deltaTrainDifferentOrientation.txt";
 			pathToTestDataset = "test_traj_data_orientations_delta_batch.txt";
 		}
 		else
 		{
-			pathToTrainingDataset = "train_traj_data_backup.txt";
-			pathToTestDataset = "test_traj_data_batch.txt";
+			pathToTrainingDataset = "user_train_traj_data.txt";
+			pathToTestDataset = "test_traj_data_user_batch.txt";
 		}
 
 		BufferedReader datafile = readDataFile(pathToTrainingDataset);

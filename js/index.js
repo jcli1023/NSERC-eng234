@@ -19,6 +19,7 @@ var REGULAR_DATASET = 0;
 var REGULAR_DELTA_DATASET = 1;
 var ORIENTATIONS_DATASET = 2;
 var ORIENTATIONS_DELTA_DATASET = 3;
+var USER_DATASET = 4;
 
 (function(){
 	var MAX_CAMERAS = 4;
@@ -183,6 +184,8 @@ function createPipeline(camNum) {
 	var totalTimeInterval;
 
 	var datasetOption = REGULAR_DATASET;
+	var trainingFileGiven = false;
+	var testFileGiven = false;
 /*
 	if (camNum == 1)
 		address.value = 'rtsp://192.168.41.129:8554/test_vid.mkv';
@@ -204,16 +207,21 @@ function createPipeline(camNum) {
 	var resultProgramOutput = document.getElementById('resultPrograms'+camNum);
 
 	regularDatasetButton = document.getElementById("regularButton");
-	regularDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DATASET); });
+	regularDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DATASET); resetUserFilesGiven(); });
 
 	regularDeltaDatasetButton = document.getElementById("regularDeltaButton");
-	regularDeltaDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DELTA_DATASET); });
+	regularDeltaDatasetButton.addEventListener('click', function(){ setDataset(REGULAR_DELTA_DATASET); resetUserFilesGiven(); });
 
 	orientationsDatasetButton = document.getElementById("orientationsButton");
-	orientationsDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DATASET); });
+	orientationsDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DATASET); resetUserFilesGiven(); });
 
 	orientationsDeltaDatasetButton = document.getElementById("orientationsDeltaButton");
-	orientationsDeltaDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DELTA_DATASET); });
+	orientationsDeltaDatasetButton.addEventListener('click', function() { setDataset(ORIENTATIONS_DELTA_DATASET); resetUserFilesGiven(); });
+
+	chooseDatasetFile = document.getElementById("chooseDatasetFile");
+
+	submitDatasetButton = document.getElementById("submitDatasetButton");
+	submitDatasetButton.addEventListener('click', findDataset);
 
 	kmeansButton = document.getElementById("kmeansButton");
 	kmeansButton.addEventListener('click', kmeansProgram);
@@ -261,6 +269,50 @@ function createPipeline(camNum) {
 	{
 		consoleWindow.scrollTop = consoleWindow.scrollHeight;
 	}
+
+	function findDataset()
+	{
+		var datasetChoice = 0;
+		var datasetChosen = chooseDatasetFile.prop("files")[0];
+		var form_data = new FormData();                  
+		form_data.append("datasetChosen", datasetChosen);
+		form_data.append("datasetChoice", datasetChoice);
+		var trainingDatasetButton = document.getElementById("trainingDataset"+camNum);
+		if (trainingDatasetButton.checked)
+		{
+			datasetChoice = 0;
+			trainingFileGiven = true;
+		}
+		else
+		{
+			datasetChoice = 1;
+			testFileGiven = true;
+		}
+	
+		consoleLog.log("datasetChoice = " + datasetChoice);
+		
+		$.post("upload_dataset.php", {
+			form_data
+		},
+		function(data, status) {
+
+			if (trainingFileGiven && !testFileGiven)
+			{
+				document.getElementById("datasetName").innerHTML = "User Dataset: Training Set Given";
+			}
+			else if (!trainingFileGiven && testFileGiven)
+			{
+				document.getElementById("datasetName").innerHTML = "User Dataset: Test Set Given";
+			}
+			else
+			{
+				document.getElementById("datasetName").innerHTML = "User Dataset: Training & Test Set Given";
+			}
+			consoleLog.log(data);
+		});	
+	}
+
+
 
 	function stopScreenshot(camNum) {
 		if (drawTimer) {
@@ -699,13 +751,19 @@ function createPipeline(camNum) {
 		{
 			datasetName = "Orientations Dataset";
 		}
-		if (dataset == ORIENTATIONS_DELTA_DATASET)
+		else if (dataset == ORIENTATIONS_DELTA_DATASET)
 		{
 			datasetName = "Orientations Delta Dataset";
 		}
 		
 		document.getElementById("datasetName").innerHTML = "Dataset: " + datasetName;
 		
+	}
+
+	function resetUserFilesGiven()
+	{
+		trainingFileGiven = false;
+		testFileGiven = false;
 	}
 
 	//Not Complete
@@ -919,7 +977,7 @@ function createPipeline(camNum) {
 				tempTrajectoryLog.push(trajectoryLog[trajectoryLog.length-1]);
 			}
 			trajectoryFinal = tempTrajectoryLog;
-			//consoleLog.log(JSON.stringify(tempTrajectoryLog));
+			consoleLog.log(JSON.stringify(tempTrajectoryLog));
 		}
 		else
 		{
@@ -927,7 +985,6 @@ function createPipeline(camNum) {
 		}
 	}
 
-	//TO-DO
 	function calculateDeltaTrajectory()
 	{
 		var deltaTrajectory = aClone(trajectoryFinal);
@@ -983,6 +1040,10 @@ function createPipeline(camNum) {
 		{
 			movementName = "Line";
 		}
+		else if (videoName.search(".sdp") > -1)
+		{
+			movementName = "Half-Circle";
+		}
 		console.log("findMovementVideoName: " + movementName);
 		return movementName;
 	}
@@ -997,6 +1058,29 @@ function createPipeline(camNum) {
 		},
 		function(data, status) {
 		});
+	}
+
+	function writeBatchTestData()
+	{
+		var movementName = findMovementVideoName();
+
+		var testTrajectory = trajectoryFinal;
+
+		consoleLog.log(JSON.stringify(trajectoryFinal));
+		consoleLog.log("");
+
+		if (datasetOption == REGULAR_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
+		{
+			testTrajectory = calculateDeltaTrajectory();
+		}
+
+		$.post("write_batch_test_traj_data.php", {
+			traj_data : JSON.stringify(testTrajectory),
+			movementName: movementName,
+			datasetOption : datasetOption
+		},
+		function(data, status) {
+		});		
 	}
 
 	function resetDefaultUI() {
@@ -1149,6 +1233,7 @@ function createPipeline(camNum) {
 		fixTrajectoryInterval();
 		fixTrajectoryLength();
 		writeTrainingData();
+		writeBatchTestData();
 
 		address.disabled = false;
 		if (webRtcPeer) {

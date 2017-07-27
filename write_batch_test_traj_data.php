@@ -1,7 +1,14 @@
 <?php
 
+$REGULAR_DATASET = 0;
+$REGULAR_DELTA_DATASET = 1;
+$ORIENTATIONS_DATASET = 2;
+$ORIENTATIONS_DELTA_DATASET = 3;
+$USER_DATASET = 4;
+
 $traj_data = $_POST['traj_data'];
 $movementName = $_POST['movementName'];
+$datasetOption = $_POST['datasetOption'];
 
 $new_traj_data = "";
 
@@ -17,11 +24,7 @@ for ($i = 0; $i < $arrlength; $i++)
 
 $new_traj_data = $new_traj_data . $movementName . "\n";
 
-$startTime = microtime(true);
-if (!file_exists("train_offline_traj_data.txt"))
-{
-	$fp = fopen('train_offline_traj_data.txt', 'w');
-	$new_offline_traj_data = "@relation trajdataTrain
+$requiredData = "
 
 @attribute x1 numeric
 @attribute y1 numeric
@@ -146,22 +149,53 @@ if (!file_exists("train_offline_traj_data.txt"))
 @attribute result {Half-Circle, Line, Sine}
 
 
-@data\n" . $new_traj_data;
+@data\n";
+
+
+$pathtoTestDataset = "";
+$relationName = "";
+
+if ($datasetOption == $REGULAR_DATASET)
+{
+	$pathToTestDataset = "test_traj_data_regular_batch.txt";
+	$relationName = "@relation trajdataTestSVMBatchRegular";
+}
+else if ($datasetOption == $REGULAR_DELTA_DATASET)
+{
+	$pathToTestDataset = "test_traj_data_regular_delta_batch.txt";
+	$relationName = "@relation trajdataTestSVMBatchRegularDelta";
+}
+else if ($datasetOption == $ORIENTATIONS_DATASET)
+{
+	$pathToTestDataset = "test_traj_data_orientations_batch.txt";
+	$relationName = "@relation trajdataTestSVMBatchOrientations";
+}
+else if ($datasetOption == $ORIENTATIONS_DELTA_DATASET)
+{
+	$pathToTestDataset = "test_traj_data_orientations_delta_batch.txt";
+	$relationName = "@relation trajdataTestSVMBatchOrientationsDelta";
+}
+
+else if ($datasetOption == $USER_DATASET)
+{
+	$pathToTestDataset = "test_traj_data_user_batch.txt";
+	$relationName = "@relation trajdataTestSVMBatchUser";
+}
+
+if (!file_exists($pathToTestDataset))
+{
+	$fp2 = fopen($pathToTestDataset, 'w');
+	$new_traj_data_batch = $relationName . $requiredData . $new_traj_data;
 
 }
 else
 {
-	$fp = fopen('train_offline_traj_data.txt', 'a');
-	$new_offline_traj_data = $new_traj_data;
+	$fp2 = fopen($pathToTestDataset, 'a');
+	$new_traj_data_batch = $new_traj_data;
 }
 
 
-fwrite($fp, $new_offline_traj_data);
-fclose($fp);
+fwrite($fp2, $new_traj_data_batch);
+fclose($fp2);
 
-$endTime = microtime(true);
-$write_time = $endTime - $startTime;
-file_put_contents("timings.txt","write_train_traj_dataWrite: ".$write_time."\n",FILE_APPEND);
 ?>
-
-
