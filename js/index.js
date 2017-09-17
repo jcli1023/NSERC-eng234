@@ -238,6 +238,9 @@ function createPipeline(camNum) {
 	svmBatchTestButton = document.getElementById("svmBatchTest");
 	svmBatchTestButton.addEventListener('click', svmBatchTestProgram);
 
+	appendTrainingDataButton = document.getElementById("appendTrainingData");
+	appendTrainingDataButton.addEventListener('click', appendTrainingDataset);
+
 	startButton = document.getElementById('start'+camNum);
 	startButton.addEventListener('click', start);
 
@@ -800,6 +803,28 @@ function createPipeline(camNum) {
 		testFileGiven = false;
 	}
 
+	function appendTrainingDataset()
+	{
+		var datasetName = "";
+		if (datasetOption == REGULAR_DATASET)
+			datasetName = "Regular Dataset";
+		else if (datasetOption == REGULAR_DELTA_DATASET)
+			datasetName = "Regular Delta Dataset";
+		else if (datasetOption == ORIENTATIONS_DATASET)
+			datasetName = "Orientations Dataset";
+		else if (datasetOption == ORIENTATIONS_DELTA_DATASET)
+			datasetName = "Orientations Delta Dataset";
+		else if (datasetOption == USER_DATASET)
+			datasetName = "User Dataset";
+
+		$.post("append_training_data.php", {
+			datasetOption : datasetOption
+		},
+		function(data, status) {
+			resultProgramOutput.innerHTML = "Appended Training " + datasetName;
+		});
+	}
+
 	//Not Complete
 	function kmeansProgram() {
 		consoleLog.log("-------K-MEANS------------");
@@ -1114,7 +1139,16 @@ function createPipeline(camNum) {
 			datasetOption : datasetOption
 		},
 		function(data, status) {
-		});		
+		});
+
+		//Write data for appending later
+		$.post("write_test_traj_data_appending.php", {
+			traj_data : JSON.stringify(testTrajectory),
+			movementName: movementName,
+			datasetOption : datasetOption
+		},
+		function(data, status) {
+		});	
 	}
 
 	function resetDefaultUI() {
