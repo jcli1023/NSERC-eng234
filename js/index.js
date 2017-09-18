@@ -1157,7 +1157,12 @@ function createPipeline(camNum) {
 	{
 		var videoName = address.value;
 		var movementName = "";
-		if (videoName.search("hcircle") > -1)
+		if (videoName.search(".sdp") > -1)
+		{
+			var movementClass = document.getElementById("movementClassName").value;
+			movementName = movementClass;
+		}
+		else if (videoName.search("hcircle") > -1)
 		{
 			movementName = "Half-Circle";
 		}
@@ -1168,10 +1173,6 @@ function createPipeline(camNum) {
 		else if (videoName.search("line") > -1)
 		{
 			movementName = "Line";
-		}
-		else if (videoName.search(".sdp") > -1)
-		{
-			movementName = "Half-Circle";
 		}
 		console.log("findMovementVideoName: " + movementName);
 		return movementName;
