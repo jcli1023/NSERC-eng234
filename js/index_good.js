@@ -238,9 +238,6 @@ function createPipeline(camNum) {
 	svmBatchTestButton = document.getElementById("svmBatchTest");
 	svmBatchTestButton.addEventListener('click', svmBatchTestProgram);
 
-        j48Button = document.getElementById("j48Realtime");
-        j48Button.addEventListener('click', j48RealtimeProgram);
-
 	appendTrainingDataButton = document.getElementById("appendTrainingData");
 	appendTrainingDataButton.addEventListener('click', appendTrainingDataset);
 
@@ -1003,74 +1000,7 @@ function createPipeline(camNum) {
 
 	}
 
-         function j48RealtimeProgram() {
-		//consoleLog.log("-------Classifiers------------");
-		var beginTimeJ48 = performance.now();
-		resetClassifiedMovementText();
-		j48Button.innerHTML = "Classifying...";
-		//movementsNum++;
-
-		fixTrajectoryLength();
-
-		var testTrajectory = trajectoryFinal;
-
-		consoleLog.log(JSON.stringify(trajectoryFinal));
-		consoleLog.log("");
-
-		if (datasetOption == REGULAR_DELTA_DATASET || datasetOption == ORIENTATIONS_DELTA_DATASET)
-		{
-			testTrajectory = calculateDeltaTrajectory();
-		}
-	
-		
-		consoleLog.log(JSON.stringify(testTrajectory));
-
-		var movementName = findMovementVideoName();
-		console.log("j48RealtimeProgram: "+movementName);
-
-		$.post("write_test_traj_data.php", {
-			traj_data : JSON.stringify(testTrajectory),
-			movementName: movementName
-		},
-		function(data, status) {
-			consoleLog.log(data);
-		});
-
-
-		$.post("j48_realtime.php", {
-			dataset: datasetOption
-		},
-		function(data, status) {
-			var endTimeJ48 = performance.now();
-			//consoleLog.log(data);
-			classifiedMovement = data;
-			classifiedMovementText.innerHTML = "Classified Movement: " + classifiedMovement;
-
-			/*
-			//Trim any white spaces
-			if (strcmp(movementLabel.value.trim(),data.trim())==0)
-			{
-				
-				correctPredictionsNum++;
-				classifiedMovementText.style.backgroundColor = "green";
-			}
-			else
-			{
-				classifiedMovementText.style.backgroundColor = "red";
-			}
-			*/
-			//calculateCorrectLabels();
-			j48Button.innerHTML = "J48 Real-Time";
-			timingLabel.innerHTML = "J48 Timing: " + (endTimeJ48-beginTimeJ48) + " ms";
-
-			
-		});
-
-//		writeTrainingData();
-
-	}
-
-       	function fixTrajectoryInterval()
+	function fixTrajectoryInterval()
 	{
 		var numTrajPoints = trajectoryLog.length;
 		var newTrajectoryLog = [];
