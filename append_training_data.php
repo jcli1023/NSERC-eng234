@@ -43,4 +43,6 @@ $appendFile = file_get_contents($pathToAppendData);
 fwrite($fp, $appendFile);
 fclose($fp);
 
+unlink($pathToAppendData);
+
 ?>
