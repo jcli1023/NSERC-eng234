@@ -141,8 +141,10 @@ public class InitializeObject {
 //					Scalar lowerBound = new Scalar(averageH.val[0]*0.75,averageS.val[0]*0.75,averageV.val[0]*0.75);
 					Scalar upperBound = new Scalar(minMaxValuesH.maxVal+10,255,255);
 					Scalar lowerBound = new Scalar(minMaxValuesH.minVal-10,100,150);
-//                                      Scalar upperBound = new Scalar(255,255,255);
-//					Scalar lowerBound = new Scalar(164,150,60);
+//                                        Scalar upperBound = new Scalar(255,255,255);
+//					Scalar lowerBound = new Scalar(240,0,0);
+//                                      Scalar upperBound = new Scalar(255,255,255);                                      
+//                                      Scalar lowerBound = new Scalar(164,150,60);
 					Core.inRange(hsv,lowerBound,upperBound,objectThresholdMask);
 
 //					Imgcodecs.imwrite("objectThresholdMask_initialize_"+fileName,objectThresholdMask);
