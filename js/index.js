@@ -241,6 +241,9 @@ function createPipeline(camNum) {
         j48Button = document.getElementById("j48Realtime");
         j48Button.addEventListener('click', j48RealtimeProgram);
 
+	deepLearningButton = document.getElementById("deepLearningTest");
+        deepLearningButton.addEventListener('click', deepLearningProgram);
+
 	appendTrainingDataButton = document.getElementById("appendTrainingData");
 	appendTrainingDataButton.addEventListener('click', appendTrainingDataset);
 
@@ -899,6 +902,25 @@ function createPipeline(camNum) {
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
 			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+		});
+
+	}
+
+	function deepLearningProgram() {
+		consoleLog.log("-------DEEP LEARNING------------");
+		var beginTimeDL = performance.now();
+
+
+		$.post("deep_learning_test.php", {
+			dataset: datasetOption
+		},
+		function(data, status) {
+			var endTimeDL = performance.now();
+			var cleanLookingData  = data.replace(/;/g, "</br></br>")
+			resultProgramOutput.innerHTML = cleanLookingData;
+			//resultProgramOutput.innerHTML = data;
+			//calculateCorrectLabels();
+			timingLabel.innerHTML = "Deep Learning Timing: " + (endTimeDL-beginTimeDL) + " ms";
 		});
 
 	}
