@@ -14,30 +14,7 @@ classes = {"Half-Circle": 0, "Line": 1, "Sine": 2}
 learning_rate = 0.01
 number_of_iterations = 1000
 
-REGULAR_DATASET = "0"
-REGULAR_DELTA_DATASET = "1"
-ORIENTATIONS_DATASET = "2"
-ORIENTATIONS_DELTA_DATASET = "3"
-USER_DATASET = "4"
-
-if sys.argv[2] == REGULAR_DATASET:
-	pathToTrainingDataset = "train_traj_data_backup.txt"
-	pathToTestDataset = "test_traj_data_regular_batch.txt" 
-elif sys.argv[2] == REGULAR_DELTA_DATASET:
-	pathToTrainingDataset = "deltaRegular-Train.txt"
-	pathToTestDataset = "test_traj_data_regular_delta_batch.txt"
-elif sys.argv[2] == ORIENTATIONS_DATASET:
-	pathToTrainingDataset = "trainDiffOrientations.txt"
-	pathToTestDataset = "test_traj_data_orientations_batch.txt"
-elif sys.argv[2] == ORIENTATIONS_DELTA_DATASET:
-	pathToTrainingDataset = "deltaTrainDifferentOrientation.txt"
-	pathToTestDataset = "test_traj_data_orientations_delta_batch.txt"
-elif datasetOption == USER_DATASET:
-	pathToTrainingDataset = "user_train_traj_data.txt"
-	pathToTestDataset = "test_traj_data_user_batch.txt"
-
-#train = pd.read_table("sepideh_train.txt", skiprows=126, header=None, sep=",")
-train = pd.read_table(pathToTrainingDataset, skiprows=126, header=None, sep=",")
+train = pd.read_table("sepideh_train.txt", skiprows=126, header=None, sep=",")
 Y_train = train[120]
 Y_train = Y_train.replace((classes))
 X_train = train
@@ -46,8 +23,7 @@ X_train = X_train.transpose()
 Y_train = Y_train.values.reshape(len(Y_train), 1).transpose()
 Y_train = np.eye(3)[Y_train.reshape(-1)].T
 
-#test = pd.read_table("sepideh_test.txt", skiprows=126, header=None, sep=",")
-test = pd.read_table(pathToTestDataset, skiprows=126, header=None, sep=",")
+test = pd.read_table("sepideh_test.txt", skiprows=126, header=None, sep=",")
 Y_test = test[120]
 Y_test = Y_test.replace((classes))
 X_test = test
@@ -117,10 +93,10 @@ else:
 			costs.append(batch_cost)
 		correct_prediction = tf.equal(tf.argmax(Z1), tf.argmax(Y))
 		accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}))
-		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}))
-		plt.figure()
-		plt.plot(costs)
-		plt.show()
+		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
+		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
+		#plt.figure()
+		#plt.plot(costs)
+		#plt.show()
 
 print("Timing: ", datetime.now() - start)

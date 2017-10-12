@@ -911,7 +911,8 @@ function createPipeline(camNum) {
 		var beginTimeDL = performance.now();
 
 
-		$.post("deep_learning_test.php", {
+		//$.post("deep_learning_test.php", {
+		$.post("deep_learning_test_fixed_sets.php", {
 			dataset: datasetOption
 		},
 		function(data, status) {
