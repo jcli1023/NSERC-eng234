@@ -23,7 +23,8 @@
 <script src="bower_components/paper/dist/paper-full.js"></script>
 <script src="./js/console.js"></script>
 
-<script src="./js/index.js"></script>
+<!--<script src="./js/index.js"></script>-->
+<script src="./js/index_screenshot.js"></script>
 
 <title>DSMP Lab: Security Movement Detection</title>
 </head>
@@ -47,34 +48,34 @@
 			<h1>DSMP Lab: Security Movement Detection</h1>
 		</div>
 		<div id="template_options">
-			<button id="template1Button">Template 1</button>
+			<button id="template1Button" >Template 1</button>
 			<button id="template2Button">Template 2</button>
-			<!--
-			<button id="regularButton">Regular Dataset</button>
-			<button id="regularDeltaButton">Regular Delta Dataset</button>
-			<button id="orientationsButton">Orientations Dataset</button>
-			<button id="orientationsDeltaButton">Orientations Delta Dataset</button>
+			
+			<button id="regularButton" style="display: none">Regular Dataset</button>
+			<button id="regularDeltaButton" style="display: none">Regular Delta Dataset</button>
+			<button id="orientationsButton" style="display: none">Orientations Dataset</button>
+			<button id="orientationsDeltaButton" style="display: none">Orientations Delta Dataset</button>
 			</br></br>
-			<input id="chooseDatasetFile" type="file" name="dataset">
-			<button id="submitDatasetButton">Submit Dataset</button>
-			Training Dataset: <input type="radio" name="chooseDataset" id="trainingDataset1" checked> 
-			Test Dataset: <input type="radio" name="chooseDataset" id="testDataset1">
-			</br></br>
-			-->
+			<input id="chooseDatasetFile" type="file" name="dataset" style="display: none">
+			<button id="submitDatasetButton" style="display: none">Submit Dataset</button>
+			<!--Training Dataset: --><input type="radio" name="chooseDataset" id="trainingDataset1" checked style="display: none"> 
+			<!--Test Dataset: --><input type="radio" name="chooseDataset" id="testDataset1" style="display: none">
+			<!--</br></br>-->
+			
 			<button id="trainButton">Train Model(s)</button>			
 			<button id="kmeansButton">K-Means</button>
-			<!--			
-			<button id="svmBatchButton">SVM Batch</button>
-			-->
+			
+			<button id="svmBatchButton" style="display: none">SVM Batch</button>
+			
 			<button id="svmButton">SVM Real-Time</button>
-			<!--
-			<button id="svmBatchTest">SVM Batch Test 30</button>
-			-->
+			
+			<button id="svmBatchTest" style="display: none">SVM Batch Test 30</button>
+			
 			<button id="deepLearningTest">Deep Learning</button>
-			<!--
-                        <button id="j48Batch">J48 Batch</button>
-                        <button id="j48Realtime">J48 Real-Time</button>
-			-->
+			
+                        <button id="j48Batch" style="display: none">J48 Batch</button>
+                        <button id="j48Realtime" style="display: none">J48 Real-Time</button>
+			
 			<button id="appendTrainingData">Append Training Data</button>
 			
 			<p id="datasetName">Dataset: </p>
