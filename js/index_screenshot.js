@@ -183,7 +183,7 @@ function createPipeline(camNum) {
 	var endTimeInterval;
 	var totalTimeInterval;
 
-	var datasetOption = REGULAR_DATASET;
+	var datasetOption = ORIENTATIONS_DELTA_DATASET;
 	var trainingFileGiven = false;
 	var testFileGiven = false;
 /*
@@ -1017,7 +1017,7 @@ function createPipeline(camNum) {
 			}
 			*/
 			//calculateCorrectLabels();
-			svmButton.innerHTML = "SVM Real-Time";
+			svmButton.innerHTML = "SVM";
 			timingLabel.innerHTML = "SVM Timing: " + (endTimeSVM-beginTimeSVM) + " ms";
 
 			
@@ -1277,7 +1277,7 @@ function createPipeline(camNum) {
 		borderButton.disabled = false;
 		objectTrackerText.innerHTML = "Object Not Tracked";
 		objectTrackerText.style.backgroundColor = "white";
-		svmButton.innerHTML = "SVM Real-Time";
+		svmButton.innerHTML = "SVM";
 		resultProgramOutput.innerHTML = "";
 
 		timingLabel.innerHTML = "Timing: ";

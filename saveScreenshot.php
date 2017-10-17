@@ -31,29 +31,29 @@ $_SESSION['maxsize']= $max;
 
 session_write_close();
 
-require('Block.php');
+//require('Block.php');
 
 
 
-/**
- * Creating new block, with a random ID
- */
-$memory = new Block;
-$memory->write('Sample');
-echo $memory->read();
+#/**
+# * Creating new block, with a random ID
+# */
+#$memory = new Block;
+#$memory->write('Sample');
+#echo $memory->read();
 
-/**
- * Creating new block, with an specified ID
- */
-$new = new Block(897);
-$new->write('Sample');
-echo $new->read();
+#/**
+# * Creating new block, with an specified ID
+# */
+#$new = new Block(897);
+#$new->write('Sample');
+#echo $new->read();
 
-/**
- * Reading an existing block, with the ID of 42
- */
-$existing = new Block(42);
-echo $existing->read();
+#/**
+# * Reading an existing block, with the ID of 42
+# */
+#$existing = new Block(42);
+#echo $existing->read();
 
 $startTime = microtime(true);
 if (!file_exists("./".$camFolder))	
@@ -74,10 +74,10 @@ file_put_contents("timings.txt","screenshotWrite: ".$write_time."\n",FILE_APPEND
 #$size =  shmop_size ( $shmid );
 #//shmop_close($shmid);
 
-$fp2 = fopen("testing.txt",'w');
+#$fp2 = fopen("testing.txt",'w');
 #fwrite($fp2,$size." ".$content);
-fwrite($fp2,$memory->read()." ".$new->read()." ".$existing->read());
-fclose($fp2);
+#fwrite($fp2,$memory->read()." ".$new->read()." ".$existing->read());
+#fclose($fp2);
 
 #$fp2 = fopen("testingMemoryConfirm.txt",'a');
 #fwrite($fp2,$content);
