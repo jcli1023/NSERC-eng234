@@ -856,7 +856,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("kmeans.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			var endTimeKmeans = performance.now();
@@ -893,7 +893,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("svm_batch.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -913,7 +913,7 @@ function createPipeline(camNum) {
 
 		//$.post("deep_learning_test.php", {
 		$.post("deep_learning_test_fixed_sets.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			var endTimeDL = performance.now();
@@ -932,7 +932,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm_batch_test.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -952,7 +952,7 @@ function createPipeline(camNum) {
 //		writeTrainingData();
 
 		$.post("train_models.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			resultProgramOutput.innerHTML = "Finished Training Models";
@@ -994,7 +994,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm.php", {
-			dataset: REGULAR_DELTA_DATASET
+			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
 			var endTimeSVM = performance.now();
