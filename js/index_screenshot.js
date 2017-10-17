@@ -940,7 +940,8 @@ function createPipeline(camNum) {
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+			//timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+			timingLabel.innerHTML = "SVM Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
 		});
 
 	}
