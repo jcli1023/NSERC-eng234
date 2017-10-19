@@ -864,7 +864,7 @@ function createPipeline(camNum) {
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "K-Means Timing: " + (endTimeKmeans-beginTimeKmeans) + " ms";
+			timingLabel.innerHTML = "K-Means Timing Response Time: " + (endTimeKmeans-beginTimeKmeans) + " ms";
 		});
 
 	}
@@ -901,7 +901,7 @@ function createPipeline(camNum) {
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+			timingLabel.innerHTML = "SVM Batch Timing Response Time: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
 		});
 
 	}
@@ -921,7 +921,7 @@ function createPipeline(camNum) {
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "Deep Learning Timing: " + (endTimeDL-beginTimeDL) + " ms";
+			timingLabel.innerHTML = "Deep Learning Timing Response Time: " + (endTimeDL-beginTimeDL) + " ms";
 		});
 
 	}
@@ -940,7 +940,7 @@ function createPipeline(camNum) {
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
-			timingLabel.innerHTML = "SVM Batch Timing: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
+			timingLabel.innerHTML = "SVM Batch Timing Response Time: " + (endTimeSVMBatch-beginTimeSVMBatch) + " ms";
 		});
 
 	}
@@ -957,7 +957,7 @@ function createPipeline(camNum) {
 		function(data, status) {
 			var endTimeTraining = performance.now();
 			resultProgramOutput.innerHTML = "Finished Training Models</br></br>"+ data;
-			timingLabel.innerHTML = "Training Timing: " + (endTimeTraining-beginTimeTraining) + " ms";
+			timingLabel.innerHTML = "Training Timing Response Time: " + (endTimeTraining-beginTimeTraining) + " ms";
 		});
 	}
 
@@ -1021,7 +1021,7 @@ function createPipeline(camNum) {
 			*/
 			//calculateCorrectLabels();
 			svmButton.innerHTML = "SVM Real-Time";
-			timingLabel.innerHTML = "SVM Timing: " + (endTimeSVM-beginTimeSVM) + " ms";
+			timingLabel.innerHTML = "SVM Timing Response Time: " + (endTimeSVM-beginTimeSVM) + " ms";
 
 			
 		});
