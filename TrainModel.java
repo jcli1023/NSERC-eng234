@@ -64,6 +64,8 @@ public class TrainModel {
 
 	public static void main(String[] args) throws Exception {
 
+		long beginTime = System.nanoTime();
+
 		int datasetOption = REGULAR_DATASET;
 
 		if (args.length > 0)
@@ -138,6 +140,10 @@ public class TrainModel {
 			// evaluate classifier and print some statistics
 		}
 		
+		long endTime = System.nanoTime();
+		long duration = (endTime-beginTime)/1000000;
+		System.out.println("Training SVM Time: " + duration);
+
 		weka.core.SerializationHelper.write("trained_models.txt", models);
 
 	}

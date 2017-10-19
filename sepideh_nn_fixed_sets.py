@@ -2,37 +2,35 @@
 
 import pandas as pd
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import numpy as np
-import sys
 from datetime import datetime
 
-start = datetime.now()
+# Constants
+CLASSES = {"Half-Circle": 0, "Line": 1, "Sine": 2}
+LEARNING_RATE = 0.01
+NUMBER_OF_EPOCHS = 1000
 
-classes = {"Half-Circle": 0, "Line": 1, "Sine": 2}
-
-learning_rate = 0.01
-number_of_iterations = 1000
-
+# Prepare training data
 train = pd.read_table("sepideh_train.txt", skiprows=126, header=None, sep=",")
 Y_train = train[120]
-Y_train = Y_train.replace((classes))
+Y_train = Y_train.replace((CLASSES))
 X_train = train
 del X_train[120]
 X_train = X_train.transpose()
 Y_train = Y_train.values.reshape(len(Y_train), 1).transpose()
 Y_train = np.eye(3)[Y_train.reshape(-1)].T
 
+# Prepare test data
 test = pd.read_table("sepideh_test.txt", skiprows=126, header=None, sep=",")
 Y_test = test[120]
-Y_test = Y_test.replace((classes))
+Y_test = Y_test.replace((CLASSES))
 X_test = test
 del X_test[120]
 X_test = X_test.transpose()
 Y_test = Y_test.values.reshape(len(Y_test), 1).transpose()
 Y_test = np.eye(3)[Y_test.reshape(-1)].T
 
-
+# Make preparations for neural network training in tensorflow
 input_layer_size, number_of_training_examples = X_train.shape
 hidden_layer_1_size = 10
 hidden_layer_2_size = 10
@@ -41,62 +39,43 @@ output_layer_size = Y_train.shape[0]
 costs = []
 X = tf.placeholder(tf.float32, shape=(input_layer_size, None))
 Y = tf.placeholder(tf.float32, shape=(output_layer_size, None))
+W1 = tf.get_variable("W1", [hidden_layer_1_size, input_layer_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+b1 = tf.get_variable("b1", [hidden_layer_1_size, 1], initializer=tf.zeros_initializer())
+W2 = tf.get_variable("W2", [hidden_layer_2_size, hidden_layer_1_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+b2 = tf.get_variable("b2", [hidden_layer_2_size, 1], initializer=tf.zeros_initializer())
+W3 = tf.get_variable("W3", [hidden_layer_3_size, hidden_layer_2_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+b3 = tf.get_variable("b3", [hidden_layer_3_size, 1], initializer=tf.zeros_initializer())
+W4 = tf.get_variable("W4", [output_layer_size, hidden_layer_3_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
+b4 = tf.get_variable("b4", [output_layer_size, 1], initializer=tf.zeros_initializer())
+Z1 = tf.add(tf.matmul(W1, X), b1)
+A1 = tf.nn.softplus(Z1)
+Z2 = tf.add(tf.matmul(W2, A1), b2)
+A2 = tf.nn.elu(Z2)
+Z3 = tf.add(tf.matmul(W3, A2), b3)
+A3 = tf.nn.softplus(Z3)
+Z4 = tf.add(tf.matmul(W4, A3), b4)
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=tf.transpose(Z4), labels=tf.transpose(Y)))
+optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(cost)
+initialize = tf.global_variables_initializer()
+correct_prediction = tf.equal(tf.argmax(Z4), tf.argmax(Y))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-if sys.argv[1] == "hidden":
-	W1 = tf.get_variable("W1", [hidden_layer_1_size, input_layer_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
-	b1 = tf.get_variable("b1", [hidden_layer_1_size, 1], initializer=tf.zeros_initializer())
-	W2 = tf.get_variable("W2", [hidden_layer_2_size, hidden_layer_1_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
-	b2 = tf.get_variable("b2", [hidden_layer_2_size, 1], initializer=tf.zeros_initializer())
-	W3 = tf.get_variable("W3", [hidden_layer_3_size, hidden_layer_2_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
-	b3 = tf.get_variable("b3", [hidden_layer_3_size, 1], initializer=tf.zeros_initializer())
-	W4 = tf.get_variable("W4", [output_layer_size, hidden_layer_3_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
-	b4 = tf.get_variable("b4", [output_layer_size, 1], initializer=tf.zeros_initializer())
-	Z1 = tf.add(tf.matmul(W1, X), b1)
-	A1 = tf.nn.softplus(Z1)
-	Z2 = tf.add(tf.matmul(W2, A1), b2)
-	A2 = tf.nn.elu(Z2)
-	Z3 = tf.add(tf.matmul(W3, A2), b3)
-	A3 = tf.nn.softplus(Z3)
-	Z4 = tf.add(tf.matmul(W4, A3), b4)
-	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=tf.transpose(Z4), labels=tf.transpose(Y)))
-	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-	initialize = tf.global_variables_initializer()
-	with tf.Session() as sess:
-		sess.run(initialize)
-		for iteration in range(number_of_iterations):
-			count = 0
-			iteration_cost = 0
-			__, batch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
-			costs.append(batch_cost)
-		correct_prediction = tf.equal(tf.argmax(Z4), tf.argmax(Y))
-		accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-		#print(X_train.shape)
-		#print(Y_train.shape)
-		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
-		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
-		#plt.figure()
-		#plt.plot(costs)
-		#plt.show()
-else:
-	W1 = tf.get_variable("W1", [output_layer_size, input_layer_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
-	b1 = tf.get_variable("b1", [output_layer_size, 1], initializer=tf.zeros_initializer())
-	Z1 = tf.add(tf.matmul(W1, X), b1)
-	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=tf.transpose(Z1), labels=tf.transpose(Y)))
-	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
-	initialize = tf.global_variables_initializer()
-	with tf.Session() as sess:
-		sess.run(initialize)
-		for iteration in range(number_of_iterations):
-			count = 0
-			iteration_cost = 0
-			__, batch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
-			costs.append(batch_cost)
-		correct_prediction = tf.equal(tf.argmax(Z1), tf.argmax(Y))
-		accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
-		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
-		#plt.figure()
-		#plt.plot(costs)
-		#plt.show()
+# Run tensorflow session
+with tf.Session() as sess:
+	# Train neural network
+	train_start = datetime.now()
+	sess.run(initialize)
+	for epoch in range(NUMBER_OF_EPOCHS):
+		count = 0
+		epoch_cost = 0
+		__, batch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
+		costs.append(batch_cost)
+	train_end = datetime.now()	
+	print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
+	# Test neural network
+	test_start = datetime.now()
+	print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
+	test_end = datetime.now()
 
-print("Timing: ", datetime.now() - start)
+print("Time to Train:", train_end - train_start,";")
+print("Time to Test:", test_end - test_start)
