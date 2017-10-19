@@ -948,6 +948,7 @@ function createPipeline(camNum) {
 
 	function trainProgram() {
 
+		var beginTimeTraining = performance.now();
 		fixTrajectoryLength();
 
 //		writeTrainingData();
@@ -956,7 +957,9 @@ function createPipeline(camNum) {
 			dataset: ORIENTATIONS_DELTA_DATASET
 		},
 		function(data, status) {
+			var endTimeTraining = performance.now();
 			resultProgramOutput.innerHTML = "Finished Training Models";
+			timingLabel.innerHTML = "Training Timing: " + (endTimeTraining-beginTimeTraining) + " ms";
 		});
 	}
 
