@@ -108,10 +108,6 @@ public class SVMBatch {
 
 		// Use a set of classifiers
 		Classifier[] models = { 
-				new J48(), // a decision tree
-				new PART(), 
-				new DecisionTable(),//decision table majority classifier
-				new DecisionStump(), //one-level decision tree
 				new SMO()
 		};
 
@@ -147,7 +143,7 @@ public class SVMBatch {
 			// Calculate overall accuracy of current classifier on all splits
 			double accuracy = calculateAccuracy(predictions);
 
-			if (j == 4)
+//			if (j == 4)
 			// Print current classifier's name and accuracy in a complicated,
 			// but nice-looking way.
 			System.out.println("Accuracy of " + models[j].getClass().getSimpleName() + ": "
@@ -160,7 +156,7 @@ public class SVMBatch {
 
 		// for SMO/SVM
 		for (int i = 0; i < test.numInstances(); i++) {
-			double clsLabel = models[4].classifyInstance(test.instance(i));
+			double clsLabel = models[0].classifyInstance(test.instance(i));
 			predictedLabels.instance(i).setClassValue(clsLabel);
 			if ( ((i+1) %50) == 0)
 				System.out.println("Movement "+ (i+1) + ": " + predictedLabels.instance(i).stringValue(test.numAttributes()-1) + ";");

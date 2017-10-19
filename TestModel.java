@@ -111,10 +111,10 @@ public class TestModel {
 
 		// Use a set of classifiers
 		Classifier[] models = { 
-				new J48(), // a decision tree
-				new PART(), 
-				new DecisionTable(),//decision table majority classifier
-				new DecisionStump(), //one-level decision tree
+//				new J48(), // a decision tree
+//				new PART(), 
+//				new DecisionTable(),//decision table majority classifier
+//				new DecisionStump(), //one-level decision tree
 				new SMO()
 		};
 
@@ -174,7 +174,7 @@ public class TestModel {
 		// for SMO/SVM
 		for (int i = 0; i < test.numInstances(); i++) {
 //			double clsLabel = svmFiltered.classifyInstance(test.instance(i));
-			double clsLabel = models[4].classifyInstance(test.instance(i));
+			double clsLabel = models[0].classifyInstance(test.instance(i));
 			predictedLabels.instance(i).setClassValue(clsLabel);
 			if (i == test.numInstances()-1)
 			{
