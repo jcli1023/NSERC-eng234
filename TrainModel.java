@@ -107,11 +107,14 @@ public class TrainModel {
 		data.setClassIndex(data.numAttributes() - 1);
 
 		// Use a set of classifiers
+//		Classifier[] models = { 
+//				new J48(), // a decision tree
+//				new PART(), 
+//				new DecisionTable(),//decision table majority classifier
+//				new DecisionStump(), //one-level decision tree
+//				new SMO()
+//		};
 		Classifier[] models = { 
-				new J48(), // a decision tree
-				new PART(), 
-				new DecisionTable(),//decision table majority classifier
-				new DecisionStump(), //one-level decision tree
 				new SMO()
 		};
 
