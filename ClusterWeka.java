@@ -86,7 +86,7 @@ public class ClusterWeka {
 
 //		System.out.println(data.numAttributes());
 
-	
+		long beginTime = System.nanoTime();
 		
 		kmeans.buildClusterer(newData);
 		
@@ -94,6 +94,10 @@ public class ClusterWeka {
 	        eval.setClusterer(kmeans);
 		eval.evaluateClusterer(newData);
 	
+		long endTime = System.nanoTime();
+		long duration = (endTime-beginTime)/1000000;
+		System.out.println("Clustering Time: " + duration + " ms;");
+		
 		//System.out.println("Cluster Results \n =================== \n "+eval.clusterResultsToString()+ ";");
 
 		

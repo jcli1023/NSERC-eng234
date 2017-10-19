@@ -120,6 +120,8 @@ public class TestModel {
 
 		 models = (Classifier[]) weka.core.SerializationHelper.read("trained_models.txt");
 		
+		long beginTime = System.nanoTime();
+
 		// Run for each model
 		for (int j = 0; j < models.length; j++) {
 
@@ -168,6 +170,10 @@ public class TestModel {
 //					+ "\n---------------------------------");
 		}
 		
+		long endTime = System.nanoTime();
+		long duration = (endTime-beginTime)/1000000;
+		System.out.println("Testing SVM Time: " + duration + " ms;");
+
 		// create copy
 		Instances predictedLabels = new Instances(test);
 		

@@ -958,7 +958,7 @@ function createPipeline(camNum) {
 		},
 		function(data, status) {
 			var endTimeTraining = performance.now();
-			resultProgramOutput.innerHTML = "Finished Training Models";
+			resultProgramOutput.innerHTML = "Finished Training Models</br></br>"+ data;
 			timingLabel.innerHTML = "Training Timing: " + (endTimeTraining-beginTimeTraining) + " ms";
 		});
 	}
@@ -1003,8 +1003,10 @@ function createPipeline(camNum) {
 		function(data, status) {
 			var endTimeSVM = performance.now();
 			//consoleLog.log(data);
-			classifiedMovement = data;
+			classifiedMovement = data.split(";")[1];
 			classifiedMovementText.innerHTML = "Classified Movement: " + classifiedMovement;
+			
+			resultProgramOutput.innerHTML = data.split(";")[0];
 
 			/*
 			//Trim any white spaces
