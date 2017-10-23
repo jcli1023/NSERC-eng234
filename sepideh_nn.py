@@ -33,6 +33,8 @@ elif datasetOption == USER_DATASET:
 	pathToTrainingDataset = "user_train_traj_data.txt"
 	pathToTestDataset = "test_traj_data_user_batch.txt"
 
+#pathToTestDataset = "test_traj_data.txt"
+
 # Prepare training data
 train = pd.read_table(pathToTrainingDataset, skiprows=126, header=None, sep=",")
 Y_train = train[120]
@@ -60,8 +62,8 @@ hidden_layer_2_size = 10
 hidden_layer_3_size = 10
 output_layer_size = Y_train.shape[0]
 costs = []
-X = tf.placeholder(tf.float32, shape=(input_layer_size, None))
-Y = tf.placeholder(tf.float32, shape=(output_layer_size, None))
+X = tf.placeholder(tf.float32, shape=(input_layer_size, None), name="X")
+Y = tf.placeholder(tf.float32, shape=(output_layer_size, None), name="Y")
 W1 = tf.get_variable("W1", [hidden_layer_1_size, input_layer_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
 b1 = tf.get_variable("b1", [hidden_layer_1_size, 1], initializer=tf.zeros_initializer())
 W2 = tf.get_variable("W2", [hidden_layer_2_size, hidden_layer_1_size], initializer=tf.contrib.layers.xavier_initializer(seed=0))
@@ -76,10 +78,12 @@ Z2 = tf.add(tf.matmul(W2, A1), b2)
 A2 = tf.nn.elu(Z2)
 Z3 = tf.add(tf.matmul(W3, A2), b3)
 A3 = tf.nn.softplus(Z3)
-Z4 = tf.add(tf.matmul(W4, A3), b4)
+Z4 = tf.add(tf.matmul(W4, A3), b4, name="Z4")
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=tf.transpose(Z4), labels=tf.transpose(Y)))
 optimizer = tf.train.AdamOptimizer(learning_rate=LEARNING_RATE).minimize(cost)
 initialize = tf.global_variables_initializer()
+predictions = tf.argmax(Z4)
+inverted_classes = {value: key for key, value in CLASSES.items()}
 correct_prediction = tf.equal(tf.argmax(Z4), tf.argmax(Y))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
@@ -93,13 +97,12 @@ with tf.Session() as sess:
 		epoch_cost = 0
 		__, batch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
 		costs.append(batch_cost)
-	train_end = datetime.now()	
-	print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
-	# Test neural network
+	train_end = datetime.now()
+	#print("Train Predictions:", list(map(inverted_classes.get, predictions.eval({X: X_train}))))
+	print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}),";")
 	test_start = datetime.now()
-	print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
+	print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}),";")
 	test_end = datetime.now()
-
-print("Time to Train:", train_end - train_start,";")
-print("Time to Test:", test_end - test_start)
-
+	print("Time to Train:", train_end - train_start,";")
+	print("Time to Test:", test_end - test_start,";")
+	print(list(map(inverted_classes.get, predictions.eval({X: X_test}))))

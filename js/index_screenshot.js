@@ -920,11 +920,14 @@ function createPipeline(camNum) {
 		},
 		function(data, status) {
 			var endTimeDL = performance.now();
-			var cleanLookingData  = data.replace(/;/g, "</br></br>")
+			var splitResult = data.split(";");
+			var prediction = splitResult[4];
+			var cleanLookingData  = splitResult[0] +"</br></br>" + splitResult[1] + "</br></br>" + splitResult[2] + "</br></br>" + splitResult[3];
 			resultProgramOutput.innerHTML = cleanLookingData;
 			//resultProgramOutput.innerHTML = data;
 			//calculateCorrectLabels();
 			timingLabel.innerHTML = "Deep Learning Timing Response Time: " + (endTimeDL-beginTimeDL) + " ms";
+			classifiedMovementText.innerHTML = "Classified Movement: " + prediction;
 		});
 
 	}
