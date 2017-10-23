@@ -241,7 +241,10 @@ function createPipeline(camNum) {
         j48Button = document.getElementById("j48Realtime");
         j48Button.addEventListener('click', j48RealtimeProgram);
 
-	deepLearningButton = document.getElementById("deepLearningTest");
+	deepLearningTestButton = document.getElementById("deepLearningTest");
+        deepLearningTestButton.addEventListener('click', deepLearningProgramTest);
+
+	deepLearningButton = document.getElementById("deepLearningDetect");
         deepLearningButton.addEventListener('click', deepLearningProgram);
 
 	appendTrainingDataButton = document.getElementById("appendTrainingData");
@@ -907,6 +910,26 @@ function createPipeline(camNum) {
 	}
 
 	function deepLearningProgram() {
+		consoleLog.log("-------DEEP LEARNING------------");
+		var beginTimeDL = performance.now();
+
+
+		//$.post("deep_learning_test.php", {
+		$.post("deep_learning_test.php", {
+			dataset: datasetOption
+		},
+		function(data, status) {
+			var endTimeDL = performance.now();
+			var cleanLookingData  = data.replace(/;/g, "</br></br>")
+			resultProgramOutput.innerHTML = cleanLookingData;
+			//resultProgramOutput.innerHTML = data;
+			//calculateCorrectLabels();
+			timingLabel.innerHTML = "Deep Learning Timing Response Time: " + (endTimeDL-beginTimeDL) + " ms";
+		});
+
+	}
+
+	function deepLearningProgramTest() {
 		consoleLog.log("-------DEEP LEARNING------------");
 		var beginTimeDL = performance.now();
 

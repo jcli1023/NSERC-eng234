@@ -241,7 +241,10 @@ function createPipeline(camNum) {
         j48Button = document.getElementById("j48Realtime");
         j48Button.addEventListener('click', j48RealtimeProgram);
 
-	deepLearningButton = document.getElementById("deepLearningTest");
+	deepLearningTestButton = document.getElementById("deepLearningTest");
+        deepLearningTestButton.addEventListener('click', deepLearningProgramTest);
+
+	deepLearningButton = document.getElementById("deepLearningDetect");
         deepLearningButton.addEventListener('click', deepLearningProgram);
 
 	appendTrainingDataButton = document.getElementById("appendTrainingData");
@@ -856,7 +859,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("kmeans.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeKmeans = performance.now();
@@ -893,7 +896,7 @@ function createPipeline(camNum) {
 		//consoleLog.log(JSON.stringify(trajectoryFinal));
 
 		$.post("svm_batch.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -912,8 +915,28 @@ function createPipeline(camNum) {
 
 
 		//$.post("deep_learning_test.php", {
+		$.post("deep_learning_test.php", {
+			dataset: datasetOption
+		},
+		function(data, status) {
+			var endTimeDL = performance.now();
+			var cleanLookingData  = data.replace(/;/g, "</br></br>")
+			resultProgramOutput.innerHTML = cleanLookingData;
+			//resultProgramOutput.innerHTML = data;
+			//calculateCorrectLabels();
+			timingLabel.innerHTML = "Deep Learning Timing Response Time: " + (endTimeDL-beginTimeDL) + " ms";
+		});
+
+	}
+
+	function deepLearningProgramTest() {
+		consoleLog.log("-------DEEP LEARNING------------");
+		var beginTimeDL = performance.now();
+
+
+		//$.post("deep_learning_test.php", {
 		$.post("deep_learning_test_fixed_sets.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeDL = performance.now();
@@ -932,7 +955,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm_batch_test.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVMBatch = performance.now();
@@ -954,7 +977,7 @@ function createPipeline(camNum) {
 //		writeTrainingData();
 
 		$.post("train_models.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeTraining = performance.now();
@@ -998,7 +1021,7 @@ function createPipeline(camNum) {
 
 
 		$.post("svm.php", {
-			dataset: ORIENTATIONS_DELTA_DATASET
+			dataset: datasetOption
 		},
 		function(data, status) {
 			var endTimeSVM = performance.now();
@@ -1236,7 +1259,7 @@ function createPipeline(camNum) {
 		$.post("write_batch_test_traj_data.php", {
 			traj_data : JSON.stringify(testTrajectory),
 			movementName: movementName,
-			datasetOption : REGULAR_DELTA_DATASET
+			datasetOption : datasetOption
 		},
 		function(data, status) {
 		});
@@ -1245,7 +1268,7 @@ function createPipeline(camNum) {
 		$.post("write_test_traj_data_appending.php", {
 			traj_data : JSON.stringify(testTrajectory),
 			movementName: movementName,
-			datasetOption : REGULAR_DELTA_DATASET
+			datasetOption : datasetOption
 		},
 		function(data, status) {
 		});	

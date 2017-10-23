@@ -36,7 +36,6 @@ elif datasetOption == USER_DATASET:
 	pathToTrainingDataset = "user_train_traj_data.txt"
 	pathToTestDataset = "test_traj_data_user_batch.txt"
 
-#train = pd.read_table("sepideh_train.txt", skiprows=126, header=None, sep=",")
 train = pd.read_table(pathToTrainingDataset, skiprows=126, header=None, sep=",")
 Y_train = train[120]
 Y_train = Y_train.replace((classes))
@@ -46,7 +45,6 @@ X_train = X_train.transpose()
 Y_train = Y_train.values.reshape(len(Y_train), 1).transpose()
 Y_train = np.eye(3)[Y_train.reshape(-1)].T
 
-#test = pd.read_table("sepideh_test.txt", skiprows=126, header=None, sep=",")
 test = pd.read_table(pathToTestDataset, skiprows=126, header=None, sep=",")
 Y_test = test[120]
 Y_test = Y_test.replace((classes))
@@ -86,18 +84,22 @@ if sys.argv[1] == "hidden":
 	optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 	initialize = tf.global_variables_initializer()
 	with tf.Session() as sess:
+		train_start = datetime.now()		
 		sess.run(initialize)
 		for iteration in range(number_of_iterations):
 			count = 0
 			iteration_cost = 0
 			__, batch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
 			costs.append(batch_cost)
+		train_end = datetime.now()
 		correct_prediction = tf.equal(tf.argmax(Z4), tf.argmax(Y))
 		accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 		#print(X_train.shape)
 		#print(Y_train.shape)
-		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}), ";")
-		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}), ";")
+		print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train}))
+		test_start = datetime.now()
+		print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test}))
+		test_end = datetime.now()
 		#plt.figure()
 		#plt.plot(costs)
 		#plt.show()
@@ -123,4 +125,5 @@ else:
 		plt.plot(costs)
 		plt.show()
 
-print("Timing: ", datetime.now() - start)
+print("Time to Train:", train_end - train_start,";")
+print("Time to Test:", test_end - test_start)
