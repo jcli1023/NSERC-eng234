@@ -1,3 +1,3 @@
 # NSERC-eng234
 
-Files for testing demo Meaningful Camera from DSMP Lab
+Files for testing demo Object Movement Detection by Real-Time Deep Learning for Security Surveillance Camera from DSMP Lab
